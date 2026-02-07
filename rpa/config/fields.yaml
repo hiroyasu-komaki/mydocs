@@ -1,0 +1,31 @@
+# 請求書（invoice / Invoice）設定（日英両対応）
+
+invoice:
+  fields:
+    - name: "請求日"
+      pattern: "(?:請求日|Invoice Date|Date)[:：]?\\s*(\\d{4}[年/-]\\d{1,2}[月/-]\\d{1,2}[日]?|[A-Za-z]+\\s+\\d{1,2},?\\s+\\d{4})"
+    - name: "請求書番号"
+      pattern: "(?:請求書番号|Invoice No\\.?|Invoice Number|Invoice #)[:：]?\\s*([A-Z0-9\\-]+)"
+    - name: "登録番号"
+      pattern: "(?:登録番号|Registration No\\.?|Tax ID)[:：]?\\s*([A-Z0-9]+)"
+    - name: "宛先会社名"
+      pattern: "(?:株式会社\\s*([^\\s御中]+)\\s*御中|(?:To|Bill To|Billed To)[:：]?\\s*([A-Za-z0-9\\s&.,]+(?:Inc\\.|LLC|Ltd\\.|Corporation|Co\\.)?))"
+    - name: "請求金額"
+      pattern: "(?:請求金額|Total Amount|Invoice Amount|Amount Due)\\s*[¥￥$]?\\s*([\\d,]+\\.?\\d*(?:円)?)"
+    - name: "小計"
+      pattern: "(?:小計|Subtotal|Sub Total)\\s*[¥￥$]?\\s*([\\d,]+\\.?\\d*(?:円)?)"
+    - name: "消費税"
+      pattern: "(?:消費税|Tax|VAT|Sales Tax)\\s*[¥￥$]?\\s*([\\d,]+\\.?\\d*(?:円)?)"
+    - name: "合計"
+      pattern: "(?:合計|Total|Grand Total|Amount)\\s*[¥￥$]?\\s*([\\d,]+\\.?\\d*(?:円)?)"
+    - name: "振込期日"
+      pattern: "(?:振込期日|Payment Due|Due Date|Payment Date)[:：]?\\s*(\\d{4}[年/-]\\d{1,2}[月/-]\\d{1,2}[日]?|[A-Za-z]+\\s+\\d{1,2},?\\s+\\d{4})"
+    - name: "発行者名"
+      pattern: "(?:([^\\n]+事務所[^\\n]+)\\s*〒|(?:From|Issued by)[:：]?\\s*([A-Za-z0-9\\s&.,]+))"
+    - name: "電話番号"
+      pattern: "(?:電話番号|Tel|Phone|Telephone)[:：]?\\s*([\\d\\-\\(\\)\\s+]+)"
+    - name: "メールアドレス"
+      pattern: "(?:メールアドレス|Email|E-mail|Mail)[:：]?\\s*([\\w\\.\\-]+@[\\w\\.\\-]+)"
+  output:
+    filename: "invoice_data.json"
+    format: "json"
