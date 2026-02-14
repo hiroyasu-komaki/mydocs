@@ -1,0 +1,220 @@
+{
+  "original_shape": [
+    100,
+    44
+  ],
+  "processed_shape": [
+    100,
+    241
+  ],
+  "transformations": [
+    {
+      "column": "所属部門",
+      "method": "label_encoding",
+      "description": "カテゴリをコード化"
+    },
+    {
+      "column": "地域",
+      "method": "one_hot_encoding",
+      "num_columns": 3
+    },
+    {
+      "column": "管掌範囲",
+      "method": "binary_encoding",
+      "num_columns": 6
+    },
+    {
+      "column": "昨年度IT予算執行額",
+      "method": "numeric_conversion",
+      "description": "数値として変換、欠損値は0"
+    },
+    {
+      "column": "新しいツールやシステムを導入する時、実際にどのように決めていますか？",
+      "method": "binary_encoding",
+      "num_columns": 7
+    },
+    {
+      "column": "新しいツール・システムの導入で困ることは？",
+      "method": "binary_encoding",
+      "num_columns": 9
+    },
+    {
+      "column": "システムの設計・検討段階で、セキュリティをどのように考慮していますか？",
+      "method": "binary_encoding",
+      "num_columns": 7
+    },
+    {
+      "column": "ID・アクセス管理 - 認証方法",
+      "method": "binary_encoding",
+      "num_columns": 3
+    },
+    {
+      "column": "ID・アクセス管理 - 権限管理",
+      "method": "binary_encoding",
+      "num_columns": 3
+    },
+    {
+      "column": "ID・アクセス管理 - 管理方法",
+      "method": "binary_encoding",
+      "num_columns": 4
+    },
+    {
+      "column": "データの保護設計はどうなっていますか？",
+      "method": "binary_encoding",
+      "num_columns": 6
+    },
+    {
+      "column": "リリース前の検証・評価はどうしていますか？",
+      "method": "binary_encoding",
+      "num_columns": 6
+    },
+    {
+      "column": "セキュリティ設計・実装で困ることは？",
+      "method": "binary_encoding",
+      "num_columns": 7
+    },
+    {
+      "column": "他部門からデータ提供を依頼された時、どう対応していますか？",
+      "method": "binary_encoding",
+      "num_columns": 8
+    },
+    {
+      "column": "データの品質管理はどうしていますか？",
+      "method": "binary_encoding",
+      "num_columns": 5
+    },
+    {
+      "column": "データ管理で困ることは？",
+      "method": "binary_encoding",
+      "num_columns": 6
+    },
+    {
+      "column": "本番システムに変更を加える時、どうしていますか？",
+      "method": "binary_encoding",
+      "num_columns": 8
+    },
+    {
+      "column": "変更が失敗した時の対応は？",
+      "method": "binary_encoding",
+      "num_columns": 4
+    },
+    {
+      "column": "システムトラブルが起きた時、どう対応していますか？",
+      "method": "binary_encoding",
+      "num_columns": 6
+    },
+    {
+      "column": "システム変更・トラブル対応で困ることは？",
+      "method": "binary_encoding",
+      "num_columns": 7
+    },
+    {
+      "column": "IT予算はどのように決まっていますか？",
+      "method": "binary_encoding",
+      "num_columns": 6
+    },
+    {
+      "column": "予算超過しそうな時はどうしますか？",
+      "method": "binary_encoding",
+      "num_columns": 5
+    },
+    {
+      "column": "クラウドコストの管理は？",
+      "method": "binary_encoding",
+      "num_columns": 7
+    },
+    {
+      "column": "予算・コスト管理で困ることは？",
+      "method": "binary_encoding",
+      "num_columns": 7
+    },
+    {
+      "column": "ベンダー・SaaSを新規契約する時、どのように決めていますか？",
+      "method": "binary_encoding",
+      "num_columns": 8
+    },
+    {
+      "column": "ベンダー選定時に誰が関与しますか？",
+      "method": "binary_encoding",
+      "num_columns": 7
+    },
+    {
+      "column": "ベンダー選定・管理で困っていることは？",
+      "method": "binary_encoding",
+      "num_columns": 8
+    },
+    {
+      "column": "どんな支援があれば役立ちますか？",
+      "method": "binary_encoding",
+      "num_columns": 7
+    },
+    {
+      "column": "他部門との調整で困ることは？",
+      "method": "binary_encoding",
+      "num_columns": 6
+    },
+    {
+      "column": "他地域との調整で困ることは？",
+      "method": "binary_encoding",
+      "num_columns": 8
+    },
+    {
+      "column": "どんな基準や支援があれば、もっと迅速に判断・活動できますか？",
+      "method": "binary_encoding",
+      "num_columns": 7
+    },
+    {
+      "column": "中央ITや他部門に相談しますか？",
+      "method": "one_hot_encoding",
+      "num_columns": 4
+    },
+    {
+      "column": "データの機密度分類（重要度のランク付け）をしていますか？",
+      "method": "one_hot_encoding",
+      "num_columns": 4
+    },
+    {
+      "column": "重要なデータのバックアップは？",
+      "method": "one_hot_encoding",
+      "num_columns": 4
+    },
+    {
+      "column": "トラブルの重大度は定義されていますか？",
+      "method": "one_hot_encoding",
+      "num_columns": 4
+    },
+    {
+      "column": "トラブル後の振り返りはしていますか？",
+      "method": "one_hot_encoding",
+      "num_columns": 4
+    },
+    {
+      "column": "予算の使い方に制約はありますか？",
+      "method": "one_hot_encoding",
+      "num_columns": 4
+    },
+    {
+      "column": "クラウド（AWS/Azure/GCP等）を使っていますか？",
+      "method": "one_hot_encoding",
+      "num_columns": 2
+    },
+    {
+      "column": "判断する時に重視することは何ですか？",
+      "method": "priority_encoding",
+      "num_columns": 16,
+      "description": "選択有無と順位の両方を保持"
+    },
+    {
+      "column": "技術選定やシステム導入で相談する相手は？",
+      "method": "priority_encoding",
+      "num_columns": 14,
+      "description": "選択有無と順位の両方を保持"
+    },
+    {
+      "column": "その他ITガバナンスに関して、ご意見・提言・アイデア等",
+      "method": "text_flag",
+      "description": "記入有無をフラグ化"
+    }
+  ],
+  "column_mapping": {}
+}
