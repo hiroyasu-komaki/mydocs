@@ -45,16 +45,16 @@ graph TD
     A --> Level0
     Level0 --> Level1
     
-    style A fill:#e1f5ff
-    style Level0 fill:#fff4e6
-    style Level1 fill:#f0f9ff
-    style B fill:#fef3c7
-    style C1 fill:#dbeafe
-    style C2 fill:#dbeafe
-    style C3 fill:#dbeafe
-    style C4 fill:#dbeafe
-    style C5 fill:#dbeafe
-    style C6 fill:#dbeafe
+    style A fill:#e1f5ff,color:#000
+    style Level0 fill:#fff4e6,color:#000
+    style Level1 fill:#f0f9ff,color:#000
+    style B fill:#fef3c7,color:#000
+    style C1 fill:#dbeafe,color:#000
+    style C2 fill:#dbeafe,color:#000
+    style C3 fill:#dbeafe,color:#000
+    style C4 fill:#dbeafe,color:#000
+    style C5 fill:#dbeafe,color:#000
+    style C6 fill:#dbeafe,color:#000
 
 ```
 
@@ -347,13 +347,13 @@ graph TB
     B3 --> C2
     B3 --> C3
     
-    style A fill:#fef3c7,stroke:#92400e,stroke-width:3px
-    style B1 fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-    style B2 fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-    style B3 fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-    style C1 fill:#d1fae5,stroke:#065f46,stroke-width:2px
-    style C2 fill:#d1fae5,stroke:#065f46,stroke-width:2px
-    style C3 fill:#d1fae5,stroke:#065f46,stroke-width:2px
+    style A fill:#fef3c7,stroke:#92400e,stroke-width:3px,color:#000
+    style B1 fill:#dbeafe,stroke:#1e40af,stroke-width:2px,color:#000
+    style B2 fill:#dbeafe,stroke:#1e40af,stroke-width:2px,color:#000
+    style B3 fill:#dbeafe,stroke:#1e40af,stroke-width:2px,color:#000
+    style C1 fill:#d1fae5,stroke:#065f46,stroke-width:2px,color:#000
+    style C2 fill:#d1fae5,stroke:#065f46,stroke-width:2px,color:#000
+    style C3 fill:#d1fae5,stroke:#065f46,stroke-width:2px,color:#000
 
 ```
 

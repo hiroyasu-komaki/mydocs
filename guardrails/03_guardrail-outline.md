@@ -32,19 +32,19 @@ graph LR
     B5 --> C5
     B6 --> C6
     
-    style A fill:#fef3c7,stroke:#92400e,stroke-width:3px
-    style B1 fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-    style B2 fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-    style B3 fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-    style B4 fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-    style B5 fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-    style B6 fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-    style C1 fill:#fce7f3,stroke:#831843,stroke-width:2px
-    style C2 fill:#fce7f3,stroke:#831843,stroke-width:2px
-    style C3 fill:#fce7f3,stroke:#831843,stroke-width:2px
-    style C4 fill:#fce7f3,stroke:#831843,stroke-width:2px
-    style C5 fill:#fce7f3,stroke:#831843,stroke-width:2px
-    style C6 fill:#fce7f3,stroke:#831843,stroke-width:2px
+    style A fill:#fef3c7,stroke:#92400e,stroke-width:3px,color:#000
+    style B1 fill:#dbeafe,stroke:#1e40af,stroke-width:2px,color:#000
+    style B2 fill:#dbeafe,stroke:#1e40af,stroke-width:2px,color:#000
+    style B3 fill:#dbeafe,stroke:#1e40af,stroke-width:2px,color:#000
+    style B4 fill:#dbeafe,stroke:#1e40af,stroke-width:2px,color:#000
+    style B5 fill:#dbeafe,stroke:#1e40af,stroke-width:2px,color:#000
+    style B6 fill:#dbeafe,stroke:#1e40af,stroke-width:2px,color:#000
+    style C1 fill:#fce7f3,stroke:#831843,stroke-width:2px,color:#000
+    style C2 fill:#fce7f3,stroke:#831843,stroke-width:2px,color:#000
+    style C3 fill:#fce7f3,stroke:#831843,stroke-width:2px,color:#000
+    style C4 fill:#fce7f3,stroke:#831843,stroke-width:2px,color:#000
+    style C5 fill:#fce7f3,stroke:#831843,stroke-width:2px,color:#000
+    style C6 fill:#fce7f3,stroke:#831843,stroke-width:2px,color:#000
 ```
 
 ---
