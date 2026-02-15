@@ -226,7 +226,7 @@ def main():
                 results = report_gen.generate_full_report()
                 
                 print("\n✓ レポート生成が完了しました！")
-                print(f"  - {results['markdown_report']}")
+                print(f"  - {results['report']}")
                 print(f"  - 可視化: {len([v for v in results['visualizations'].values() if v])}個")
                 
             except Exception as e:
@@ -244,7 +244,7 @@ def main():
                 results = report_gen.generate_full_report()
                 
                 print("\n✓ レポート生成が完了しました！")
-                print(f"  - {results['markdown_report']}")
+                print(f"  - {results['report']}")
                 print(f"  - 可視化: {len([v for v in results['visualizations'].values() if v])}個")
                 
             except Exception as e:

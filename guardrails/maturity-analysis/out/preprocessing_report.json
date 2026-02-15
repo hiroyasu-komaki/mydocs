@@ -1,11 +1,11 @@
 {
   "original_shape": [
     100,
-    44
+    45
   ],
   "processed_shape": [
     100,
-    241
+    248
   ],
   "transformations": [
     {
@@ -125,6 +125,11 @@
     },
     {
       "column": "予算・コスト管理で困ることは？",
+      "method": "binary_encoding",
+      "num_columns": 7
+    },
+    {
+      "column": "予算・コスト管理で、どんな支援があれば役立ちますか？",
       "method": "binary_encoding",
       "num_columns": 7
     },

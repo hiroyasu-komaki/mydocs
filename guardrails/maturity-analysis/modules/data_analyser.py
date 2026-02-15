@@ -119,6 +119,68 @@ class ITGovernanceAnalyser:
         print(f"  ✓ {len(selection_rates)}セクションの選択率を計算")
         return selection_rates
     
+    def calculate_decision_process_breakdown(self):
+        """
+        意思決定プロセス（s1_q2）の地域別・部門別集計
+        
+        Returns:
+            dict: by_region, by_department
+        """
+        if self.raw_data is None:
+            return {'by_region': {}, 'by_department': {}}
+        
+        question = '新しいツールやシステムを導入する時、実際にどのように決めていますか？'
+        question_config = None
+        
+        for q in self.questions.get('section1_tech_adoption', []):
+            if q.get('question') == question:
+                question_config = q
+                break
+        
+        if not question_config:
+            return {'by_region': {}, 'by_department': {}}
+        
+        def _compute_rates(data_subset, n_total):
+            rates = {}
+            for opt in question_config.get('options', []):
+                if 'その他' in opt:
+                    continue
+                col_name = f'{question}_{opt}'
+                if col_name in data_subset.columns:
+                    count = data_subset[col_name].sum()
+                    if count > 0:
+                        rates[opt] = {
+                            'count': int(count),
+                            'rate': float((count / n_total) * 100)
+                        }
+            return rates
+        
+        by_region = {}
+        if '地域' in self.raw_data.columns:
+            for region in self.raw_data['地域'].unique():
+                indices = self.raw_data[self.raw_data['地域'] == region].index
+                subset = self.data.loc[indices]
+                n = len(subset)
+                if n > 0:
+                    by_region[region] = {
+                        'rates': _compute_rates(subset, n),
+                        'respondent_count': n
+                    }
+        
+        by_department = {}
+        if '所属部門' in self.raw_data.columns:
+            for dept in self.raw_data['所属部門'].unique():
+                indices = self.raw_data[self.raw_data['所属部門'] == dept].index
+                subset = self.data.loc[indices]
+                n = len(subset)
+                if n > 0:
+                    by_department[dept] = {
+                        'rates': _compute_rates(subset, n),
+                        'respondent_count': n
+                    }
+        
+        return {'by_region': by_region, 'by_department': by_department}
+    
     def calculate_department_breakdown(self):
         """
         部門別の回答分布を計算
@@ -296,11 +358,44 @@ class ITGovernanceAnalyser:
                     'respondent_count': int(len(dept_data))
                 }
         
+        # 地域別のスコアリング（生データがある場合）
+        region_maturity = {}
+        if self.raw_data is not None and '地域' in self.raw_data.columns:
+            for region in self.raw_data['地域'].unique():
+                region_indices = self.raw_data[self.raw_data['地域'] == region].index
+                region_data = self.data.iloc[region_indices]
+                
+                region_score = 0
+                region_max = 0
+                
+                for item_name, question in security_items.items():
+                    item_cols = [col for col in region_data.columns if question in col and col != '回答者ID']
+                    
+                    for col in item_cols:
+                        is_positive = any(kw in col for kw in positive_keywords)
+                        is_negative = any(kw in col for kw in negative_keywords)
+                        
+                        if is_positive:
+                            region_score += region_data[col].sum()
+                        elif is_negative:
+                            region_score -= region_data[col].sum() * 0.5
+                    
+                    region_max += len(item_cols) * len(region_data)
+                
+                region_maturity[region] = {
+                    'score': float(region_score),
+                    'max_score': float(region_max),
+                    'percentage': float((region_score / region_max) * 100) if region_max > 0 else 0,
+                    'maturity_level': self._classify_maturity_level((region_score / region_max) * 100 if region_max > 0 else 0),
+                    'respondent_count': int(len(region_data))
+                }
+        
         print(f"  ✓ セキュリティ成熟度を計算（全体: {overall_maturity['maturity_level']}）")
         
         return {
             'overall': overall_maturity,
-            'by_department': department_maturity
+            'by_department': department_maturity,
+            'by_region': region_maturity
         }
     
     def _classify_maturity_level(self, percentage):
@@ -390,13 +485,58 @@ class ITGovernanceAnalyser:
             category_summary[cat]['count'] += pp['count']
             category_summary[cat]['items'].append(pp['pain_point'])
         
+        # 地域別集計（raw_dataに地域がある場合）
+        by_region = {}
+        if self.raw_data is not None and '地域' in self.raw_data.columns:
+            for region in self.raw_data['地域'].unique():
+                region_indices = self.raw_data[self.raw_data['地域'] == region].index
+                region_data = self.data.loc[region_indices]
+                region_pain_points = self._compute_pain_points_for_subset(
+                    region_data, pain_point_questions, len(region_data)
+                )
+                
+                # セクション別スコアを集計
+                section_scores = self._aggregate_by_section(region_pain_points)
+                
+                by_region[region] = {
+                    'top_pain_points': region_pain_points[:10],
+                    'respondent_count': len(region_data),
+                    'section_scores': section_scores  # セクション別スコアを追加
+                }
+        
         print(f"  ✓ {len(all_pain_points)}個の困りごとを分析")
         
         return {
             'top_pain_points': all_pain_points[:20],  # 上位20個
             'all_pain_points': all_pain_points,
-            'category_summary': category_summary
+            'category_summary': category_summary,
+            'by_region': by_region
         }
+    
+    def _compute_pain_points_for_subset(self, data_subset, pain_point_questions, n_total):
+        """データサブセットに対する困りごと集計"""
+        if n_total == 0:
+            return []
+        result = []
+        for pq in pain_point_questions:
+            question = pq['question']
+            options = pq['options']
+            section = pq['section'].replace('section', 'セクション').replace('_', ' ')
+            for opt in options:
+                if '特に困っていない' in opt or 'その他' in opt:
+                    continue
+                col_name = f'{question}_{opt}'
+                if col_name in data_subset.columns:
+                    count = data_subset[col_name].sum()
+                    if count > 0:
+                        result.append({
+                            'pain_point': opt,
+                            'count': int(count),
+                            'rate': float((count / n_total) * 100),
+                            'section': section  # セクション情報を追加
+                        })
+        result.sort(key=lambda x: x['count'], reverse=True)
+        return result
     
     def _categorize_pain_point(self, pain_point):
         """困りごとをカテゴリ分類"""
@@ -415,6 +555,53 @@ class ITGovernanceAnalyser:
         else:
             return 'その他'
     
+    def _aggregate_by_section(self, items):
+        """
+        困りごとまたは支援のリストをセクション別に集計
+        
+        Args:
+            items: 困りごとまたは支援のリスト（各要素に'section'と'count'を含む）
+        
+        Returns:
+            dict: セクション別の集計結果
+                {
+                    'セクション4 change trouble': {
+                        'count': 55,
+                        'percentage': 30.5
+                    },
+                    ...
+                }
+        """
+        section_counts = {}
+        total_count = 0
+        
+        # セクション別に選択数を集計
+        for item in items:
+            section = item.get('section', 'セクション7 others')
+            count = item.get('count', 0)
+            
+            if section not in section_counts:
+                section_counts[section] = 0
+            
+            section_counts[section] += count
+            total_count += count
+        
+        # パーセンテージを計算
+        section_scores = {}
+        for section, count in section_counts.items():
+            percentage = (count / total_count * 100) if total_count > 0 else 0
+            section_scores[section] = {
+                'count': count,
+                'percentage': float(percentage)
+            }
+        
+        # パーセンテージの降順でソート
+        section_scores = dict(sorted(section_scores.items(), 
+                                    key=lambda x: x[1]['percentage'], 
+                                    reverse=True))
+        
+        return section_scores
+    
     # ==========================================
     # 4. 必要な支援分析
     # ==========================================
@@ -428,53 +615,151 @@ class ITGovernanceAnalyser:
         """
         print("\n[5/7] 必要な支援の分析中...")
         
-        # セクション7 Q3: 理想の支援
-        support_question = 'どんな基準や支援があれば、もっと迅速に判断・活動できますか？'
+        # セクション7 Q3: 理想の支援（全般）
+        support_question_s7 = 'どんな基準や支援があれば、もっと迅速に判断・活動できますか？'
         
-        support_needs = []
+        # セクション6 Q7: ベンダー管理の支援
+        support_question_s6 = 'どんな支援があれば役立ちますか？'
         
-        # 該当する列を探す
-        support_cols = [col for col in self.data.columns if support_question in col and col != '回答者ID']
+        # セクション5 Q7: 予算・コスト管理の支援
+        support_question_s5 = '予算・コスト管理で、どんな支援があれば役立ちますか？'
         
-        for col in support_cols:
-            support_item = col.replace(support_question + '_', '')
+        # 3つの質問から支援ニーズを収集
+        all_support_needs = []
+        
+        # セクション7の支援（全般）
+        support_cols_s7 = [col for col in self.data.columns if support_question_s7 in col and col != '回答者ID']
+        for col in support_cols_s7:
+            support_item = col.replace(support_question_s7 + '_', '')
             count = self.data[col].sum()
             
             if count > 0 and 'その他' not in support_item:
-                support_needs.append({
+                all_support_needs.append({
                     'support': support_item,
                     'count': int(count),
-                    'rate': float((count / len(self.data)) * 100)
+                    'rate': float((count / len(self.data)) * 100),
+                    'section': 'セクション7 others'
+                })
+        
+        # セクション6の支援（ベンダー管理）
+        # 注意: セクション5にも「どんな支援があれば役立ちますか？」が含まれるため、除外する
+        support_cols_s6 = [col for col in self.data.columns 
+                          if support_question_s6 in col 
+                          and col != '回答者ID'
+                          and support_question_s5 not in col]  # セクション5の質問を除外
+        for col in support_cols_s6:
+            support_item = col.replace(support_question_s6 + '_', '')
+            count = self.data[col].sum()
+            
+            if count > 0 and 'その他' not in support_item:
+                all_support_needs.append({
+                    'support': support_item,
+                    'count': int(count),
+                    'rate': float((count / len(self.data)) * 100),
+                    'section': 'セクション6 vendor'
+                })
+        
+        # セクション5の支援（予算・コスト管理）
+        support_cols_s5 = [col for col in self.data.columns if support_question_s5 in col and col != '回答者ID']
+        for col in support_cols_s5:
+            support_item = col.replace(support_question_s5 + '_', '')
+            count = self.data[col].sum()
+            
+            if count > 0 and 'その他' not in support_item:
+                all_support_needs.append({
+                    'support': support_item,
+                    'count': int(count),
+                    'rate': float((count / len(self.data)) * 100),
+                    'section': 'セクション5 budget'
                 })
         
         # 頻出順にソート
-        support_needs.sort(key=lambda x: x['count'], reverse=True)
+        all_support_needs.sort(key=lambda x: x['count'], reverse=True)
         
-        # セクション6 Q7: ベンダー管理で必要な支援
-        vendor_support_question = 'どんな支援があれば役立ちますか？'
-        vendor_support_cols = [col for col in self.data.columns if vendor_support_question in col and col != '回答者ID']
+        # 地域別集計（raw_dataに地域がある場合）
+        by_region = {}
+        if self.raw_data is not None and '地域' in self.raw_data.columns:
+            for region in self.raw_data['地域'].unique():
+                region_indices = self.raw_data[self.raw_data['地域'] == region].index
+                region_data = self.data.loc[region_indices]
+                n_total = len(region_data)
+                if n_total == 0:
+                    continue
+                region_combined = self._compute_support_needs_for_subset(region_data, n_total)
+                
+                # セクション別スコアを集計
+                section_scores = self._aggregate_by_section(region_combined)
+                
+                by_region[region] = {
+                    'top_support_needs': region_combined[:10],
+                    'respondent_count': n_total,
+                    'section_scores': section_scores
+                }
         
-        vendor_support_needs = []
-        for col in vendor_support_cols:
-            support_item = col.replace(vendor_support_question + '_', '')
-            count = self.data[col].sum()
-            
-            if count > 0 and 'その他' not in support_item:
-                vendor_support_needs.append({
-                    'support': support_item,
-                    'count': int(count),
-                    'rate': float((count / len(self.data)) * 100)
-                })
-        
-        vendor_support_needs.sort(key=lambda x: x['count'], reverse=True)
-        
-        print(f"  ✓ {len(support_needs)}個の支援ニーズを分析")
+        print(f"  ✓ {len(all_support_needs)}個の支援ニーズを分析")
         
         return {
-            'general_support': support_needs,
-            'vendor_support': vendor_support_needs,
-            'combined': sorted(support_needs + vendor_support_needs, key=lambda x: x['count'], reverse=True)
+            'combined': all_support_needs,
+            'by_region': by_region
         }
+    
+    def _compute_support_needs_for_subset(self, data_subset, n_total):
+        """データサブセットに対する必要な支援集計"""
+        if n_total == 0:
+            return []
+        
+        # 3つの支援質問を定義
+        support_question_s7 = 'どんな基準や支援があれば、もっと迅速に判断・活動できますか？'
+        support_question_s6 = 'どんな支援があれば役立ちますか？'
+        support_question_s5 = '予算・コスト管理で、どんな支援があれば役立ちますか？'
+        
+        result = []
+        
+        # セクション7の支援
+        support_cols_s7 = [col for col in data_subset.columns if support_question_s7 in col and col != '回答者ID']
+        for col in support_cols_s7:
+            support_item = col.replace(support_question_s7 + '_', '')
+            count = data_subset[col].sum()
+            if count > 0 and 'その他' not in support_item:
+                result.append({
+                    'support': support_item,
+                    'count': int(count),
+                    'rate': float((count / n_total) * 100),
+                    'section': 'セクション7 others'
+                })
+        
+        # セクション6の支援
+        # 注意: セクション5にも「どんな支援があれば役立ちますか？」が含まれるため、除外する
+        support_cols_s6 = [col for col in data_subset.columns 
+                          if support_question_s6 in col 
+                          and col != '回答者ID'
+                          and support_question_s5 not in col]  # セクション5の質問を除外
+        for col in support_cols_s6:
+            support_item = col.replace(support_question_s6 + '_', '')
+            count = data_subset[col].sum()
+            if count > 0 and 'その他' not in support_item:
+                result.append({
+                    'support': support_item,
+                    'count': int(count),
+                    'rate': float((count / n_total) * 100),
+                    'section': 'セクション6 vendor'
+                })
+        
+        # セクション5の支援
+        support_cols_s5 = [col for col in data_subset.columns if support_question_s5 in col and col != '回答者ID']
+        for col in support_cols_s5:
+            support_item = col.replace(support_question_s5 + '_', '')
+            count = data_subset[col].sum()
+            if count > 0 and 'その他' not in support_item:
+                result.append({
+                    'support': support_item,
+                    'count': int(count),
+                    'rate': float((count / n_total) * 100),
+                    'section': 'セクション5 budget'
+                })
+        
+        result.sort(key=lambda x: x['count'], reverse=True)
+        return result
     
     # ==========================================
     # 5. 部門別プロファイル
@@ -564,6 +849,9 @@ class ITGovernanceAnalyser:
         
         # 1. 選択率の計算
         results['selection_rates'] = self.calculate_selection_rates()
+        
+        # 1b. 意思決定プロセスの地域別・部門別集計
+        results['decision_process_breakdown'] = self.calculate_decision_process_breakdown()
         
         # 2. 部門別分布
         results['department_breakdown'] = self.calculate_department_breakdown()

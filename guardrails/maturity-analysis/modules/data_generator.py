@@ -84,7 +84,7 @@ class DataGenerator:
             if q_type == 'text':
                 # テキスト項目は簡略化して生成
                 if q_id == 'department':
-                    info[question] = self._random_from_list(['営業部', '開発部', 'インフラ部', '企画部', '管理部'])
+                    info[question] = self._random_department_from_config()
                 elif q_id == 'name_position':
                     info[question] = f"回答者{random.randint(1, 999)}"
                 elif q_id == 'main_management_target':
@@ -210,6 +210,15 @@ class DataGenerator:
     def _random_from_list(self, items):
         """リストからランダムに選択"""
         return random.choice(items)
+
+    def _random_department_from_config(self):
+        """configのpopulation_distribution.departmentに従って部門を重み付きランダム選択"""
+        dist = self.config.get('data_generation', {}).get('population_distribution', {}).get('department', {})
+        if not dist:
+            return random.choice(['営業部', '開発部', 'インフラ部', '企画部', '管理部'])
+        names = list(dist.keys())
+        weights = list(dist.values())
+        return random.choices(names, weights=weights, k=1)[0]
     
     def save_to_csv(self, df, filepath=None):
         """DataFrameをCSVファイルに保存

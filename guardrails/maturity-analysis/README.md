@@ -2,8 +2,8 @@
 
 ## 概要
 
-ITガバナンスに関する実態調査のサンプルデータ生成から前処理までを自動化するシステムです。
-`survey.md`（ITガバナンス実態調査票）の**全7セクション・37問**を完全に反映しています。
+ITガバナンスに関する実態調査の**完全な分析システム**です。
+`survey.md`（ITガバナンス実態調査票）の**全7セクション・37問**を完全に反映し、データ生成から可視化・レポート生成までの全工程を自動化しています。
 
 **実装済み機能:**
 - ✅ サンプルデータの自動生成（任意のレコード数を指定可能）
@@ -11,31 +11,34 @@ ITガバナンスに関する実態調査のサンプルデータ生成から前
 - ✅ 複数の質問タイプに対応（複数選択、単一選択、優先順位付き、自由記述）
 - ✅ **データ前処理機能（バイナリ変換・One-Hot Encoding・優先順位付き変換）**
 - ✅ **前処理レポートの自動生成（JSON形式）**
-- ⏳ 統計分析（今後実装予定）
-- ⏳ レポート生成（今後実装予定）
+- ✅ **統計分析機能（選択率・成熟度・困りごと・部門別プロファイル）**
+- ✅ **レポート生成機能（6つの可視化グラフ + 2種類のMarkdownレポート）**
+- ✅ **対話型UIによる4ステップワークフロー**
 
 ## フォルダ構成
 
 ```
 survey-analysis/
-├── main.py                          # メインプログラム
+├── main.py                          # メインプログラム（4ステップワークフロー）
 ├── config/
 │   ├── config.yaml                  # システム設定ファイル
 │   └── survey_questions.yaml        # アンケート項目定義（全7セクション・37問）
 ├── modules/
 │   ├── data_generator.py            # サンプルデータ生成
-│   ├── data_preprocess.py           # データ前処理 ★実装済み★
-│   ├── util.py                      # ユーティリティ関数
-│   ├── data_analyser.py             # データ分析（今後実装）
-│   └── report_generator.py          # レポート生成（今後実装）
+│   ├── data_preprocess.py           # データ前処理
+│   ├── data_analyser.py             # データ分析
+│   ├── report_generator.py          # レポート生成
+│   └── util.py                      # ユーティリティ関数
 ├── csv/
-│   ├── survey_sample_data.csv       # 生成されたサンプルデータ（100件×44列）
-│   └── survey_preprocessed_data.csv # 前処理済みデータ（100件×241列）★実装済み★
+│   ├── survey_sample_data.csv       # 生成されたサンプルデータ
+│   └── survey_preprocessed_data.csv # 前処理済みデータ
 ├── out/
-│   ├── preprocessing_report.json    # 前処理レポート ★実装済み★
-│   └── analysis_results.json        # 分析結果（今後実装）
-├── reports/                         # レポート出力先（今後実装）
-│   └── graphs/                      # グラフ画像
+│   ├── preprocessing_report.json    # 前処理レポート
+│   └── analysis_results.json        # 分析結果（JSON形式）
+├── reports/
+│   ├── governance_report.md         # 簡易レポート（Markdown）
+│   ├── detailed_report.md           # 詳細レポート（Markdown）
+│   └── graphs/                      # 可視化グラフ（PNG形式）
 ├── requirements.txt                 # 依存パッケージ
 └── README.md                        # このファイル
 ```
@@ -47,29 +50,63 @@ survey-analysis/
 
 ### インストール手順
 
+## セットアップ
+
 ```bash
+# 仮想環境の作成と有効化
+python3 -m venv venv
+
+source venv/bin/activate  # Linux/macOS
+# venv\Scripts\activate  # Windows
+
 # 必要なパッケージのインストール
 pip install -r requirements.txt
 
-# ディレクトリは自動作成されます（手動作成は不要）
 ```
 
 ## 実行方法
 
-### 基本的な実行
+### 基本的な実行（推奨）
 
 ```bash
 python3 main.py
 ```
 
-**実行時の対話:**
+**4ステップの対話型ワークフロー:**
+
 1. **サンプルデータ生成**
    - 既存データがある場合: 新規生成するか既存データを使用するか選択
    - 新規生成する場合: サンプル数を入力（デフォルト: 100）
    
 2. **データ前処理**
    - 既存の前処理済みデータがある場合: 再実行するか既存データを使用するか選択
-   - 前処理実行: バイナリ変換・One-Hot Encodingを自動実行
+   - 前処理実行: バイナリ変換・One-Hot Encoding・優先順位付き変換を自動実行
+
+3. **データ分析**
+   - 既存の分析結果がある場合: 再実行するか既存結果を使用するか選択
+   - 分析実行: 選択率・セキュリティ成熟度・困りごと・部門別プロファイルを計算
+
+4. **レポート生成**
+   - 既存のレポートがある場合: 再生成するか既存レポートを使用するか選択
+   - レポート生成: 6つの可視化グラフ + 2種類のMarkdownレポートを作成
+
+### 個別モジュールの実行
+
+各モジュールを個別に実行することも可能です：
+
+```bash
+# データ生成のみ
+python3 -m modules.data_generator
+
+# データ前処理のみ
+python3 -m modules.data_preprocess
+
+# データ分析のみ
+python3 -m modules.data_analyser
+
+# レポート生成のみ
+python3 -m modules.report_generator
+```
 
 ### 実行例
 
@@ -83,8 +120,8 @@ $ python3 main.py
 このシステムは以下の機能を提供します:
   1. サンプルデータの自動生成
   2. データの前処理（バイナリ変換・One-Hot Encoding）
-  3. 統計分析（今後実装予定）
-  4. レポート生成（今後実装予定）
+  3. データ分析（選択率・成熟度・困りごと分析）
+  4. レポート生成（5つの可視化 + Markdownレポート）
 
 ================================================================================
   Step 1: サンプルデータ生成
@@ -92,10 +129,10 @@ $ python3 main.py
 
 サンプルデータを生成しますか？ (Y/N): Y
 
-生成するサンプル数を入力してください（デフォルト: 100）: 150
+生成するサンプル数を入力してください（デフォルト: 100）: 100
 
-150件のサンプルデータを生成中...
-✓ 150件のサンプルデータを生成しました
+100件のサンプルデータを生成中...
+✓ 100件のサンプルデータを生成しました
   - 列数: 44列
   - 基本情報: 6項目
   - 質問数: 37問
@@ -107,9 +144,6 @@ $ python3 main.py
 ================================================================================
 
 データ前処理を実行しますか？ (Y/N): Y
-
-生データを読み込み中: csv/survey_sample_data.csv
-✓ 読み込み完了: 150行 × 44列
 
 [1/5] 基本情報の処理中...
   ✓ 基本情報を処理: 11列生成
@@ -127,8 +161,82 @@ $ python3 main.py
   ✓ テキスト項目を処理: 1列生成
 
 ✓ データ前処理が完了しました！
-  - csv/survey_preprocessed_data.csv (150件 × 241列)
+  - csv/survey_preprocessed_data.csv (100件 × 241列)
   - out/preprocessing_report.json
+
+================================================================================
+  Step 3: データ分析
+================================================================================
+
+データ分析を実行しますか？ (Y/N): Y
+
+[1/7] 選択率の計算中...
+  ✓ 7セクションの選択率を計算
+
+[2/7] 部門別回答分布の計算中...
+  ✓ 部門別分布を計算
+
+[3/7] セキュリティ成熟度の計算中...
+  ✓ セキュリティ成熟度を計算（全体: 低）
+
+[4/7] 困りごと分析中...
+  ✓ 42個の困りごとを分析
+
+[5/7] 必要な支援の分析中...
+  ✓ 6個の支援ニーズを分析
+
+[6/7] 部門別プロファイルの作成中...
+  ✓ 5部門のプロファイルを作成
+
+[7/7] 可視化用データの準備中...
+  ✓ 可視化用データを準備
+
+✓ 分析結果を保存しました: out/analysis_results.json
+
+================================================================================
+  Step 4: レポート生成
+================================================================================
+
+レポート生成を実行しますか？ (Y/N): Y
+
+[可視化A] 導入ツール・ベンダーマップ（プレースホルダー）
+  ✓ 保存: reports/graphs/visualization_A_vendor_map.png
+
+[可視化B] 意思決定プロセスの実態
+  ✓ 保存: reports/graphs/visualization_B_decision_process.png
+
+[可視化C] セキュリティ成熟度マップ
+  ✓ 保存: reports/graphs/visualization_C_security_maturity.png
+
+[可視化D] 困りごと・ニーズ分析
+  ✓ 保存: reports/graphs/visualization_D_pain_points_needs.png
+
+[可視化E] 部門別プロファイル
+  ✓ 保存: reports/graphs/visualization_E_department_profile.png
+
+[追加] 困りごとカテゴリ別サマリー
+  ✓ 保存: reports/graphs/additional_category_summary.png
+
+✓ Markdownレポートを保存: reports/governance_report.md
+✓ 詳細レポートを保存: reports/detailed_report.md
+
+✓ レポート生成が完了しました！
+  - reports/governance_report.md
+  - reports/detailed_report.md
+  - 可視化: 6個
+
+================================================================================
+  処理完了
+================================================================================
+
+生成されたファイル:
+  ✓ csv/survey_sample_data.csv - 生データ
+  ✓ csv/survey_preprocessed_data.csv - 前処理済みデータ
+  ✓ out/preprocessing_report.json - 前処理レポート
+  ✓ out/analysis_results.json - 分析結果
+  ✓ reports/governance_report.md - 簡易レポート
+  ✓ reports/detailed_report.md - 詳細レポート
+  ✓ reports/graphs/*.png - 可視化グラフ（6個）
 ```
 
 ## 出力データの構造
@@ -343,6 +451,47 @@ print(selection_rates.sort_values(ascending=False))
 
 ## トラブルシューティング
 
+### グラフの日本語が表示されない（□□□になる）
+
+**macOS:**
+```bash
+# システムに日本語フォントがインストールされているか確認
+# Hiragino Sansは通常プリインストールされています
+
+# フォントリストを確認
+python3 -c "from matplotlib import font_manager; print([f.name for f in font_manager.fontManager.ttflist if 'Hiragino' in f.name or 'Gothic' in f.name])"
+```
+
+**Windows:**
+```bash
+# Yu Gothicは通常プリインストールされています
+# フォントリストを確認
+python -c "from matplotlib import font_manager; print([f.name for f in font_manager.fontManager.ttflist if 'Gothic' in f.name or 'Yu' in f.name])"
+```
+
+**Linux:**
+```bash
+# 日本語フォントをインストール
+sudo apt-get install fonts-noto-cjk  # Ubuntu/Debian
+# または
+sudo yum install google-noto-sans-cjk-jp-fonts  # CentOS/RHEL
+
+# matplotlibのフォントキャッシュをクリア
+rm -rf ~/.cache/matplotlib
+```
+
+### UserWarning: Glyph ... missing from font(s) が大量に出る
+
+この警告は修正済みですが、もし出る場合：
+
+```python
+# Pythonスクリプトの先頭に追加
+import warnings
+warnings.filterwarnings('ignore', category=UserWarning, module='matplotlib')
+```
+
+または、日本語フォントが正しくインストールされているか確認してください。
+
 ### パッケージのインストールエラー
 
 ```bash
@@ -375,16 +524,58 @@ print(f"処理後: {report['processed_shape']}")
 print(f"変換数: {len(report['transformations'])}")
 ```
 
-## 今後の実装予定
+## 実装済み機能の詳細
 
-- [ ] データ分析機能
-  - 記述統計
-  - 相関分析
-  - 属性別分析
-- [ ] レポート生成機能
-  - グラフの自動生成
-  - Markdownレポート
-  - JSON形式の分析結果出力
+### データ分析機能 ✅
+
+以下の7つの分析が実装されています：
+
+1. **選択率の計算** - 全7セクション・37問の選択率を自動計算
+2. **部門別回答分布** - 地域別・部門別・予算別の分布を集計
+3. **セキュリティ成熟度スコアリング** - 全体・部門別の成熟度を3段階評価（高/中/低）
+4. **困りごと分析** - 42個の困りごとをカテゴリ別に集計・ランキング
+5. **必要な支援分析** - 一般的支援とベンダー管理支援の統合ランキング
+6. **部門別プロファイル** - 各部門の特徴・変更管理・困りごとを可視化
+7. **可視化用データ準備** - 5つの主要可視化（A〜E）のデータを自動生成
+
+### レポート生成機能 ✅
+
+以下のレポートが自動生成されます：
+
+**可視化グラフ（PNG形式）**:
+- A: 導入ツール・ベンダーマップ（プレースホルダー）
+- B: 意思決定プロセスの実態
+- C: セキュリティ成熟度マップ
+- D: 困りごと・ニーズ分析
+- E: 部門別プロファイル
+- 追加: 困りごとカテゴリ別サマリー
+
+**Markdownレポート**:
+- **簡易レポート** (`governance_report.md`) - エグゼクティブサマリー中心
+- **詳細レポート** (`detailed_report.md`) - 全分析結果を網羅した完全版
+
+### 分析結果（JSON形式）
+
+`out/analysis_results.json`に以下が保存されます：
+- メタデータ（総回答数、総列数）
+- 選択率データ（7セクション別）
+- 部門別分布
+- セキュリティ成熟度（全体・部門別）
+- 困りごとランキング・カテゴリ別集計
+- 必要な支援ランキング
+- 部門別プロファイル
+- 可視化用データ（5つの可視化A〜E）
+
+## 将来の拡張可能性
+
+このシステムは以下の拡張が可能です：
+
+- [ ] 実データの取り込み機能
+- [ ] インタラクティブなダッシュボード（Streamlit/Dash）
+- [ ] 時系列分析（複数回の調査結果の比較）
+- [ ] 機械学習モデルによる予測・クラスタリング
+- [ ] PowerBI/Tableau用のデータエクスポート
+- [ ] 可視化Aの完全実装（実際のベンダー情報の集計）
 
 ## ライセンス
 

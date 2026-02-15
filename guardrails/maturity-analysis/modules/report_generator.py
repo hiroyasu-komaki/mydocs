@@ -17,6 +17,7 @@ warnings.filterwarnings('ignore', category=UserWarning)
 
 import matplotlib.pyplot as plt
 import matplotlib
+from matplotlib.colors import BoundaryNorm, ListedColormap
 import seaborn as sns
 from matplotlib import font_manager
 from modules.util import load_yaml
@@ -58,20 +59,21 @@ def setup_japanese_font():
 # フォント設定を実行
 setup_japanese_font()
 
+# 地域別の色（日本=赤、北米=濃い青、EMEA=薄い青）
+REGION_COLORS = {
+    '日本': '#E53935',   # 赤
+    '北米': '#1565C0',   # 濃い青
+    'EMEA': '#64B5F6',   # 薄い青
+}
+
 
 class ITGovernanceReportGenerator:
     """ITガバナンス実態調査レポート生成クラス"""
     
     def __init__(self, 
-                 analysis_results_path=None,
-                 config_path='config/config.yaml'):
-        """
-        初期化
-        
-        Args:
-            analysis_results_path: 分析結果JSONのパス
-            config_path: 設定ファイルのパス
-        """
+                analysis_results_path=None,
+                config_path='config/config.yaml'):
+        """初期化"""
         self.config = load_yaml(config_path)
         
         # 分析結果の読み込み
@@ -81,13 +83,34 @@ class ITGovernanceReportGenerator:
         with open(analysis_results_path, 'r', encoding='utf-8') as f:
             self.analysis_results = json.load(f)
         
+        # ========== 追加部分 ==========
+        # 生データと前処理済みデータの読み込み（ヒートマップ用）
+        try:
+            raw_data_path = self.config['paths']['raw_data']
+            print(f"生データ読み込み試行: {raw_data_path}")
+            self.raw_data = pd.read_csv(raw_data_path)
+            print(f"  ✓ 生データ読み込み成功: {len(self.raw_data)}行")
+        except Exception as e:
+            print(f"  ⚠️ 生データの読み込みに失敗: {e}")
+            self.raw_data = None
+        
+        try:
+            preprocessed_data_path = self.config['paths']['preprocessed_data']
+            print(f"前処理済みデータ読み込み試行: {preprocessed_data_path}")
+            self.data = pd.read_csv(preprocessed_data_path)
+            print(f"  ✓ 前処理済みデータ読み込み成功: {len(self.data)}行")
+        except Exception as e:
+            print(f"  ⚠️ 前処理済みデータの読み込みに失敗: {e}")
+            self.data = None
+        # ========== 追加部分終わり ==========
+        
         # グラフスタイルの設定
         self._setup_plot_style()
         
         # 出力ディレクトリの作成
         self.graph_dir = Path('reports/graphs')
         self.graph_dir.mkdir(parents=True, exist_ok=True)
-    
+
     def _setup_plot_style(self):
         """グラフスタイルの設定"""
         sns.set_style("whitegrid")
@@ -147,55 +170,104 @@ class ITGovernanceReportGenerator:
         """
         可視化B: 意思決定プロセスの実態
         
-        セクション1の「新しいツール・システム導入時の決定方法」を可視化
+        地域別・部門別それぞれで作成
         """
-        print("\n[可視化B] 意思決定プロセスの実態")
+        print("\n[可視化B] 意思決定プロセスの実態（地域別・部門別）")
         
-        # セクション1 Q2のデータを取得
-        s1_data = self.analysis_results['selection_rates'].get('section1', {})
-        s1_q2_data = s1_data.get('s1_q2', {})
+        breakdown = self.analysis_results.get('decision_process_breakdown', {})
+        by_region = breakdown.get('by_region', {})
+        by_department = breakdown.get('by_department', {})
         
-        if not s1_q2_data or 'rates' not in s1_q2_data:
-            print("  ⚠️ データが見つかりません")
-            return None
+        output_paths = []
         
-        rates = s1_q2_data['rates']
+        # 地域別
+        if by_region:
+            fig = self._create_decision_process_bar_chart(
+                by_region,
+                '意思決定プロセス（地域別）',
+                '新しいツール・システム導入時の意思決定方法'
+            )
+            path = self.graph_dir / 'visualization_B_decision_process_by_region.png'
+            fig.savefig(path, dpi=150, bbox_inches='tight')
+            plt.close(fig)
+            output_paths.append(str(path))
+            print(f"  ✓ 保存: {path}")
         
-        # データを整形
-        processes = []
-        percentages = []
+        # 部門別
+        if by_department:
+            fig = self._create_decision_process_bar_chart(
+                by_department,
+                '意思決定プロセス（部門別）',
+                '新しいツール・システム導入時の意思決定方法'
+            )
+            path = self.graph_dir / 'visualization_B_decision_process_by_department.png'
+            fig.savefig(path, dpi=150, bbox_inches='tight')
+            plt.close(fig)
+            output_paths.append(str(path))
+            print(f"  ✓ 保存: {path}")
         
-        for process, data in sorted(rates.items(), key=lambda x: x[1]['rate'], reverse=True):
-            if 'その他' not in process:
-                processes.append(process)
-                percentages.append(data['rate'])
+        # フォールバック: 従来の全体データ
+        if not output_paths:
+            s1_data = self.analysis_results.get('selection_rates', {}).get('section1', {})
+            s1_q2_data = s1_data.get('s1_q2', {})
+            if s1_q2_data and 'rates' in s1_q2_data:
+                single_data = {'全体': {'rates': s1_q2_data['rates'], 'respondent_count': 100}}
+                fig = self._create_decision_process_bar_chart(
+                    single_data, '意思決定プロセス', '新しいツール・システム導入時の意思決定方法'
+                )
+                path = self.graph_dir / 'visualization_B_decision_process.png'
+                fig.savefig(path, dpi=150, bbox_inches='tight')
+                plt.close(fig)
+                output_paths.append(str(path))
         
-        # 横棒グラフを作成
-        fig, ax = plt.subplots(figsize=(12, 8))
+        return output_paths[0] if output_paths else None
+    
+    def _create_decision_process_bar_chart(self, breakdown_data, main_title, sub_title):
+        """意思決定プロセスの横棒グラフ（複数グループ対応）"""
+        all_processes = set()
+        for group_data in breakdown_data.values():
+            for p in group_data.get('rates', {}).keys():
+                if 'その他' not in p:
+                    all_processes.add(p)
+        processes = sorted(all_processes, key=lambda p: sum(
+            g.get('rates', {}).get(p, {}).get('rate', 0) for g in breakdown_data.values()
+        ), reverse=True)
         
-        colors = sns.color_palette("RdYlGn_r", len(processes))
-        bars = ax.barh(processes, percentages, color=colors)
+        if not processes:
+            fig, ax = plt.subplots(figsize=(12, 6))
+            ax.text(0.5, 0.5, 'データがありません', ha='center', va='center')
+            return fig
         
+        groups = list(breakdown_data.keys())
+        n_processes = len(processes)
+        bar_height = 0.8 / max(1, len(groups))
+        y_base = np.arange(n_processes) * 1.2
+        
+        fig, ax = plt.subplots(figsize=(12, max(8, n_processes * 0.9)))
+        # 地域の場合は統一色（日本=赤、北米=濃い青、EMEA=薄い青）、それ以外はhusl
+        if all(g in REGION_COLORS for g in groups):
+            colors = [REGION_COLORS[g] for g in groups]
+        else:
+            colors = sns.color_palette("husl", len(groups))
+        
+        for i, group in enumerate(groups):
+            rates = breakdown_data[group].get('rates', {})
+            vals = [rates.get(p, {}).get('rate', 0) for p in processes]
+            y_pos = y_base + i * bar_height
+            bars = ax.barh(y_pos, vals, bar_height * 0.9, label=group, color=colors[i])
+            for bar, v in zip(bars, vals):
+                if v > 0:
+                    ax.text(v + 2, bar.get_y() + bar.get_height()/2, f'{v:.1f}%',
+                           va='center', fontsize=8)
+        
+        ax.set_yticks(y_base + bar_height * (len(groups) - 1) / 2)
+        ax.set_yticklabels(processes, fontsize=10)
         ax.set_xlabel('選択率 (%)', fontsize=12)
-        ax.set_title('新しいツール・システム導入時の意思決定プロセス', 
-                    fontsize=14, fontweight='bold', pad=20)
-        
-        # パーセント表示
-        for i, (bar, pct) in enumerate(zip(bars, percentages)):
-            ax.text(pct + 2, bar.get_y() + bar.get_height()/2, 
-                   f'{pct:.1f}%',
-                   va='center', fontsize=9)
-        
-        ax.set_xlim(0, max(percentages) * 1.15)
+        ax.set_title(f'{main_title}\n{sub_title}', fontsize=14, fontweight='bold', pad=20)
+        ax.legend(loc='lower right', fontsize=9)
+        ax.set_xlim(0, 100)
         ax.grid(axis='x', alpha=0.3)
-        
-        plt.tight_layout()
-        output_path = self.graph_dir / 'visualization_B_decision_process.png'
-        plt.savefig(output_path, dpi=150, bbox_inches='tight')
-        plt.close()
-        
-        print(f"  ✓ 保存: {output_path}")
-        return str(output_path)
+        return fig
     
     # ==========================================
     # 可視化C: セキュリティ成熟度マップ
@@ -205,67 +277,85 @@ class ITGovernanceReportGenerator:
         """
         可視化C: セキュリティ成熟度マップ
         
-        部門別のセキュリティ成熟度を可視化
+        地域別・部門別それぞれで作成
         """
-        print("\n[可視化C] セキュリティ成熟度マップ")
+        print("\n[可視化C] セキュリティ成熟度マップ（地域別・部門別）")
         
         security_data = self.analysis_results.get('security_maturity', {})
+        region_data = security_data.get('by_region', {})
         dept_data = security_data.get('by_department', {})
         
-        if not dept_data:
-            print("  ⚠️ 部門別データが見つかりません")
-            return None
+        output_paths = []
         
-        # データを整形
-        departments = []
+        # 地域別
+        if region_data:
+            path = self._save_security_maturity_chart(
+                region_data, security_data,
+                'visualization_C_security_maturity_by_region.png',
+                'セキュリティ成熟度（地域別）'
+            )
+            if path:
+                output_paths.append(path)
+                print(f"  ✓ 保存: {path}")
+        
+        # 部門別
+        if dept_data:
+            path = self._save_security_maturity_chart(
+                dept_data, security_data,
+                'visualization_C_security_maturity_by_department.png',
+                'セキュリティ成熟度（部門別）'
+            )
+            if path:
+                output_paths.append(path)
+                print(f"  ✓ 保存: {path}")
+        
+        return output_paths[0] if output_paths else None
+    
+    def _save_security_maturity_chart(self, group_data, security_data, filename, title):
+        """セキュリティ成熟度の横棒グラフを保存"""
+        groups = []
         percentages = []
         levels = []
         
-        for dept, data in sorted(dept_data.items(), key=lambda x: x[1]['percentage'], reverse=True):
-            departments.append(dept)
+        for name, data in sorted(group_data.items(), key=lambda x: x[1]['percentage'], reverse=True):
+            groups.append(name)
             percentages.append(data['percentage'])
             levels.append(data['maturity_level'])
         
-        # 色を成熟度レベルに応じて設定
-        colors = []
-        for level in levels:
-            if level == '高':
-                colors.append('#4CAF50')  # 緑
-            elif level == '中':
-                colors.append('#FFC107')  # 黄
-            else:
-                colors.append('#F44336')  # 赤
+        # 地域別の場合は統一色（日本=赤、北米=濃い青、EMEA=薄い青）、部門別は成熟度で色分け
+        if all(g in REGION_COLORS for g in groups):
+            colors = [REGION_COLORS[g] for g in groups]
+        else:
+            colors = []
+            for level in levels:
+                if level == '高':
+                    colors.append('#4CAF50')
+                elif level == '中':
+                    colors.append('#FFC107')
+                else:
+                    colors.append('#F44336')
         
-        # 横棒グラフを作成
-        fig, ax = plt.subplots(figsize=(12, 8))
+        fig, ax = plt.subplots(figsize=(12, max(6, len(groups) * 1.2)))
+        bars = ax.barh(groups, percentages, color=colors)
         
-        bars = ax.barh(departments, percentages, color=colors)
-        
-        ax.set_xlabel('セキュリティ成熟度スコア (%)', fontsize=12)
-        ax.set_title('部門別セキュリティ成熟度', 
-                    fontsize=14, fontweight='bold', pad=20)
-        
-        # スコアとレベルを表示
-        for i, (bar, pct, level) in enumerate(zip(bars, percentages, levels)):
+        for bar, pct, level in zip(bars, percentages, levels):
             ax.text(pct + 2, bar.get_y() + bar.get_height()/2, 
-                   f'{pct:.1f}% ({level})',
-                   va='center', fontsize=9)
+                   f'{pct:.1f}% ({level})', va='center', fontsize=9)
         
-        # 全体平均線を追加
         overall_pct = security_data.get('overall', {}).get('percentage', 0)
         ax.axvline(overall_pct, color='blue', linestyle='--', 
                   linewidth=2, label=f'全体平均: {overall_pct:.1f}%', alpha=0.7)
         
-        ax.set_xlim(0, max(percentages) * 1.2)
+        ax.set_xlabel('セキュリティ成熟度スコア (%)', fontsize=12)
+        ax.set_title(title, fontsize=14, fontweight='bold', pad=20)
+        ax.set_xlim(0, max(percentages) * 1.2 if percentages else 20)
         ax.legend(loc='lower right')
         ax.grid(axis='x', alpha=0.3)
         
         plt.tight_layout()
-        output_path = self.graph_dir / 'visualization_C_security_maturity.png'
+        output_path = self.graph_dir / filename
         plt.savefig(output_path, dpi=150, bbox_inches='tight')
         plt.close()
-        
-        print(f"  ✓ 保存: {output_path}")
         return str(output_path)
     
     # ==========================================
@@ -276,71 +366,246 @@ class ITGovernanceReportGenerator:
         """
         可視化D: 困りごと・ニーズ分析
         
-        困りごとトップ15と必要な支援トップ10を並べて表示
+        TOP10形式で地域間比較（困りごと、必要な支援を別々に）
         """
-        print("\n[可視化D] 困りごと・ニーズ分析")
+        print("\n[可視化D] 困りごと・ニーズ分析（TOP10・地域比較）")
         
         pain_data = self.analysis_results.get('pain_points', {})
         support_data = self.analysis_results.get('support_needs', {})
         
-        top_pains = pain_data.get('top_pain_points', [])[:15]
-        top_supports = support_data.get('combined', [])[:10]
+        pain_by_region = pain_data.get('by_region', {})
+        support_by_region = support_data.get('by_region', {})
         
-        # 2つのサブプロットを作成
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 10))
+        if not pain_by_region and not support_by_region:
+            print("  ⚠️ 地域別データが見つかりません")
+            return None
         
-        # 左: 困りごとトップ15
-        if top_pains:
-            pains = [p['pain_point'][:40] + '...' if len(p['pain_point']) > 40 else p['pain_point'] 
-                    for p in top_pains]
-            pain_rates = [p['rate'] for p in top_pains]
-            
-            colors1 = sns.color_palette("Reds_r", len(pains))
-            bars1 = ax1.barh(pains, pain_rates, color=colors1)
-            
-            ax1.set_xlabel('選択率 (%)', fontsize=11)
-            ax1.set_title('困りごとトップ15', fontsize=13, fontweight='bold', pad=15)
-            
-            for bar, rate in zip(bars1, pain_rates):
-                ax1.text(rate + 1, bar.get_y() + bar.get_height()/2, 
-                        f'{rate:.1f}%',
-                        va='center', fontsize=8)
-            
-            ax1.set_xlim(0, max(pain_rates) * 1.15)
-            ax1.grid(axis='x', alpha=0.3)
-            ax1.invert_yaxis()
+        output_paths = {}
         
-        # 右: 必要な支援トップ10
-        if top_supports:
-            supports = [s['support'][:40] + '...' if len(s['support']) > 40 else s['support'] 
-                       for s in top_supports]
-            support_rates = [s['rate'] for s in top_supports]
+        # ========================================
+        # 1. 困りごとの地域比較グラフ
+        # ========================================
+        if pain_by_region:
+            fig = self._create_regional_comparison_chart(
+                pain_by_region,
+                '困りごとトップ10（地域比較）',
+                'top_pain_points',
+                'pain_point'
+            )
             
-            colors2 = sns.color_palette("Greens_r", len(supports))
-            bars2 = ax2.barh(supports, support_rates, color=colors2)
+            output_path_pain = self.graph_dir / 'visualization_D1_pain_points_regional_comparison.png'
+            fig.savefig(output_path_pain, dpi=150, bbox_inches='tight')
+            plt.close(fig)
             
-            ax2.set_xlabel('選択率 (%)', fontsize=11)
-            ax2.set_title('必要な支援トップ10', fontsize=13, fontweight='bold', pad=15)
-            
-            for bar, rate in zip(bars2, support_rates):
-                ax2.text(rate + 1, bar.get_y() + bar.get_height()/2, 
-                        f'{rate:.1f}%',
-                        va='center', fontsize=8)
-            
-            ax2.set_xlim(0, max(support_rates) * 1.15)
-            ax2.grid(axis='x', alpha=0.3)
-            ax2.invert_yaxis()
+            print(f"  ✓ 保存: {output_path_pain}")
+            output_paths['pain_points'] = str(output_path_pain)
         
-        plt.suptitle('ITガバナンス実態調査: 困りごと・ニーズ分析', 
-                    fontsize=15, fontweight='bold', y=0.98)
+        # ========================================
+        # 2. 必要な支援の地域比較グラフ
+        # ========================================
+        if support_by_region:
+            fig = self._create_regional_comparison_chart(
+                support_by_region,
+                '必要な支援トップ10（地域比較）',
+                'top_support_needs',
+                'support'
+            )
+            
+            output_path_support = self.graph_dir / 'visualization_D2_support_needs_regional_comparison.png'
+            fig.savefig(output_path_support, dpi=150, bbox_inches='tight')
+            plt.close(fig)
+            
+            print(f"  ✓ 保存: {output_path_support}")
+            output_paths['support_needs'] = str(output_path_support)
+        
+        return output_paths
+    
+    def _create_regional_comparison_chart(self, region_data, title, data_key, item_key):
+        """
+        地域比較グラフを作成（困りごと or 必要な支援）
+        
+        Args:
+            region_data: 地域別データ
+            title: グラフタイトル
+            data_key: データキー ('top_pain_points' or 'top_support_needs')
+            item_key: 項目キー ('pain_point' or 'support')
+        
+        Returns:
+            matplotlib figure
+        """
+        regions = ['日本', '北米', 'EMEA']
+        
+        # 各地域のトップ10を取得
+        region_items = {}
+        for region in regions:
+            if region in region_data:
+                items = region_data[region].get(data_key, [])[:10]
+                region_items[region] = items
+        
+        # 全地域の項目を統合してユニークな項目リストを作成（出現頻度順）
+        all_items_count = {}
+        all_items_first = {}  # 各項目名が最初に出現したデータを保持
+        
+        for region, items in region_items.items():
+            for item in items:
+                item_text = item[item_key]
+                if item_text not in all_items_count:
+                    all_items_count[item_text] = 0
+                    all_items_first[item_text] = item  # 最初の出現を保存
+                all_items_count[item_text] += item['count']
+        
+        # 出現頻度順にソート（上位15項目）
+        sorted_items = sorted(all_items_count.items(), key=lambda x: x[1], reverse=True)[:15]
+        unique_items = [item[0] for item in sorted_items]
+        
+        # 各地域・各項目の選択率を格納
+        region_rates = {region: [] for region in regions}
+        
+        for item_text in unique_items:
+            for region in regions:
+                # この地域でこの項目の選択率を探す（最初に見つかったもののみ使用）
+                rate = 0
+                if region in region_items:
+                    for item in region_items[region]:
+                        if item[item_key] == item_text:
+                            rate = item['rate']
+                            break  # 最初に見つかったものを使用
+                region_rates[region].append(rate)
+        
+        # グラフを作成（横並びの棒グラフ）
+        fig, ax = plt.subplots(figsize=(16, 10))
+        
+        # 項目数とバーの設定
+        n_items = len(unique_items)
+        bar_height = 0.25
+        y_pos = np.arange(n_items)
+        
+        # 色設定（日本=赤、北米=濃い青、EMEA=薄い青）
+        colors = REGION_COLORS
+        
+        # 各地域のバーを描画
+        for idx, region in enumerate(regions):
+            if region in region_items:
+                offset = (idx - 1) * bar_height
+                rates = region_rates[region]
+                
+                bars = ax.barh(y_pos + offset, rates, bar_height, 
+                              label=f'{region} ({region_data[region]["respondent_count"]}名)',
+                              color=colors.get(region, '#95A5A6'),
+                              alpha=0.8)
+                
+                # 値ラベルを追加（5%以上の場合）
+                for bar, rate in zip(bars, rates):
+                    if rate >= 5.0:
+                        width = bar.get_width()
+                        ax.text(width + 1, bar.get_y() + bar.get_height()/2,
+                               f'{rate:.0f}%',
+                               va='center', fontsize=8, color=colors.get(region, '#95A5A6'))
+        
+        # 項目ラベル（長い場合は省略）
+        item_labels = []
+        for item in unique_items:
+            if len(item) > 35:
+                item_labels.append(item[:32] + '...')
+            else:
+                item_labels.append(item)
+        
+        # 軸の設定
+        ax.set_yticks(y_pos)
+        ax.set_yticklabels(item_labels, fontsize=10)
+        ax.set_xlabel('選択率 (%)', fontsize=11)
+        ax.set_title(title, fontsize=14, fontweight='bold', pad=20)
+        ax.legend(loc='lower right', fontsize=10)
+        ax.grid(axis='x', alpha=0.3)
+        ax.invert_yaxis()
+        
+        # X軸の範囲を設定
+        max_rate = max([max(rates) for rates in region_rates.values()] + [0])
+        ax.set_xlim(0, max_rate * 1.2)
+        
         plt.tight_layout()
         
-        output_path = self.graph_dir / 'visualization_D_pain_points_needs.png'
-        plt.savefig(output_path, dpi=150, bbox_inches='tight')
-        plt.close()
+        return fig
+    
+    def _plot_stacked_bars(self, ax, section_data, respondent_counts, section_colors, regions, title):
+        """
+        積み上げ横棒グラフをプロット
         
-        print(f"  ✓ 保存: {output_path}")
-        return str(output_path)
+        Args:
+            ax: matplotlibのaxesオブジェクト
+            section_data: 地域別・セクション別のデータ {'日本': {'セクション4': {'percentage': 30.5, ...}, ...}, ...}
+            respondent_counts: 地域別の回答者数 {'日本': 36, ...}
+            section_colors: セクション別の色マッピング
+            regions: 地域のリスト
+            title: グラフタイトル
+        """
+        # 全セクションのリストを取得（出現順）
+        all_sections = []
+        for region_data in section_data.values():
+            for section in region_data.keys():
+                if section not in all_sections:
+                    all_sections.append(section)
+        
+        # 地域数
+        n_regions = len([r for r in regions if r in section_data])
+        
+        # Y軸の位置
+        y_pos = np.arange(n_regions)
+        
+        # 各地域の積み上げバーを作成
+        region_labels = []
+        left_positions = [0] * n_regions
+        
+        for idx, region in enumerate(regions):
+            if region not in section_data:
+                continue
+            
+            respondent_count = respondent_counts.get(region, 0)
+            region_labels.append(f'{region}\n({respondent_count}名)')
+        
+        # セクションごとにバーを積み上げ
+        for section in all_sections:
+            widths = []
+            colors = []
+            
+            for region in regions:
+                if region not in section_data:
+                    continue
+                
+                region_sections = section_data[region]
+                
+                if section in region_sections:
+                    percentage = region_sections[section]['percentage']
+                    widths.append(percentage)
+                else:
+                    widths.append(0)
+                
+                colors.append(section_colors.get(section, '#95A5A6'))
+            
+            # バーをプロット
+            bars = ax.barh(y_pos, widths, left=left_positions, 
+                          color=colors, edgecolor='white', linewidth=1)
+            
+            # パーセンテージラベルを追加（5%以上の場合のみ）
+            for idx, (bar, width, left) in enumerate(zip(bars, widths, left_positions)):
+                if width >= 5.0:  # 5%以上の場合のみ表示
+                    label_x = left + width / 2
+                    label_y = bar.get_y() + bar.get_height() / 2
+                    ax.text(label_x, label_y, f'{width:.1f}%',
+                           ha='center', va='center', fontsize=9, 
+                           color='white', fontweight='bold')
+            
+            # 左位置を更新
+            left_positions = [left + width for left, width in zip(left_positions, widths)]
+        
+        # 軸の設定
+        ax.set_yticks(y_pos)
+        ax.set_yticklabels(region_labels, fontsize=11)
+        ax.set_xlabel('割合 (%)', fontsize=11)
+        ax.set_xlim(0, 100)
+        ax.set_title(title, fontsize=13, fontweight='bold', pad=15)
+        ax.grid(axis='x', alpha=0.3)
+        ax.invert_yaxis()
     
     # ==========================================
     # 可視化E: 部門別プロファイル
@@ -348,96 +613,173 @@ class ITGovernanceReportGenerator:
     
     def create_department_profile_chart(self):
         """
-        可視化E: 部門別プロファイル
+        可視化E: 部門別の強み分析（困りごとの少なさ）
         
-        各部門の特徴を一覧表示
+        縦軸: 部門名
+        横軸: セクション
+        値: 困りごとの逆数（困りごとが少ない = 強み・ベストプラクティスを持つ可能性）
         """
-        print("\n[可視化E] 部門別プロファイル")
+        print("\n[可視化E] 部門別の強み分析（ヒートマップ）")
         
-        profiles = self.analysis_results.get('department_profiles', {})
+        # データの存在確認（詳細ログ付き）
+        print(f"  - raw_data: {'あり' if self.raw_data is not None else 'なし'}")
+        print(f"  - data: {'あり' if self.data is not None else 'なし'}")
         
-        if not profiles:
-            print("  ⚠️ 部門別プロファイルが見つかりません")
+        if self.raw_data is None:
+            print("  ⚠️ 生データが見つかりません")
             return None
         
-        # 部門数
-        n_depts = len(profiles)
+        if self.data is None:
+            print("  ⚠️ 前処理済みデータが見つかりません")
+            return None
         
-        # サブプロット作成
-        fig, axes = plt.subplots(2, 1, figsize=(14, 10))
+        # 所属部門列の存在確認
+        if '所属部門' not in self.raw_data.columns:
+            print(f"  ⚠️ '所属部門'列が見つかりません")
+            print(f"  利用可能な列: {list(self.raw_data.columns[:10])}")
+            return None
         
-        # 上: 回答者数とIT予算
-        departments = list(profiles.keys())
-        respondent_counts = [profiles[d]['respondent_count'] for d in departments]
-        avg_budgets = [profiles[d]['average_budget'] / 10000 for d in departments]  # 万円→億円
+        pain_data = self.analysis_results.get('pain_points', {})
+        all_pain_points = pain_data.get('all_pain_points', [])
         
-        x = np.arange(len(departments))
-        width = 0.35
+        print(f"  - 困りごとデータ: {len(all_pain_points)}件")
         
-        ax1 = axes[0]
-        bars1 = ax1.bar(x - width/2, respondent_counts, width, label='回答者数', color='#2196F3')
+        if not all_pain_points:
+            print("  ⚠️ 困りごとデータが見つかりません")
+            return None
         
-        ax1.set_ylabel('回答者数', fontsize=11)
-        ax1.set_title('部門別プロファイル: 回答者数とIT予算', 
-                     fontsize=13, fontweight='bold', pad=15)
-        ax1.set_xticks(x)
-        ax1.set_xticklabels(departments, rotation=45, ha='right')
-        ax1.legend(loc='upper left')
-        ax1.grid(axis='y', alpha=0.3)
+        # 部門リストを取得
+        departments = sorted(self.raw_data['所属部門'].unique())
+        print(f"  - 部門数: {len(departments)}")
         
-        # 値表示
-        for bar in bars1:
-            height = bar.get_height()
-            ax1.text(bar.get_x() + bar.get_width()/2, height,
-                    f'{int(height)}',
-                    ha='center', va='bottom', fontsize=8)
+        # セクションリスト
+        sections = [
+            'セクション1 tech adoption',
+            'セクション2 security',
+            'セクション3 data handling',
+            'セクション4 change trouble',
+            'セクション5 budget',
+            'セクション6 vendor',
+            'セクション7 others'
+        ]
+        # S1〜S7 に英語ラベルを付与（分かりやすくするため）
+        section_labels = [
+            'S1\nTech adoption',
+            'S2\nSecurity',
+            'S3\nData handling',
+            'S4\nChange/Trouble',
+            'S5\nBudget',
+            'S6\nVendor',
+            'S7\nOthers'
+        ]
         
-        # 予算を右軸に追加
-        ax1_right = ax1.twinx()
-        bars2 = ax1_right.bar(x + width/2, avg_budgets, width, label='平均IT予算', color='#4CAF50')
-        ax1_right.set_ylabel('平均IT予算 (億円)', fontsize=11)
-        ax1_right.legend(loc='upper right')
-        
-        for bar in bars2:
-            height = bar.get_height()
-            ax1_right.text(bar.get_x() + bar.get_width()/2, height,
-                          f'{height:.2f}',
-                          ha='center', va='bottom', fontsize=8)
-        
-        # 下: 主な困りごと
-        ax2 = axes[1]
-        ax2.axis('off')
-        
-        # 表形式でプロファイル表示
-        table_data = []
-        headers = ['部門', '回答者数', '平均予算\n(万円)', '主な困りごと']
+        # 部門×セクションの困りごとスコアを計算
+        dept_section_scores = {}
         
         for dept in departments:
-            profile = profiles[dept]
-            top_issues = profile.get('top_issues', [])[:2]  # 上位2つ
-            issues_text = '\n'.join([f"• {issue['issue'][:20]}" for issue in top_issues])
+            dept_indices = self.raw_data[self.raw_data['所属部門'] == dept].index
+            dept_data = self.data.loc[dept_indices]
+            n_dept = len(dept_data)
             
-            table_data.append([
-                dept,
-                f"{profile['respondent_count']}名",
-                f"{profile['average_budget']:.0f}",
-                issues_text if issues_text else '（なし）'
-            ])
+            if n_dept == 0:
+                continue
+            
+            dept_scores = []
+            
+            for section in sections:
+                # このセクションの困りごとを抽出
+                section_pain_points = [p for p in all_pain_points if p.get('section') == section]
+                
+                if not section_pain_points:
+                    # データがない場合は中立値
+                    dept_scores.append(50.0)
+                    continue
+                
+                # この部門でのセクションの困りごと選択率を計算
+                total_rate = 0
+                count = 0
+                
+                for pain in section_pain_points:
+                    pain_point = pain['pain_point']
+                    # 困りごとの列名を構築（質問文は不明なので、列名から検索）
+                    matching_cols = [col for col in dept_data.columns if pain_point in col]
+                    
+                    for col in matching_cols:
+                        if dept_data[col].sum() > 0:
+                            rate = (dept_data[col].sum() / n_dept) * 100
+                            total_rate += rate
+                            count += 1
+                
+                # 平均困りごと選択率
+                avg_pain_rate = total_rate / count if count > 0 else 0
+                
+                # 逆数に変換（困りごとが少ない = 高スコア）
+                strength_score = 100 - avg_pain_rate
+                dept_scores.append(strength_score)
+            
+            dept_section_scores[dept] = dept_scores
         
-        table = ax2.table(cellText=table_data, colLabels=headers,
-                         cellLoc='left', loc='center',
-                         colWidths=[0.15, 0.12, 0.15, 0.58])
+        # ヒートマップ用の行列を作成
+        heatmap_data = []
+        dept_labels = []
         
-        table.auto_set_font_size(False)
-        table.set_fontsize(9)
-        table.scale(1, 2.5)
+        for dept in departments:
+            if dept in dept_section_scores:
+                heatmap_data.append(dept_section_scores[dept])
+                dept_labels.append(dept)
         
-        # ヘッダーのスタイル
-        for i in range(len(headers)):
-            table[(0, i)].set_facecolor('#E3F2FD')
-            table[(0, i)].set_text_props(weight='bold')
+        heatmap_matrix = np.array(heatmap_data)
         
-        plt.suptitle('部門別プロファイル', fontsize=15, fontweight='bold', y=0.98)
+        # RAGカラー: 閾値 20以下=赤(困っている), 20超〜50=黄(中間), 50超=緑(困っていない)
+        RAG_THRESHOLD_TROUBLED = 20   # 以下なら困っている
+        RAG_THRESHOLD_OK = 50         # 超えていれば困っていない
+        rag_colors = ['#C62828', '#F9A825', '#2E7D32']  # Red, Amber, Green
+        rag_cmap = ListedColormap(rag_colors)
+        rag_bounds = [0, RAG_THRESHOLD_TROUBLED, RAG_THRESHOLD_OK, 100]
+        rag_norm = BoundaryNorm(rag_bounds, rag_cmap.N)
+        
+        # ヒートマップを描画
+        fig, ax = plt.subplots(figsize=(12, 8))
+        
+        im = ax.imshow(heatmap_matrix, cmap=rag_cmap, norm=rag_norm, aspect='auto')
+        
+        # 軸の設定
+        ax.set_xticks(np.arange(len(section_labels)))
+        ax.set_yticks(np.arange(len(dept_labels)))
+        ax.set_xticklabels(section_labels, fontsize=11)
+        ax.set_yticklabels(dept_labels, fontsize=11)
+        
+        # X軸ラベルを上に配置
+        ax.xaxis.tick_top()
+        ax.xaxis.set_label_position('top')
+        
+        # グリッド線
+        ax.set_xticks(np.arange(len(section_labels) + 1) - 0.5, minor=True)
+        ax.set_yticks(np.arange(len(dept_labels) + 1) - 0.5, minor=True)
+        ax.grid(which='minor', color='white', linestyle='-', linewidth=2)
+        
+        # 各セルに値を表示
+        for i in range(len(dept_labels)):
+            for j in range(len(section_labels)):
+                value = heatmap_matrix[i, j]
+                # 値に応じて文字色を変更（赤セルは白文字、黄・緑は黒文字）
+                text_color = 'white' if value <= RAG_THRESHOLD_TROUBLED else 'black'
+                text = ax.text(j, i, f'{value:.0f}',
+                             ha='center', va='center', 
+                             color=text_color, fontsize=10, fontweight='bold')
+        
+        # カラーバー（閾値: ≤20=赤, 20-50=黄, >50=緑）
+        cbar = plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04, ticks=[10, 35, 75])
+        cbar.ax.set_yticklabels(['≤20 困っている', '20-50 中間', '>50 困っていない'], fontsize=10)
+        cbar.set_label('強みスコア', rotation=270, labelpad=20, fontsize=11)
+        
+        # タイトルと説明
+        ax.set_xlabel('調査セクション', fontsize=12, labelpad=10)
+        ax.set_ylabel('部門', fontsize=12)
+        
+        plt.title('部門別の強み分析（RAG: ≤20=赤/困っている, >50=緑/困っていない）', 
+                 fontsize=14, fontweight='bold', pad=20)
+        
         plt.tight_layout()
         
         output_path = self.graph_dir / 'visualization_E_department_profile.png'
@@ -561,12 +903,13 @@ class ITGovernanceReportGenerator:
 ## 目次
 
 1. [エグゼクティブサマリー](#1-エグゼクティブサマリー)
-2. [セキュリティ成熟度分析](#2-セキュリティ成熟度分析)
-3. [意思決定プロセス分析](#3-意思決定プロセス分析)
-4. [困りごと分析](#4-困りごと分析)
-5. [必要な支援分析](#5-必要な支援分析)
-6. [部門別プロファイル](#6-部門別プロファイル)
-7. [グラフ一覧](#7-グラフ一覧)
+2. [可視化一覧表](#2-可視化一覧表)
+3. [A: 導入ツール・ベンダーマップ](#3-a-導入ツールベンダーマップ)
+4. [B: 意思決定プロセスの実態](#4-b-意思決定プロセスの実態)
+5. [C: セキュリティ成熟度マップ](#5-c-セキュリティ成熟度マップ)
+6. [D: 困りごと・ニーズ分析](#6-d-困りごとニーズ分析)
+7. [E: 部門別プロファイル](#7-e-部門別プロファイル)
+8. [グラフ一覧](#8-グラフ一覧)
 
 ---
 
@@ -577,163 +920,83 @@ class ITGovernanceReportGenerator:
 - **総回答数**: {self.analysis_results['metadata']['total_respondents']}件
 - **調査項目**: 全7セクション・37問
 
-### セキュリティ成熟度スコア
+"""
+        
+        # セキュリティ成熟度サマリー
+        sm = self.analysis_results.get('security_maturity', {}).get('overall', {})
+        md += f"- **セキュリティ成熟度スコア**: {sm.get('percentage', 0):.1f}% ({sm.get('maturity_level', '不明')})\n\n"
+        md += "---\n\n"
+        
+        # 可視化一覧表
+        md += """## 2. 可視化一覧表
+
+| 可視化 | 目的 | わかること | わからないこと | データソース |
+|--------|------|-----------|---------------|-------------|
+| **A: 導入ツール・ベンダーマップ** | 全社のツール・ベンダー利用状況を一覧化 | ・同じカテゴリで複数ツールが存在する領域<br>・部門ごとの契約状況<br>・年間コストの全体像 | ・統合した場合の正確な削減額（契約条件の詳細が必要）<br>・なぜそのツールを選んだのか（個別ヒアリングが必要） | セクション1 Q1<br>セクション6 Q1 |
+| **B: 意思決定プロセスの実態** | 判断プロセスのバラつきを把握 | ・金額基準の部門間のバラつき<br>・実際にどういうプロセスで決めているか<br>・何に困っているか | ・なぜバラついているのか（歴史的経緯、組織文化）<br>・判断の質（良い判断ができているか） | セクション1 Q2, Q4, Q5 |
+| **C: セキュリティ成熟度マップ** | セキュリティ対策の実施状況を部門別に把握 | ・部門別のセキュリティ成熟度<br>・特に対応が遅れている項目<br>・共通アカウント利用など明らかな問題 | ・実装の技術的な正確性（監査が必要）<br>・実際のインシデント発生状況（ログ分析が必要） | セクション2 Q1-Q4 |
+| **D: 困りごと・ニーズ分析** | 現場が求める支援を特定 | ・現場が最も求めている支援<br>・共通する困りごと<br>・地域による違い | ・支援策の具体的な設計内容（別途検討が必要） | 全セクションの「困ること」<br>セクション5,6,7の支援質問 |
+| **E: 部門別プロファイル** | ベストプラクティス保有部門の特定 | ・セクション別に困っていない度合い<br>・ベストプラクティスを持つ可能性がある部門<br>・部門間の知識共有の機会 | ・具体的なベストプラクティスの内容（個別ヒアリングが必要） | 全セクションの困りごと |
+
+---
 
 """
         
-        # セキュリティ成熟度
-        sm = self.analysis_results.get('security_maturity', {}).get('overall', {})
-        md += f"- **全体スコア**: {sm.get('percentage', 0):.1f}% ({sm.get('maturity_level', '不明')})\n\n"
-        
-        # グラフ
-        md += "![セキュリティ成熟度](graphs/visualization_C_security_maturity.png)\n\n"
-        
-        # 困りごとトップ10
-        md += "### 困りごとトップ10\n\n"
-        md += "| 順位 | 困りごと | 選択率 | 件数 |\n"
-        md += "|------|---------|--------|------|\n"
-        
-        top_pains = self.analysis_results.get('pain_points', {}).get('top_pain_points', [])[:10]
-        for i, pp in enumerate(top_pains, 1):
-            md += f"| {i} | {pp['pain_point']} | {pp['rate']:.1f}% | {pp['count']}件 |\n"
-        
-        md += "\n### 必要な支援トップ10\n\n"
-        md += "| 順位 | 支援内容 | 選択率 | 件数 |\n"
-        md += "|------|---------|--------|------|\n"
-        
-        top_supports = self.analysis_results.get('support_needs', {}).get('combined', [])[:10]
-        for i, sn in enumerate(top_supports, 1):
-            md += f"| {i} | {sn['support']} | {sn['rate']:.1f}% | {sn['count']}件 |\n"
-        
-        md += "\n![困りごと・ニーズ](graphs/visualization_D_pain_points_needs.png)\n\n"
+        # A: 導入ツール・ベンダーマップ
+        md += "## 3. A: 導入ツール・ベンダーマップ\n\n"
+        md += '<img src="graphs/visualization_A_vendor_map.png" alt="導入ツール・ベンダーマップ" style="width: 50%;" />\n\n'
         md += "---\n\n"
         
-        # セキュリティ成熟度分析
-        md += "## 2. セキュリティ成熟度分析\n\n"
-        md += "### 全体スコア\n\n"
-        md += f"- **スコア**: {sm.get('percentage', 0):.1f}%\n"
-        md += f"- **成熟度レベル**: {sm.get('maturity_level', '不明')}\n"
-        md += f"- **最大スコア**: {sm.get('max_score', 0):.0f}点中 {sm.get('total_score', 0):.0f}点\n\n"
-        
-        md += "### 項目別スコア\n\n"
-        md += "| 項目 | スコア | 達成率 |\n"
-        md += "|------|--------|--------|\n"
-        
-        item_scores = sm.get('item_scores', {})
-        for item_name, scores in item_scores.items():
-            md += f"| {item_name} | {scores['score']:.1f}点 | {scores['percentage']:.1f}% |\n"
-        
-        md += "\n### 部門別成熟度\n\n"
-        md += "| 部門 | スコア | レベル | 回答者数 |\n"
-        md += "|------|--------|--------|----------|\n"
-        
-        dept_maturity = self.analysis_results.get('security_maturity', {}).get('by_department', {})
-        for dept, data in sorted(dept_maturity.items(), key=lambda x: x[1]['percentage'], reverse=True):
-            md += f"| {dept} | {data['percentage']:.1f}% | {data['maturity_level']} | {data['respondent_count']}名 |\n"
-        
-        md += "\n![部門別セキュリティ成熟度](graphs/visualization_C_security_maturity.png)\n\n"
+        # B: 意思決定プロセスの実態
+        md += "## 4. B: 意思決定プロセスの実態\n\n"
+        md += "### 地域別\n\n"
+        md += '<img src="graphs/visualization_B_decision_process_by_region.png" alt="意思決定プロセス（地域別）" style="width: 50%;" />\n\n'
+        md += "### 部門別\n\n"
+        md += '<img src="graphs/visualization_B_decision_process_by_department.png" alt="意思決定プロセス（部門別）" style="width: 50%;" />\n\n'
         md += "---\n\n"
         
-        # 意思決定プロセス分析
-        md += "## 3. 意思決定プロセス分析\n\n"
-        
-        s1_data = self.analysis_results['selection_rates'].get('section1', {})
-        s1_q2_data = s1_data.get('s1_q2', {})
-        
-        if s1_q2_data and 'rates' in s1_q2_data:
-            md += "### 導入時の意思決定方法\n\n"
-            md += "| 方法 | 選択率 | 件数 |\n"
-            md += "|------|--------|------|\n"
-            
-            for process, data in sorted(s1_q2_data['rates'].items(), key=lambda x: x[1]['rate'], reverse=True):
-                if 'その他' not in process:
-                    md += f"| {process} | {data['rate']:.1f}% | {data['count']}件 |\n"
-        
-        md += "\n![意思決定プロセス](graphs/visualization_B_decision_process.png)\n\n"
+        # C: セキュリティ成熟度マップ
+        md += "## 5. C: セキュリティ成熟度マップ\n\n"
+        md += "### 地域別\n\n"
+        md += '<img src="graphs/visualization_C_security_maturity_by_region.png" alt="セキュリティ成熟度（地域別）" style="width: 50%;" />\n\n'
+        md += "### 部門別\n\n"
+        md += '<img src="graphs/visualization_C_security_maturity_by_department.png" alt="セキュリティ成熟度（部門別）" style="width: 50%;" />\n\n'
         md += "---\n\n"
         
-        # 困りごと分析
-        md += "## 4. 困りごと分析\n\n"
-        md += "### カテゴリ別サマリー\n\n"
-        md += "| カテゴリ | 件数 | 構成比 |\n"
-        md += "|---------|------|--------|\n"
+        # D: 困りごと・ニーズ分析
+        md += "## 6. D: 困りごと・ニーズ分析\n\n"
         
-        category_summary = self.analysis_results.get('pain_points', {}).get('category_summary', {})
-        total_count = sum(data['count'] for data in category_summary.values())
+        md += "### 困りごとトップ10（地域比較）\n\n"
         
-        for cat, data in sorted(category_summary.items(), key=lambda x: x[1]['count'], reverse=True):
-            percentage = (data['count'] / total_count * 100) if total_count > 0 else 0
-            md += f"| {cat} | {data['count']}件 | {percentage:.1f}% |\n"
+        md += '<img src="graphs/visualization_D1_pain_points_regional_comparison.png" alt="困りごとトップ10（地域比較）" style="width: 50%;" />\n\n'
         
-        md += "\n![カテゴリ別分布](graphs/additional_category_summary.png)\n\n"
+        md += "### 必要な支援トップ10（地域比較）\n\n"
         
-        md += "### 詳細リスト（全困りごと）\n\n"
-        md += "| 順位 | カテゴリ | 困りごと | 選択率 | 件数 |\n"
-        md += "|------|---------|---------|--------|------|\n"
+        md += '<img src="graphs/visualization_D2_support_needs_regional_comparison.png" alt="必要な支援トップ10（地域比較）" style="width: 50%;" />\n\n'
         
-        all_pains = self.analysis_results.get('pain_points', {}).get('all_pain_points', [])
-        for i, pp in enumerate(all_pains[:30], 1):  # 上位30個
-            md += f"| {i} | {pp['category']} | {pp['pain_point']} | {pp['rate']:.1f}% | {pp['count']}件 |\n"
+        md += "---\n\n"
         
-        md += "\n---\n\n"
+        # E: 部門別プロファイル
+        md += "## 7. E: 部門別の強み分析\n\n"
         
-        # 必要な支援分析
-        md += "## 5. 必要な支援分析\n\n"
-        md += "### 全体的な支援ニーズ\n\n"
-        md += "| 順位 | 支援内容 | 選択率 | 件数 |\n"
-        md += "|------|---------|--------|------|\n"
+        md += '<img src="graphs/visualization_E_department_profile.png" alt="部門別の強み分析（困りごとの少なさ）" style="width: 50%;" />\n\n'
         
-        general_support = self.analysis_results.get('support_needs', {}).get('general_support', [])
-        for i, sn in enumerate(general_support, 1):
-            md += f"| {i} | {sn['support']} | {sn['rate']:.1f}% | {sn['count']}件 |\n"
-        
-        md += "\n### ベンダー管理での支援ニーズ\n\n"
-        md += "| 順位 | 支援内容 | 選択率 | 件数 |\n"
-        md += "|------|---------|--------|------|\n"
-        
-        vendor_support = self.analysis_results.get('support_needs', {}).get('vendor_support', [])
-        for i, sn in enumerate(vendor_support, 1):
-            md += f"| {i} | {sn['support']} | {sn['rate']:.1f}% | {sn['count']}件 |\n"
-        
-        md += "\n---\n\n"
-        
-        # 部門別プロファイル
-        md += "## 6. 部門別プロファイル\n\n"
-        
-        profiles = self.analysis_results.get('department_profiles', {})
-        
-        for dept in sorted(profiles.keys()):
-            profile = profiles[dept]
-            md += f"### {dept}\n\n"
-            md += f"- **回答者数**: {profile['respondent_count']}名\n"
-            md += f"- **平均IT予算**: {profile['average_budget']:.0f}万円\n\n"
-            
-            if profile.get('change_management'):
-                md += "**変更管理の実施状況（上位5つ）**:\n\n"
-                for i, practice in enumerate(profile['change_management'][:5], 1):
-                    md += f"{i}. {practice['practice']} ({practice['rate']:.1f}%)\n"
-                md += "\n"
-            
-            if profile.get('top_issues'):
-                md += "**主な困りごと**:\n\n"
-                for issue in profile['top_issues']:
-                    md += f"- {issue['issue']}\n"
-                md += "\n"
-        
-        md += "![部門別プロファイル](graphs/visualization_E_department_profile.png)\n\n"
         md += "---\n\n"
         
         # グラフ一覧
-        md += "## 7. グラフ一覧\n\n"
+        md += "## 8. グラフ一覧\n\n"
         md += "### 5つの主要可視化\n\n"
-        md += "1. [導入ツール・ベンダーマップ](graphs/visualization_A_vendor_map.png)\n"
-        md += "2. [意思決定プロセスの実態](graphs/visualization_B_decision_process.png)\n"
-        md += "3. [セキュリティ成熟度マップ](graphs/visualization_C_security_maturity.png)\n"
-        md += "4. [困りごと・ニーズ分析](graphs/visualization_D_pain_points_needs.png)\n"
-        md += "5. [部門別プロファイル](graphs/visualization_E_department_profile.png)\n\n"
-        
-        md += "### 追加の可視化\n\n"
-        md += "- [困りごとカテゴリ別サマリー](graphs/additional_category_summary.png)\n\n"
+        md += "1. [A: 導入ツール・ベンダーマップ](graphs/visualization_A_vendor_map.png)\n"
+        md += "2. B: 意思決定プロセスの実態\n"
+        md += "   - [地域別](graphs/visualization_B_decision_process_by_region.png)\n"
+        md += "   - [部門別](graphs/visualization_B_decision_process_by_department.png)\n"
+        md += "3. C: セキュリティ成熟度マップ\n"
+        md += "   - [地域別](graphs/visualization_C_security_maturity_by_region.png)\n"
+        md += "   - [部門別](graphs/visualization_C_security_maturity_by_department.png)\n"
+        md += "4. D: 困りごと・ニーズ分析（地域比較）\n"
+        md += "   - [困りごとトップ10](graphs/visualization_D1_pain_points_regional_comparison.png)\n"
+        md += "   - [必要な支援トップ10](graphs/visualization_D2_support_needs_regional_comparison.png)\n"
+        md += "5. [E: 部門別プロファイル](graphs/visualization_E_department_profile.png)\n\n"
         
         md += "---\n\n"
         md += "**レポート生成完了**\n"
@@ -764,7 +1027,17 @@ class ITGovernanceReportGenerator:
         print("=" * 80)
         print("\n生成されたファイル:")
         print(f"  ✓ レポート: {results['report']}")
-        print(f"  ✓ 可視化: {len([v for v in results['visualizations'].values() if v])}個")
+        
+        # 可視化ファイル数のカウント（Dは辞書で2ファイル）
+        viz_count = 0
+        for v in results['visualizations'].values():
+            if v:
+                if isinstance(v, dict):
+                    viz_count += len(v)  # Dの場合は2ファイル
+                else:
+                    viz_count += 1
+        
+        print(f"  ✓ 可視化: {viz_count}個")
         
         return results
 

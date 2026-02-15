@@ -14,10 +14,12 @@ data_generation:
   # 属性の分布（母集団）
   population_distribution:
     department:
-      開発部: 0.35
-      インフラ部: 0.25
-      品質保証部: 0.20
-      企画部: 0.15
+      ビジネス系IT: 0.25
+      工場系IT: 0.25
+      本社系IT: 0.2
+      インフラ: 0.1
+      セキュリティ: 0.1
+      組織運営: 0.05
       その他: 0.05
       
     position:
@@ -55,7 +57,7 @@ analysis:
   
 # グラフ設定
 graph:
-  dpi: 300
+  dpi: 100
   figure_size: [10, 6]
   style: seaborn-v0_8-darkgrid
   font_family: sans-serif
