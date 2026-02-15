@@ -2,580 +2,215 @@
 
 ## 概要
 
-ITガバナンスに関する実態調査の**完全な分析システム**です。
-`survey.md`（ITガバナンス実態調査票）の**全7セクション・37問**を完全に反映し、データ生成から可視化・レポート生成までの全工程を自動化しています。
+ITガバナンスに関する実態調査の**分析システム**です。  
+調査票の**全7セクション・37問**を反映し、データ生成・前処理・分析・可視化・レポート生成までを一貫して実行できます。
 
-**実装済み機能:**
-- ✅ サンプルデータの自動生成（任意のレコード数を指定可能）
-- ✅ 全7セクション対応（新技術導入、セキュリティ、データ取扱い、変更管理、予算、ベンダー、その他）
-- ✅ 複数の質問タイプに対応（複数選択、単一選択、優先順位付き、自由記述）
-- ✅ **データ前処理機能（バイナリ変換・One-Hot Encoding・優先順位付き変換）**
-- ✅ **前処理レポートの自動生成（JSON形式）**
-- ✅ **統計分析機能（選択率・成熟度・困りごと・部門別プロファイル）**
-- ✅ **レポート生成機能（6つの可視化グラフ + 2種類のMarkdownレポート）**
-- ✅ **対話型UIによる4ステップワークフロー**
+**主な機能**
+- サンプルデータの自動生成（部門・地域などは config で制御）
+- データ前処理（バイナリ変換・One-Hot Encoding・優先順位付き変換）
+- 統計分析（選択率、セキュリティ成熟度、困りごと、地域別・部門別集計）
+- 5つの主要可視化（A〜E）＋ 地域別・部門別のグラフ
+- 統合 Markdown レポート（`reports/report.md`）
+- 対話型の 4 ステップワークフロー（`main.py`）
+
+---
 
 ## フォルダ構成
 
 ```
-survey-analysis/
+maturity-analysis/
 ├── main.py                          # メインプログラム（4ステップワークフロー）
 ├── config/
-│   ├── config.yaml                  # システム設定ファイル
+│   ├── config.yaml                  # システム設定（サンプル数・部門分布・パス等）
 │   └── survey_questions.yaml        # アンケート項目定義（全7セクション・37問）
 ├── modules/
 │   ├── data_generator.py            # サンプルデータ生成
 │   ├── data_preprocess.py           # データ前処理
 │   ├── data_analyser.py             # データ分析
-│   ├── report_generator.py          # レポート生成
-│   └── util.py                      # ユーティリティ関数
+│   ├── report_generator.py         # レポート・可視化生成
+│   └── util.py                      # ユーティリティ
 ├── csv/
-│   ├── survey_sample_data.csv       # 生成されたサンプルデータ
+│   ├── survey_sample_data.csv      # 生データ（サンプル or 実データ）
 │   └── survey_preprocessed_data.csv # 前処理済みデータ
 ├── out/
-│   ├── preprocessing_report.json    # 前処理レポート
-│   └── analysis_results.json        # 分析結果（JSON形式）
+│   ├── preprocessing_report.json   # 前処理レポート
+│   └── analysis_results.json       # 分析結果（選択率・成熟度・困りごと・地域別等）
 ├── reports/
-│   ├── governance_report.md         # 簡易レポート（Markdown）
-│   ├── detailed_report.md           # 詳細レポート（Markdown）
-│   └── graphs/                      # 可視化グラフ（PNG形式）
-├── requirements.txt                 # 依存パッケージ
-└── README.md                        # このファイル
+│   ├── report.md                    # 統合レポート（目次・可視化一覧・図付き）
+│   └── graphs/                      # 可視化PNG（A〜E + 地域比較等）
+├── doc/                             # 調査票・提案ドキュメント
+├── requirements.txt
+└── README.md
 ```
+
+---
 
 ## セットアップ
 
 ### 前提条件
-- Python 3.8以上
+- Python 3.8 以上
 
-### インストール手順
-
-## セットアップ
+### インストール
 
 ```bash
+# リポジトリへ移動
+cd maturity-analysis
+
 # 仮想環境の作成と有効化
 python3 -m venv venv
+source venv/bin/activate   # Linux/macOS
+# venv\Scripts\activate    # Windows
 
-source venv/bin/activate  # Linux/macOS
-# venv\Scripts\activate  # Windows
-
-# 必要なパッケージのインストール
+# 依存パッケージのインストール
 pip install -r requirements.txt
-
 ```
+
+---
 
 ## 実行方法
 
-### 基本的な実行（推奨）
+### 推奨: 一括実行（対話型）
 
 ```bash
 python3 main.py
 ```
 
-**4ステップの対話型ワークフロー:**
+**4ステップの流れ**
 
-1. **サンプルデータ生成**
-   - 既存データがある場合: 新規生成するか既存データを使用するか選択
-   - 新規生成する場合: サンプル数を入力（デフォルト: 100）
-   
-2. **データ前処理**
-   - 既存の前処理済みデータがある場合: 再実行するか既存データを使用するか選択
-   - 前処理実行: バイナリ変換・One-Hot Encoding・優先順位付き変換を自動実行
-
-3. **データ分析**
-   - 既存の分析結果がある場合: 再実行するか既存結果を使用するか選択
-   - 分析実行: 選択率・セキュリティ成熟度・困りごと・部門別プロファイルを計算
-
-4. **レポート生成**
-   - 既存のレポートがある場合: 再生成するか既存レポートを使用するか選択
-   - レポート生成: 6つの可視化グラフ + 2種類のMarkdownレポートを作成
+1. **サンプルデータ生成**  
+   件数指定 or 既存 CSV 利用。部門は `config/config.yaml` の `population_distribution.department` に従い重み付きで割り当てられます。
+2. **データ前処理**  
+   バイナリ変換・One-Hot・優先順位付き変換など。`csv/survey_preprocessed_data.csv` と `out/preprocessing_report.json` を出力。
+3. **データ分析**  
+   選択率、セキュリティ成熟度、困りごと、必要な支援、地域別・部門別集計など。結果は `out/analysis_results.json` に保存。
+4. **レポート生成**  
+   全可視化を生成し、`reports/report.md` に統合レポートを出力。
 
 ### 個別モジュールの実行
-
-各モジュールを個別に実行することも可能です：
 
 ```bash
 # データ生成のみ
 python3 -m modules.data_generator
 
-# データ前処理のみ
+# 前処理のみ
 python3 -m modules.data_preprocess
 
-# データ分析のみ
+# 分析のみ
 python3 -m modules.data_analyser
 
-# レポート生成のみ
+# レポート・可視化のみ
 python3 -m modules.report_generator
 ```
 
-### 実行例
-
-```bash
-$ python3 main.py
-
-================================================================================
-  ITガバナンス実態調査 分析システム
-================================================================================
-
-このシステムは以下の機能を提供します:
-  1. サンプルデータの自動生成
-  2. データの前処理（バイナリ変換・One-Hot Encoding）
-  3. データ分析（選択率・成熟度・困りごと分析）
-  4. レポート生成（5つの可視化 + Markdownレポート）
-
-================================================================================
-  Step 1: サンプルデータ生成
-================================================================================
-
-サンプルデータを生成しますか？ (Y/N): Y
-
-生成するサンプル数を入力してください（デフォルト: 100）: 100
-
-100件のサンプルデータを生成中...
-✓ 100件のサンプルデータを生成しました
-  - 列数: 44列
-  - 基本情報: 6項目
-  - 質問数: 37問
-
-✓ データを保存しました: csv/survey_sample_data.csv
-
-================================================================================
-  Step 2: データ前処理
-================================================================================
-
-データ前処理を実行しますか？ (Y/N): Y
-
-[1/5] 基本情報の処理中...
-  ✓ 基本情報を処理: 11列生成
-
-[2/5] 複数選択質問のバイナリ変換中...
-  ✓ 複数選択質問を変換: 172列生成
-
-[3/5] 単一選択質問のOne-Hot Encoding中...
-  ✓ 単一選択質問を変換: 26列生成
-
-[4/5] 優先順位付き複数選択の処理中...
-  ✓ 優先順位付き質問を変換: 30列生成
-
-[5/5] テキスト項目の処理中...
-  ✓ テキスト項目を処理: 1列生成
-
-✓ データ前処理が完了しました！
-  - csv/survey_preprocessed_data.csv (100件 × 241列)
-  - out/preprocessing_report.json
-
-================================================================================
-  Step 3: データ分析
-================================================================================
-
-データ分析を実行しますか？ (Y/N): Y
-
-[1/7] 選択率の計算中...
-  ✓ 7セクションの選択率を計算
-
-[2/7] 部門別回答分布の計算中...
-  ✓ 部門別分布を計算
-
-[3/7] セキュリティ成熟度の計算中...
-  ✓ セキュリティ成熟度を計算（全体: 低）
-
-[4/7] 困りごと分析中...
-  ✓ 42個の困りごとを分析
-
-[5/7] 必要な支援の分析中...
-  ✓ 6個の支援ニーズを分析
-
-[6/7] 部門別プロファイルの作成中...
-  ✓ 5部門のプロファイルを作成
-
-[7/7] 可視化用データの準備中...
-  ✓ 可視化用データを準備
-
-✓ 分析結果を保存しました: out/analysis_results.json
-
-================================================================================
-  Step 4: レポート生成
-================================================================================
-
-レポート生成を実行しますか？ (Y/N): Y
-
-[可視化A] 導入ツール・ベンダーマップ（プレースホルダー）
-  ✓ 保存: reports/graphs/visualization_A_vendor_map.png
-
-[可視化B] 意思決定プロセスの実態
-  ✓ 保存: reports/graphs/visualization_B_decision_process.png
-
-[可視化C] セキュリティ成熟度マップ
-  ✓ 保存: reports/graphs/visualization_C_security_maturity.png
-
-[可視化D] 困りごと・ニーズ分析
-  ✓ 保存: reports/graphs/visualization_D_pain_points_needs.png
-
-[可視化E] 部門別プロファイル
-  ✓ 保存: reports/graphs/visualization_E_department_profile.png
-
-[追加] 困りごとカテゴリ別サマリー
-  ✓ 保存: reports/graphs/additional_category_summary.png
-
-✓ Markdownレポートを保存: reports/governance_report.md
-✓ 詳細レポートを保存: reports/detailed_report.md
-
-✓ レポート生成が完了しました！
-  - reports/governance_report.md
-  - reports/detailed_report.md
-  - 可視化: 6個
-
-================================================================================
-  処理完了
-================================================================================
-
-生成されたファイル:
-  ✓ csv/survey_sample_data.csv - 生データ
-  ✓ csv/survey_preprocessed_data.csv - 前処理済みデータ
-  ✓ out/preprocessing_report.json - 前処理レポート
-  ✓ out/analysis_results.json - 分析結果
-  ✓ reports/governance_report.md - 簡易レポート
-  ✓ reports/detailed_report.md - 詳細レポート
-  ✓ reports/graphs/*.png - 可視化グラフ（6個）
-```
-
-## 出力データの構造
-
-### 1. 生データ (survey_sample_data.csv)
-
-**形状**: 100件 × 44列
-
-**列構成:**
-- `回答者ID`: R001, R002, ...
-- **基本情報（6列）**:
-  - 所属部門
-  - 地域（日本/北米/EMEA）
-  - 回答者氏名・役職
-  - 管掌範囲（複数選択）
-  - 主要な管理対象
-  - 昨年度IT予算執行額
-  
-- **セクション1: 新しい技術・システムの導入（4問）**
-  - 導入時の決定方法
-  - 判断基準（優先順位付き）
-  - 相談先
-  - 困りごと
-
-- **セクション2: セキュリティ（8問）**
-  - セキュリティ設計
-  - ID・アクセス管理（認証/権限/管理方法）
-  - データ保護設計
-  - リリース前検証
-  - 困りごと
-
-- **セクション3: データの取扱い（5問）**
-  - データ共有対応
-  - 機密度分類
-  - 品質管理
-  - バックアップ
-  - 困りごと
-
-- **セクション4: システム変更・トラブル対応（6問）**
-  - 変更管理プロセス
-  - 失敗時対応
-  - トラブル対応
-  - 重大度定義
-  - 振り返り
-  - 困りごと
-
-- **セクション5: 予算・コスト管理（6問）**
-  - 予算決定方法
-  - 制約
-  - 超過時対応
-  - クラウド利用
-  - クラウドコスト管理
-  - 困りごと
-
-- **セクション6: ベンダー・外部サービス（5問）**
-  - ベンダー選定プロセス
-  - 関与者
-  - 技術相談先（優先順位付き）
-  - 困りごと
-  - 必要な支援
-
-- **セクション7: その他（4問）**
-  - 他部門連携課題
-  - 他地域連携課題
-  - 理想の支援
-  - 自由意見
-
-### 2. 前処理済みデータ (survey_preprocessed_data.csv)
-
-**形状**: 100件 × 241列（元データの約5.5倍）
-
-**変換方式別の内訳:**
-
-| 変換方式 | 対象項目数 | 生成列数 | 説明 |
-|---------|----------|---------|------|
-| **バイナリ変換** | 28問 | 172列 | 複数選択質問を0/1に変換 |
-| **One-Hot Encoding** | 8問 | 26列 | 単一選択質問をダミー変数化 |
-| **優先順位付き変換** | 2問 | 30列 | 選択有無（15列）＋優先順位（15列） |
-| **Label Encoding** | 1項目 | 1列 | 所属部門をコード化 |
-| **数値変換** | 1項目 | 1列 | IT予算を数値として保持 |
-| **テキストフラグ** | 1項目 | 1列 | 自由記述の有無をフラグ化 |
-
-**変換例:**
-
-```
-【複数選択 → バイナリ変換】
-元: "チーム内でレビュー、承認を得る、テスト環境で事前検証"
-↓
-本番システムに変更を加える時、どうしていますか？_チーム内でレビュー: 1
-本番システムに変更を加える時、どうしていますか？_変更計画書を作成: 0
-本番システムに変更を加える時、どうしていますか？_承認を得る: 1
-本番システムに変更を加える時、どうしていますか？_テスト環境で事前検証: 1
-...
-
-【単一選択 → One-Hot Encoding】
-元: 地域 = "日本"
-↓
-地域_日本: 1
-地域_北米: 0
-地域_EMEA: 0
-
-【優先順位付き → 複合変換】
-元: "コスト(1)、使いやすさ(2)、セキュリティ(3)"
-↓
-判断する時に重視することは何ですか？_コスト_選択: 1
-判断する時に重視することは何ですか？_コスト_順位: 1
-判断する時に重視することは何ですか？_使いやすさ_選択: 1
-判断する時に重視することは何ですか？_使いやすさ_順位: 2
-判断する時に重視することは何ですか？_セキュリティ_選択: 1
-判断する時に重視することは何ですか？_セキュリティ_順位: 3
-...
-```
-
-### 3. 前処理レポート (preprocessing_report.json)
-
-前処理の詳細を記録したJSONファイル:
-
-```json
-{
-  "original_shape": [100, 44],
-  "processed_shape": [100, 241],
-  "transformations": [
-    {
-      "column": "地域",
-      "method": "one_hot_encoding",
-      "num_columns": 3
-    },
-    {
-      "column": "本番システムに変更を加える時、どうしていますか？",
-      "method": "binary_encoding",
-      "num_columns": 8
-    },
-    ...
-  ]
-}
-```
-
-## データ生成ロジック
-
-### 複数選択質問の生成パターン
-
-質問の性質に応じてリアルな回答分布を生成：
-
-- **ポジティブな回答（80%）**: 2〜4個の選択肢を選択
-- **ネガティブな回答（20%）**: 「特に困っていない」「その他」など
-
-### 優先順位付き質問
-
-上位3つを選択し、順位を付与:
-```
-"コスト(1)、使いやすさ(2)、セキュリティ(3)"
-```
-
-### 数値データ
-
-- IT予算: 100〜10,000万円の範囲でランダム生成
+---
+
+## 可視化（レポートに含まれる図）
+
+| 可視化 | 内容 | 出力ファイル |
+|--------|------|----------------|
+| **A** | 導入ツール・ベンダーマップ（プレースホルダー） | `visualization_A_vendor_map.png` |
+| **B** | 意思決定プロセス（地域別・部門別） | `visualization_B_decision_process_by_region.png`<br>`visualization_B_decision_process_by_department.png` |
+| **C** | セキュリティ成熟度（地域別・部門別） | `visualization_C_security_maturity_by_region.png`<br>`visualization_C_security_maturity_by_department.png` |
+| **D** | 困りごと・ニーズ（地域比較） | `visualization_D1_pain_points_regional_comparison.png`<br>`visualization_D2_support_needs_regional_comparison.png` |
+| **E** | 部門別の強み（RAGヒートマップ） | `visualization_E_department_profile.png` |
+| **追加** | 困りごとカテゴリ別サマリー | `additional_category_summary.png` |
+
+- **地域の色**  
+  日本＝赤、北米＝濃い青、EMEA＝薄い青で統一（B・C・D の地域グラフ）。
+- **E のヒートマップ**  
+  RAG で表示。スコア ≤20＝赤（困っている）、20〜50＝黄（中間）、>50＝緑（困っていない）。セクションは S1〜S7 に英語ラベル（Tech adoption, Security, …）を付与。
+
+---
 
 ## 設定のカスタマイズ
 
-### サンプルサイズの変更
+### 部門名・部門分布（config で制御）
 
-`config/config.yaml`:
-```yaml
-data_generation:
-  default_sample_size: 100  # お好みの数に変更
-```
-
-### 乱数シードの変更
-
-再現性を重視する場合はシードを固定、毎回異なるデータが必要な場合はnullに:
+`config/config.yaml` の `population_distribution.department` を変更すると、**サンプルデータ生成時の部門**がその名前と割合で決まります。
 
 ```yaml
 data_generation:
-  random_seed: 42  # または null
+  population_distribution:
+    department:
+      ビジネス系IT: 0.25
+      工場系IT: 0.25
+      本社系IT: 0.2
+      インフラ: 0.1
+      セキュリティ: 0.1
+      組織運営: 0.05
+      その他: 0.05
 ```
 
-### 母集団分布の調整
+分析・レポートの部門別集計は、**実際の CSV の「所属部門」列**に基づくため、実データを使う場合は CSV の部門名がそのまま反映されます。
 
-`config/config.yaml`の`population_distribution`セクションで、実際の組織の従業員分布に合わせて調整できます。
+### サンプル数・乱数シード
 
-## 前処理データの活用
-
-前処理済みデータ（241列）は、以下の分析にそのまま利用できます：
-
-### Python / pandas での分析
-
-```python
-import pandas as pd
-
-# 前処理済みデータを読み込み
-df = pd.read_csv('csv/survey_preprocessed_data.csv', encoding='utf-8-sig')
-
-# 例: セクション4 Q1（変更管理）の選択率を集計
-change_cols = [col for col in df.columns if '本番システムに変更を加える時' in col]
-selection_rates = df[change_cols].mean() * 100
-
-print(selection_rates.sort_values(ascending=False))
+```yaml
+data_generation:
+  default_sample_size: 100
+  random_seed: 42   # 再現用。null で毎回ランダム
 ```
 
-### 統計分析
+### ファイルパス
 
-- 記述統計
-- 相関分析
-- クロス集計
-- カイ二乗検定
+```yaml
+paths:
+  raw_data: csv/survey_sample_data.csv
+  preprocessed_data: csv/survey_preprocessed_data.csv
+  analysis_results: out/analysis_results.json
+```
 
-### 機械学習
+レポートは `report_generator` 実行時に `reports/report.md` および `reports/graphs/*.png` に出力されます。
 
-- クラスタリング（回答パターンのグループ化）
-- 主成分分析（PCA）
-- 決定木分析
+---
+
+## 出力データの概要
+
+### 生データ (csv/survey_sample_data.csv)
+
+- **基本情報**: 所属部門、地域（日本/北米/EMEA）、管掌範囲、IT予算 など
+- **セクション1〜7**: 導入時の決定方法、セキュリティ、データ取扱い、変更管理、予算、ベンダー、その他 の質問と回答
+
+### 前処理済みデータ (csv/survey_preprocessed_data.csv)
+
+- 複数選択 → バイナリ（0/1）列
+- 単一選択（地域など）→ One-Hot
+- 優先順位付き → 選択フラグ＋順位列
+- 所属部門は元の文字列のまま（分析で利用）
+
+### 分析結果 (out/analysis_results.json)
+
+- メタデータ、選択率（セクション別）
+- 意思決定プロセスの地域別・部門別（`decision_process_breakdown`）
+- セキュリティ成熟度（全体・部門別・地域別）
+- 困りごと・必要な支援（全体・地域別）
+- 部門別プロファイル
+
+### レポート (reports/report.md)
+
+- 目次、エグゼクティブサマリー、可視化一覧表
+- A〜E のセクションと対応する図（50% 幅で埋め込み）
+- グラフ一覧（リンク付き）
+
+---
 
 ## トラブルシューティング
 
-### グラフの日本語が表示されない（□□□になる）
+### グラフの日本語が文字化けする
 
-**macOS:**
-```bash
-# システムに日本語フォントがインストールされているか確認
-# Hiragino Sansは通常プリインストールされています
+- `report_generator.py` では起動時に `setup_japanese_font()` で利用可能フォントを検出し、`rcParams` を設定しています。
+- フォントが足りない場合は、OS に日本語フォント（macOS: Hiragino、Windows: Yu Gothic、Linux: Noto Sans CJK JP 等）を入れ、matplotlib のフォントキャッシュをクリアしてください。
 
-# フォントリストを確認
-python3 -c "from matplotlib import font_manager; print([f.name for f in font_manager.fontManager.ttflist if 'Hiragino' in f.name or 'Gothic' in f.name])"
-```
+### ValueError: Passing a Normalize instance simultaneously with vmin/vmax
 
-**Windows:**
-```bash
-# Yu Gothicは通常プリインストールされています
-# フォントリストを確認
-python -c "from matplotlib import font_manager; print([f.name for f in font_manager.fontManager.ttflist if 'Gothic' in f.name or 'Yu' in f.name])"
-```
+- 可視化 E のヒートマップで `norm` を渡しているため、`imshow` には `vmin`/`vmax` を渡さないようにしています。別の箇所で同エラーが出る場合は、`norm` と `vmin`/`vmax` の併用をやめてください。
 
-**Linux:**
-```bash
-# 日本語フォントをインストール
-sudo apt-get install fonts-noto-cjk  # Ubuntu/Debian
-# または
-sudo yum install google-noto-sans-cjk-jp-fonts  # CentOS/RHEL
+### 部門が想定と違う
 
-# matplotlibのフォントキャッシュをクリア
-rm -rf ~/.cache/matplotlib
-```
+- **サンプルデータ**の場合: `config/config.yaml` の `population_distribution.department` を確認し、`python3 -m modules.data_generator` で再生成。
+- **実データ**の場合: CSV の「所属部門」列の値をそのまま使うため、部門名・表記を CSV 側で統一してください。
 
-### UserWarning: Glyph ... missing from font(s) が大量に出る
-
-この警告は修正済みですが、もし出る場合：
-
-```python
-# Pythonスクリプトの先頭に追加
-import warnings
-warnings.filterwarnings('ignore', category=UserWarning, module='matplotlib')
-```
-
-または、日本語フォントが正しくインストールされているか確認してください。
-
-### パッケージのインストールエラー
-
-```bash
-# pipを最新版にアップデート
-pip install --upgrade pip
-
-# 個別にインストール
-pip install pandas numpy PyYAML
-```
-
-### 同じデータが毎回生成される
-
-`config/config.yaml`の`random_seed`を変更またはnullに設定:
-
-```yaml
-data_generation:
-  random_seed: null  # または別の数値
-```
-
-### 前処理レポートの確認方法
-
-```python
-import json
-
-with open('out/preprocessing_report.json', 'r', encoding='utf-8') as f:
-    report = json.load(f)
-
-print(f"元データ: {report['original_shape']}")
-print(f"処理後: {report['processed_shape']}")
-print(f"変換数: {len(report['transformations'])}")
-```
-
-## 実装済み機能の詳細
-
-### データ分析機能 ✅
-
-以下の7つの分析が実装されています：
-
-1. **選択率の計算** - 全7セクション・37問の選択率を自動計算
-2. **部門別回答分布** - 地域別・部門別・予算別の分布を集計
-3. **セキュリティ成熟度スコアリング** - 全体・部門別の成熟度を3段階評価（高/中/低）
-4. **困りごと分析** - 42個の困りごとをカテゴリ別に集計・ランキング
-5. **必要な支援分析** - 一般的支援とベンダー管理支援の統合ランキング
-6. **部門別プロファイル** - 各部門の特徴・変更管理・困りごとを可視化
-7. **可視化用データ準備** - 5つの主要可視化（A〜E）のデータを自動生成
-
-### レポート生成機能 ✅
-
-以下のレポートが自動生成されます：
-
-**可視化グラフ（PNG形式）**:
-- A: 導入ツール・ベンダーマップ（プレースホルダー）
-- B: 意思決定プロセスの実態
-- C: セキュリティ成熟度マップ
-- D: 困りごと・ニーズ分析
-- E: 部門別プロファイル
-- 追加: 困りごとカテゴリ別サマリー
-
-**Markdownレポート**:
-- **簡易レポート** (`governance_report.md`) - エグゼクティブサマリー中心
-- **詳細レポート** (`detailed_report.md`) - 全分析結果を網羅した完全版
-
-### 分析結果（JSON形式）
-
-`out/analysis_results.json`に以下が保存されます：
-- メタデータ（総回答数、総列数）
-- 選択率データ（7セクション別）
-- 部門別分布
-- セキュリティ成熟度（全体・部門別）
-- 困りごとランキング・カテゴリ別集計
-- 必要な支援ランキング
-- 部門別プロファイル
-- 可視化用データ（5つの可視化A〜E）
-
-## 将来の拡張可能性
-
-このシステムは以下の拡張が可能です：
-
-- [ ] 実データの取り込み機能
-- [ ] インタラクティブなダッシュボード（Streamlit/Dash）
-- [ ] 時系列分析（複数回の調査結果の比較）
-- [ ] 機械学習モデルによる予測・クラスタリング
-- [ ] PowerBI/Tableau用のデータエクスポート
-- [ ] 可視化Aの完全実装（実際のベンダー情報の集計）
+---
 
 ## ライセンス
 
