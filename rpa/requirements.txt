@@ -1,5 +1,0 @@
-PyMuPDF
-pytesseract
-Pillow
-PyYAML
-pandas
