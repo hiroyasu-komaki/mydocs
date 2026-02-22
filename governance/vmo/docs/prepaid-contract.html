@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>業務システム委託：「前払い契約」のリスクと対策 インフォグラフィック</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #334155; /* slate-700 */
+        }
+        .infographic-container {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        /* Custom Gradients */
+        .bg-gradient-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+        }
+        .bg-gradient-footer {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- Language Switcher -->
+    <div class="max-w-5xl mx-auto mb-4 flex justify-end items-center space-x-2">
+        <span class="text-sm font-semibold text-slate-500">Language:</span>
+        <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-1 flex">
+            <button onclick="setLang('ja')" id="btn-ja" class="px-3 py-1 text-sm font-bold rounded bg-blue-600 text-white transition-colors">日本語</button>
+            <button onclick="setLang('en')" id="btn-en" class="px-3 py-1 text-sm font-bold rounded text-slate-500 hover:bg-slate-100 transition-colors">English</button>
+        </div>
+    </div>
+
+    <!-- Infographic Main Container -->
+    <div class="max-w-5xl mx-auto bg-white infographic-container rounded-2xl overflow-hidden">
+        
+        <!-- 1. Header Section -->
+        <header class="bg-gradient-header text-white p-8 md:p-12 text-center relative overflow-hidden">
+            <!-- Abstract Graphic Background -->
+            <div class="absolute inset-0 opacity-10 flex justify-center items-center pointer-events-none">
+                <svg width="400" height="400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            </div>
+            
+            <div class="relative z-10">
+                <h1 data-i18n="title" class="text-3xl md:text-5xl font-black mb-4 leading-tight tracking-tight">
+                    業務システム委託：<br class="md:hidden">「前払い契約」の<span class="text-orange-400">リスク</span>と<span class="text-emerald-400">対策</span>
+                </h1>
+                <p data-i18n="subtitle" class="text-lg md:text-xl font-medium text-blue-100 max-w-3xl mx-auto">
+                    慣習的な一括前払いを脱し、ガバナンスと交渉力を取り戻すためのガイド
+                </p>
+
+                <!-- Transition Graphic -->
+                <div class="flex items-center justify-center mt-10 space-x-4 md:space-x-8">
+                    <div class="bg-white/20 p-4 rounded-full backdrop-blur-sm">
+                        <svg class="w-10 h-10 text-orange-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <svg class="w-8 h-8 text-white/50 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    <div class="bg-white/20 p-4 rounded-full backdrop-blur-sm">
+                        <svg class="w-10 h-10 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 2. Warning Section -->
+        <section class="bg-amber-50 p-6 md:p-10 border-b border-amber-100">
+            <h2 data-i18n="warning_title" class="text-2xl font-bold text-center text-amber-900 mb-8 flex justify-center items-center gap-2">
+                <svg class="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <span>現在の契約、見直すべき段階ではありませんか？ 3つの警告サイン</span>
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Column 1 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-amber-200">
+                    <h3 class="font-bold text-red-600 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span data-i18n="w1_title">リスク顕在化のサイン</span>
+                    </h3>
+                    <ul class="space-y-3 text-sm font-medium text-slate-700">
+                        <li class="flex items-start gap-2"><svg class="w-5 h-5 text-red-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span data-i18n="w1_l1">ベンダー対応が遅い・不安定</span></li>
+                        <li class="flex items-start gap-2"><svg class="w-5 h-5 text-red-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span data-i18n="w1_l2">担当者変更で品質低下</span></li>
+                        <li class="flex items-start gap-2"><svg class="w-5 h-5 text-red-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span data-i18n="w1_l3">「前払いだから」でシステム改修を先送り</span></li>
+                    </ul>
+                </div>
+                <!-- Column 2 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-amber-200">
+                    <h3 class="font-bold text-amber-600 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span data-i18n="w2_title">説明責任が果たせていないサイン</span>
+                    </h3>
+                    <ul class="space-y-3 text-sm font-medium text-slate-700">
+                        <li class="flex items-start gap-2"><svg class="w-5 h-5 text-amber-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span data-i18n="w2_l1">理由が「慣習」「ベンダーの指示」のみ</span></li>
+                        <li class="flex items-start gap-2"><svg class="w-5 h-5 text-amber-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span data-i18n="w2_l2">割引率・精算ルール等の合理的理由が不明</span></li>
+                    </ul>
+                </div>
+                <!-- Column 3 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-amber-200">
+                    <h3 class="font-bold text-orange-600 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
+                        <span data-i18n="w3_title">交渉力が低下しているサイン</span>
+                    </h3>
+                    <ul class="space-y-3 text-sm font-medium text-slate-700">
+                        <li class="flex items-start gap-2"><svg class="w-5 h-5 text-orange-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span data-i18n="w3_l1">検証なしで「昨年と同額」更新</span></li>
+                        <li class="flex items-start gap-2"><svg class="w-5 h-5 text-orange-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span data-i18n="w3_l2">月額移行を即座に拒否される</span></li>
+                        <li class="flex items-start gap-2"><svg class="w-5 h-5 text-orange-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span data-i18n="w3_l3">支払方式の選択権がない</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Main Risks Section -->
+        <section class="p-6 md:p-10 bg-white">
+            <div class="text-center mb-10">
+                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">The Core Problem</span>
+                <h2 data-i18n="risk_title" class="text-2xl md:text-3xl font-bold text-slate-800 mt-4">発注者が抱える「前払い契約」4つの問題点</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <!-- Risk 1 -->
+                <div class="border-2 border-slate-800 rounded-xl p-6 relative bg-white hover:shadow-lg transition-shadow">
+                    <div class="absolute -top-5 -left-5 bg-white rounded-full p-2">
+                        <div class="bg-red-100 text-red-600 p-3 rounded-full border-2 border-slate-800">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
+                        </div>
+                    </div>
+                    <h3 data-i18n="r1_title" class="text-xl font-bold text-slate-800 ml-10 mb-3">① サービス品質リスク</h3>
+                    <p data-i18n="r1_desc" class="text-sm text-slate-600 mb-4 leading-relaxed">
+                        代金受領済みでベンダーの優先度が低下。問題発生時も実質的な是正手段（支払保留・減額）がない。
+                    </p>
+                    <div class="bg-slate-50 p-3 rounded border border-slate-200 text-sm">
+                        <strong class="text-red-600">例:</strong> <span data-i18n="r1_eg">「改善の約束」だけで済まされ、担当者が他案件へ異動。</span>
+                    </div>
+                </div>
+
+                <!-- Risk 2 -->
+                <div class="border-2 border-slate-800 rounded-xl p-6 relative bg-white hover:shadow-lg transition-shadow">
+                    <div class="absolute -top-5 -left-5 bg-white rounded-full p-2">
+                        <div class="bg-orange-100 text-orange-600 p-3 rounded-full border-2 border-slate-800">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                    </div>
+                    <h3 data-i18n="r2_title" class="text-xl font-bold text-slate-800 ml-10 mb-3">② 契約変更の困難さ</h3>
+                    <p data-i18n="r2_desc" class="text-sm text-slate-600 mb-4 leading-relaxed">
+                        支払済み費用が「サンクコスト」となり、システム統廃合や内製化など必要な見直し判断が遅れる。
+                    </p>
+                    <div class="bg-slate-50 p-3 rounded border border-slate-200 text-sm">
+                        <strong class="text-orange-600">例:</strong> <span data-i18n="r2_eg">「もったいないから使い切ろう」でベンダー依存が長期化。</span>
+                    </div>
+                </div>
+
+                <!-- Risk 3 -->
+                <div class="border-2 border-slate-800 rounded-xl p-6 relative bg-white hover:shadow-lg transition-shadow">
+                    <div class="absolute -top-5 -left-5 bg-white rounded-full p-2">
+                        <div class="bg-purple-100 text-purple-600 p-3 rounded-full border-2 border-slate-800">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                    </div>
+                    <h3 data-i18n="r3_title" class="text-xl font-bold text-slate-800 ml-10 mb-3">③ ガバナンス上の弱さ</h3>
+                    <p data-i18n="r3_desc" class="text-sm text-slate-600 mb-4 leading-relaxed">
+                        明確な根拠（割引・精算条件）がない前払いは、稟議や外部監査で合理的な説明が困難。
+                    </p>
+                    <div class="bg-slate-50 p-3 rounded border border-slate-200 text-sm">
+                        <strong class="text-purple-600">例:</strong> <span data-i18n="r3_eg">「慣習だから」以外の説明ができず、内部統制上の指摘リスクに。</span>
+                    </div>
+                </div>
+
+                <!-- Risk 4 -->
+                <div class="border-2 border-slate-800 rounded-xl p-6 relative bg-white hover:shadow-lg transition-shadow">
+                    <div class="absolute -top-5 -left-5 bg-white rounded-full p-2">
+                        <div class="bg-slate-800 text-white p-3 rounded-full border-2 border-slate-800">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                        </div>
+                    </div>
+                    <h3 data-i18n="r4_title" class="text-xl font-bold text-slate-800 ml-10 mb-3">④ コスト妥当性の検証不能</h3>
+                    <p data-i18n="r4_desc" class="text-sm text-slate-600 mb-4 leading-relaxed">
+                        費用と実績の内訳が見えず、適正価格か判断できない。値下げ交渉の根拠データが蓄積されない。
+                    </p>
+                    <div class="bg-slate-50 p-3 rounded border border-slate-200 text-sm">
+                        <strong class="text-slate-800">例:</strong> <span data-i18n="r4_eg">検証材料がなく、毎回「昨年と同額」で合意せざるを得ない。</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Solution Section -->
+        <section class="p-6 md:p-10 bg-slate-100 border-y border-slate-200">
+            <h2 data-i18n="sol_title" class="text-2xl md:text-3xl font-bold text-center text-slate-800 mb-10">月額払い（分割払い）への移行メリット</h2>
+            
+            <div class="flex flex-col md:flex-row items-stretch justify-center gap-4 relative">
+                
+                <!-- As-Is -->
+                <div class="flex-1 bg-white border border-red-200 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+                        <div class="bg-red-100 p-2 rounded">
+                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        </div>
+                        <h3 data-i18n="sol_asis_title" class="text-xl font-bold text-slate-700">【As-Is】前払い（一括）</h3>
+                    </div>
+                    <ul class="space-y-4">
+                        <li class="flex gap-3 text-sm text-slate-600"><span class="text-red-500 font-bold shrink-0">✗</span><span data-i18n="sol_asis_l1">支払いと価値が乖離（支払済み）</span></li>
+                        <li class="flex gap-3 text-sm text-slate-600"><span class="text-red-500 font-bold shrink-0">✗</span><span data-i18n="sol_asis_l2">品質低下時の交渉カードなし</span></li>
+                        <li class="flex gap-3 text-sm text-slate-600"><span class="text-red-500 font-bold shrink-0">✗</span><span data-i18n="sol_asis_l3">SLA・KPIが形骸化しやすい</span></li>
+                        <li class="flex gap-3 text-sm text-slate-600"><span class="text-red-500 font-bold shrink-0">✗</span><span data-i18n="sol_asis_l4">切替判断が遅れる（サンクコスト）</span></li>
+                        <li class="flex gap-3 text-sm text-slate-600"><span class="text-red-500 font-bold shrink-0">✗</span><span data-i18n="sol_asis_l5">コスト妥当性の検証不能</span></li>
+                    </ul>
+                </div>
+
+                <!-- Arrow -->
+                <div class="flex items-center justify-center py-4 md:py-0 shrink-0 z-10">
+                    <div class="bg-blue-600 text-white rounded-full p-3 shadow-lg flex items-center justify-center transform md:rotate-0 rotate-90">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </div>
+                </div>
+
+                <!-- To-Be -->
+                <div class="flex-1 bg-emerald-50 border-2 border-emerald-500 rounded-xl p-6 shadow-md relative overflow-hidden">
+                    <div class="absolute -right-10 -top-10 bg-emerald-100 rounded-full w-32 h-32 opacity-50"></div>
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-emerald-200 relative z-10">
+                        <div class="bg-emerald-100 p-2 rounded">
+                            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        </div>
+                        <h3 data-i18n="sol_tobe_title" class="text-xl font-bold text-emerald-800">【To-Be】月額払い（分割）</h3>
+                    </div>
+                    <ul class="space-y-4 relative z-10">
+                        <li class="flex gap-3 text-sm font-medium text-emerald-900"><svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg><span data-i18n="sol_tobe_l1">当月の実績に対して支払う（価値と連動）</span></li>
+                        <li class="flex gap-3 text-sm font-medium text-emerald-900"><svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg><span data-i18n="sol_tobe_l2">翌月減額・是正要求が可能</span></li>
+                        <li class="flex gap-3 text-sm font-medium text-emerald-900"><svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg><span data-i18n="sol_tobe_l3">SLA未達時の減額を適用しやすい</span></li>
+                        <li class="flex gap-3 text-sm font-medium text-emerald-900"><svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg><span data-i18n="sol_tobe_l4">切替・解約が現実的な選択肢に</span></li>
+                        <li class="flex gap-3 text-sm font-medium text-emerald-900"><svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg><span data-i18n="sol_tobe_l5">月次で実績と費用を対比可能（交渉根拠）</span></li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 5. Negotiation Strategy Section -->
+        <section class="p-6 md:p-10 bg-white">
+            <h2 data-i18n="st_title" class="text-2xl md:text-3xl font-bold text-center text-slate-800 mb-10">ベンダー交渉への準備と戦略</h2>
+
+            <!-- Arguments VS -->
+            <div class="mb-12 bg-slate-50 p-6 rounded-xl border border-slate-200">
+                <div class="grid grid-cols-2 gap-4 mb-6 text-center font-bold text-lg">
+                    <div data-i18n="st_vs_vendor" class="text-slate-500">ベンダーの主張</div>
+                    <div data-i18n="st_vs_client" class="text-blue-700">発注者の反論と交渉ポイント</div>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Row 1 -->
+                    <div class="flex items-center justify-between gap-2 md:gap-4 relative">
+                        <div data-i18n="st_vs_1_v" class="bg-white border border-slate-200 p-3 rounded-lg text-sm text-slate-600 w-1/2 shadow-sm relative after:content-[''] after:absolute after:top-1/2 after:-right-2 after:-mt-2 after:border-solid after:border-[8px] after:border-transparent after:border-l-white">
+                            前払いで要員確保・優先度向上
+                        </div>
+                        <div class="bg-slate-200 text-slate-500 text-xs font-bold px-2 py-1 rounded-full z-10 shrink-0">VS</div>
+                        <div data-i18n="st_vs_1_c" class="bg-blue-50 border border-blue-200 p-3 rounded-lg text-sm font-bold text-blue-800 w-1/2 shadow-sm relative after:content-[''] after:absolute after:top-1/2 after:-left-2 after:-mt-2 after:border-solid after:border-[8px] after:border-transparent after:border-r-blue-50">
+                            契約条項・SLAで代替可能<br><span class="text-xs md:text-sm font-normal">(要員固定、初動時間明記)</span>
+                        </div>
+                    </div>
+                    <!-- Row 2 -->
+                    <div class="flex items-center justify-between gap-2 md:gap-4 relative">
+                        <div data-i18n="st_vs_2_v" class="bg-white border border-slate-200 p-3 rounded-lg text-sm text-slate-600 w-1/2 shadow-sm relative after:content-[''] after:absolute after:top-1/2 after:-right-2 after:-mt-2 after:border-solid after:border-[8px] after:border-transparent after:border-l-white">
+                            事務コスト削減・単価割引
+                        </div>
+                        <div class="bg-slate-200 text-slate-500 text-xs font-bold px-2 py-1 rounded-full z-10 shrink-0">VS</div>
+                        <div data-i18n="st_vs_2_c" class="bg-blue-50 border border-blue-200 p-3 rounded-lg text-sm font-bold text-blue-800 w-1/2 shadow-sm relative after:content-[''] after:absolute after:top-1/2 after:-left-2 after:-mt-2 after:border-solid after:border-[8px] after:border-transparent after:border-r-blue-50">
+                            割引根拠の提示を要求。<br><span class="text-xs md:text-sm font-normal">月額価格と比較検討する</span>
+                        </div>
+                    </div>
+                    <!-- Row 3 -->
+                    <div class="flex items-center justify-between gap-2 md:gap-4 relative">
+                        <div data-i18n="st_vs_3_v" class="bg-white border border-slate-200 p-3 rounded-lg text-sm text-slate-600 w-1/2 shadow-sm relative after:content-[''] after:absolute after:top-1/2 after:-right-2 after:-mt-2 after:border-solid after:border-[8px] after:border-transparent after:border-l-white">
+                            緊急対応が安定する
+                        </div>
+                        <div class="bg-slate-200 text-slate-500 text-xs font-bold px-2 py-1 rounded-full z-10 shrink-0">VS</div>
+                        <div data-i18n="st_vs_3_c" class="bg-blue-50 border border-blue-200 p-3 rounded-lg text-sm font-bold text-blue-800 w-1/2 shadow-sm relative after:content-[''] after:absolute after:top-1/2 after:-left-2 after:-mt-2 after:border-solid after:border-[8px] after:border-transparent after:border-r-blue-50">
+                            障害対応SLAと<br><span class="text-xs md:text-sm font-normal">減額条項で担保する</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Frameworks -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- BATNA -->
+                <div class="border border-slate-200 rounded-xl p-5 hover:border-blue-300 transition-colors">
+                    <div class="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
+                    </div>
+                    <h3 data-i18n="fw_1_title" class="font-bold text-lg text-slate-800 mb-2">① BATNA <span class="text-sm font-normal text-slate-500">(代替案)</span></h3>
+                    <p data-i18n="fw_1_desc" class="text-sm text-slate-600">
+                        交渉決裂時の最善の代替案を準備。<br>(他社見積もり、内製化検討、縮小案)
+                    </p>
+                </div>
+                <!-- ZOPA -->
+                <div class="border border-slate-200 rounded-xl p-5 hover:border-blue-300 transition-colors">
+                    <div class="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4 relative">
+                        <div class="w-6 h-6 border-2 border-slate-400 rounded-full absolute left-2 opacity-70"></div>
+                        <div class="w-6 h-6 border-2 border-blue-500 rounded-full absolute right-2 opacity-70"></div>
+                    </div>
+                    <h3 data-i18n="fw_2_title" class="font-bold text-lg text-slate-800 mb-2">② ZOPA <span class="text-sm font-normal text-slate-500">(合意可能範囲)</span></h3>
+                    <p data-i18n="fw_2_desc" class="text-sm text-slate-600">
+                        双方の許容範囲の重なりを見つける。<br>(例：四半期払い、割引率明記、精算ルール設定)
+                    </p>
+                </div>
+                <!-- Walk-away -->
+                <div class="border border-red-100 bg-red-50 rounded-xl p-5 hover:border-red-300 transition-colors">
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                    </div>
+                    <h3 data-i18n="fw_3_title" class="font-bold text-lg text-red-700 mb-2">③ 撤退ライン</h3>
+                    <p data-i18n="fw_3_desc" class="text-sm text-red-600 opacity-90">
+                        交渉を打ち切る基準を事前合意。<br>(合理的根拠なし、SLA拒否、月額提示拒否なら見送る)
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Footer Section -->
+        <footer class="bg-gradient-footer text-white p-8 md:p-12 text-center relative">
+            <div class="max-w-3xl mx-auto">
+                <h2 data-i18n="foot_main" class="text-xl md:text-2xl font-bold mb-6 leading-relaxed">
+                    本質的な問いかけ：「そのメリットは、前払いでなければ実現できないのか？」
+                </h2>
+                <p data-i18n="foot_sub" class="text-sm md:text-base text-slate-300 leading-relaxed">
+                    要員確保や優先対応は、契約条項・SLAで代替可能です。<br>前払いは必須条件ではなく、数ある手段の一つに過ぎません。
+                </p>
+            </div>
+            
+            <div class="mt-12 flex justify-end">
+                <div data-i18n="logo_text" class="text-xs font-bold tracking-widest text-slate-500 uppercase">
+                    [Your Company Logo]
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- I18n Script -->
+    <script>
+        const i18nData = {
+            ja: {
+                title: '業務システム委託：<br class="md:hidden">「前払い契約」の<span class="text-orange-400">リスク</span>と<span class="text-emerald-400">対策</span>',
+                subtitle: '慣習的な一括前払いを脱し、ガバナンスと交渉力を取り戻すためのガイド',
+                warning_title: '現在の契約、見直すべき段階ではありませんか？ 3つの警告サイン',
+                w1_title: 'リスク顕在化のサイン',
+                w1_l1: 'ベンダー対応が遅い・不安定',
+                w1_l2: '担当者変更で品質低下',
+                w1_l3: '「前払いだから」でシステム改修を先送り',
+                w2_title: '説明責任が果たせていないサイン',
+                w2_l1: '理由が「慣習」「ベンダーの指示」のみ',
+                w2_l2: '割引率・精算ルール等の合理的理由が不明',
+                w3_title: '交渉力が低下しているサイン',
+                w3_l1: '検証なしで「昨年と同額」更新',
+                w3_l2: '月額移行を即座に拒否される',
+                w3_l3: '支払方式の選択権がない',
+                risk_title: '発注者が抱える「前払い契約」4つの問題点',
+                r1_title: '① サービス品質リスク',
+                r1_desc: '代金受領済みでベンダーの優先度が低下。問題発生時も実質的な是正手段（支払保留・減額）がない。',
+                r1_eg: '「改善の約束」だけで済まされ、担当者が他案件へ異動。',
+                r2_title: '② 契約変更の困難さ',
+                r2_desc: '支払済み費用が「サンクコスト」となり、システム統廃合や内製化など必要な見直し判断が遅れる。',
+                r2_eg: '「もったいないから使い切ろう」でベンダー依存が長期化。',
+                r3_title: '③ ガバナンス上の弱さ',
+                r3_desc: '明確な根拠（割引・精算条件）がない前払いは、稟議や外部監査で合理的な説明が困難。',
+                r3_eg: '「慣習だから」以外の説明ができず、内部統制上の指摘リスクに。',
+                r4_title: '④ コスト妥当性の検証不能',
+                r4_desc: '費用と実績の内訳が見えず、適正価格か判断できない。値下げ交渉の根拠データが蓄積されない。',
+                r4_eg: '検証材料がなく、毎回「昨年と同額」で合意せざるを得ない。',
+                sol_title: '月額払い（分割払い）への移行メリット',
+                sol_asis_title: '【As-Is】前払い（一括）',
+                sol_asis_l1: '支払いと価値が乖離（支払済み）',
+                sol_asis_l2: '品質低下時の交渉カードなし',
+                sol_asis_l3: 'SLA・KPIが形骸化しやすい',
+                sol_asis_l4: '切替判断が遅れる（サンクコスト）',
+                sol_asis_l5: 'コスト妥当性の検証不能',
+                sol_tobe_title: '【To-Be】月額払い（分割）',
+                sol_tobe_l1: '当月の実績に対して支払う（価値と連動）',
+                sol_tobe_l2: '翌月減額・是正要求が可能',
+                sol_tobe_l3: 'SLA未達時の減額を適用しやすい',
+                sol_tobe_l4: '切替・解約が現実的な選択肢に',
+                sol_tobe_l5: '月次で実績と費用を対比可能（交渉根拠）',
+                st_title: 'ベンダー交渉への準備と戦略',
+                st_vs_vendor: 'ベンダーの主張',
+                st_vs_client: '発注者の反論と交渉ポイント',
+                st_vs_1_v: '前払いで要員確保・優先度向上',
+                st_vs_1_c: '契約条項・SLAで代替可能<br><span class="text-xs md:text-sm font-normal">(要員固定、初動時間明記)</span>',
+                st_vs_2_v: '事務コスト削減・単価割引',
+                st_vs_2_c: '割引根拠の提示を要求。<br><span class="text-xs md:text-sm font-normal">月額価格と比較検討する</span>',
+                st_vs_3_v: '緊急対応が安定する',
+                st_vs_3_c: '障害対応SLAと<br><span class="text-xs md:text-sm font-normal">減額条項で担保する</span>',
+                fw_1_title: '① BATNA <span class="text-sm font-normal text-slate-500">(代替案)</span>',
+                fw_1_desc: '交渉決裂時の最善の代替案を準備。<br>(他社見積もり、内製化検討、縮小案)',
+                fw_2_title: '② ZOPA <span class="text-sm font-normal text-slate-500">(合意可能範囲)</span>',
+                fw_2_desc: '双方の許容範囲の重なりを見つける。<br>(例：四半期払い、割引率明記、精算ルール設定)',
+                fw_3_title: '③ 撤退ライン',
+                fw_3_desc: '交渉を打ち切る基準を事前合意。<br>(合理的根拠なし、SLA拒否、月額提示拒否なら見送る)',
+                foot_main: '本質的な問いかけ：「そのメリットは、前払いでなければ実現できないのか？」',
+                foot_sub: '要員確保や優先対応は、契約条項・SLAで代替可能です。<br>前払いは必須条件ではなく、数ある手段の一つに過ぎません。',
+                logo_text: '[Your Company Logo]'
+            },
+            en: {
+                title: 'Outsourcing IT Systems:<br class="md:hidden"><span class="text-orange-400">Risks</span> & <span class="text-emerald-400">Countermeasures</span> of Prepaid Contracts',
+                subtitle: 'A guide to breaking away from customary lump-sum prepayments and regaining governance and negotiating power.',
+                warning_title: 'Is it time to review your current contract? 3 Warning Signs',
+                w1_title: 'Signs of Manifested Risk',
+                w1_l1: 'Slow or unstable vendor response',
+                w1_l2: 'Quality drop due to personnel changes',
+                w1_l3: 'Postponing system updates "because it is prepaid"',
+                w2_title: 'Signs of Unfulfilled Accountability',
+                w2_l1: 'Reasons are only "customary" or "vendor-instructed"',
+                w2_l2: 'Lack of logical rationale for discounts or terms',
+                w3_title: 'Signs of Weakened Negotiating Power',
+                w3_l1: 'Renewing at "same price" without verification',
+                w3_l2: 'Immediate rejection of monthly payment requests',
+                w3_l3: 'No right to choose payment methods',
+                risk_title: '4 Structural Risks of "Prepaid Contracts" for Clients',
+                r1_title: '1. Service Quality Risk',
+                r1_desc: 'Since payment is received, vendor priority drops. No practical leverage (e.g., withholding payment) exists when issues arise.',
+                r1_eg: 'Issues end with just a "promise to improve," and staff are moved to other projects.',
+                r2_title: '2. Difficulty in Modification',
+                r2_desc: 'Paid fees become "sunk costs," delaying necessary decisions like system consolidation or in-house development.',
+                r2_eg: 'Vendor dependency prolongs simply because it feels "wasteful not to use it up."',
+                r3_title: '3. Weakness in Governance',
+                r3_desc: 'Prepayment without clear rationale makes it hard to provide logical explanations during internal approvals or external audits.',
+                r3_eg: 'Inability to explain beyond "it is customary" leads to internal control audit risks.',
+                r4_title: '4. Inability to Verify Costs',
+                r4_desc: 'The breakdown of costs versus actual performance is opaque. No data is accumulated for price negotiations.',
+                r4_eg: 'Forced to agree to the "same price as last year" due to lack of verification data.',
+                sol_title: 'Benefits of Transitioning to Monthly Payments',
+                sol_asis_title: '[As-Is] Prepaid (Lump-sum)',
+                sol_asis_l1: 'Disconnect between payment and value',
+                sol_asis_l2: 'No leverage during quality drops',
+                sol_asis_l3: 'SLAs/KPIs become mere formalities',
+                sol_asis_l4: 'Delayed switching decisions (Sunk Cost)',
+                sol_asis_l5: 'Inability to verify cost reasonableness',
+                sol_tobe_title: '[To-Be] Monthly (Installment)',
+                sol_tobe_l1: 'Pay based on actual monthly performance',
+                sol_tobe_l2: 'Enables immediate deductions/corrections',
+                sol_tobe_l3: 'Easier to apply penalties for missed SLAs',
+                sol_tobe_l4: 'Switching or canceling becomes realistic',
+                sol_tobe_l5: 'Monthly comparison of cost vs. performance',
+                st_title: 'Preparation & Strategy for Vendor Negotiation',
+                st_vs_vendor: 'Vendor\'s Claim',
+                st_vs_client: 'Client\'s Counterargument',
+                st_vs_1_v: 'Prepayment secures staff & priority',
+                st_vs_1_c: 'Can be replaced by contract terms.<br><span class="text-xs md:text-sm font-normal">(Specify fixed staff, response times)</span>',
+                st_vs_2_v: 'Reduces admin costs & offers discount',
+                st_vs_2_c: 'Request basis for discount.<br><span class="text-xs md:text-sm font-normal">Compare with monthly pricing.</span>',
+                st_vs_3_v: 'Stabilizes emergency response',
+                st_vs_3_c: 'Secure via incident SLAs and<br><span class="text-xs md:text-sm font-normal">penalty clauses instead.</span>',
+                fw_1_title: '1. BATNA <span class="text-sm font-normal text-slate-500">(Best Alternative)</span>',
+                fw_1_desc: 'Prepare the best alternative if negotiations fail.<br>(Quotes from competitors, in-house review)',
+                fw_2_title: '2. ZOPA <span class="text-sm font-normal text-slate-500">(Zone of Agreement)</span>',
+                fw_2_desc: 'Find the overlap of acceptable ranges.<br>(e.g., Quarterly payment, defined discount rates)',
+                fw_3_title: '3. Walk-away Line',
+                fw_3_desc: 'Pre-agree on criteria to terminate negotiation.<br>(Walk away if no rationale, SLA refusal, etc.)',
+                foot_main: 'The Essential Question: "Can these benefits only be achieved through prepayment?"',
+                foot_sub: 'Securing personnel and prioritized support can be replaced by contract terms and SLAs.<br>Prepayment is not a strict requirement, but just one of many options.',
+                logo_text: '[Your Company Logo]'
+            }
+        };
+
+        function setLang(lang) {
+            // Update UI
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18nData[lang] && i18nData[lang][key]) {
+                    el.innerHTML = i18nData[lang][key];
+                }
+            });
+
+            // Update buttons
+            const btnJa = document.getElementById('btn-ja');
+            const btnEn = document.getElementById('btn-en');
+            
+            if (lang === 'ja') {
+                btnJa.className = 'px-3 py-1 text-sm font-bold rounded bg-blue-600 text-white transition-colors';
+                btnEn.className = 'px-3 py-1 text-sm font-bold rounded text-slate-500 hover:bg-slate-100 transition-colors';
+                document.documentElement.lang = 'ja';
+            } else {
+                btnEn.className = 'px-3 py-1 text-sm font-bold rounded bg-blue-600 text-white transition-colors';
+                btnJa.className = 'px-3 py-1 text-sm font-bold rounded text-slate-500 hover:bg-slate-100 transition-colors';
+                document.documentElement.lang = 'en';
+            }
+        }
+    </script>
+</body>
+</html>
