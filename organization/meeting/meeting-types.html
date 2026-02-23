@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turning Ideas into Reality (Meetings) - Infographic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', 'Roboto', sans-serif;
+            background-color: #f9fafb;
+            color: #374151;
+        }
+        .bg-kk-orange { background-color: #F39200; }
+        .text-kk-orange { color: #F39200; }
+        .border-kk-orange { border-color: #F39200; }
+        
+        .card-gradient-1 { background: linear-gradient(135deg, #fff 0%, #fff7ed 100%); }
+        .card-gradient-2 { background: linear-gradient(135deg, #fff 0%, #ffedd5 100%); }
+        .card-gradient-3 { background: linear-gradient(135deg, #fff 0%, #fee2e2 100%); }
+
+        .flow-node {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .flow-node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Language Toggle Switch */
+        .lang-switch {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 50;
+        }
+
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            transition: all 0.2s;
+            background: white;
+            border: 2px solid #F39200;
+        }
+        .lang-btn.active {
+            background: #F39200;
+            color: white;
+        }
+
+        /* Responsive Flow Grid */
+        .flow-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 1024px) {
+            .flow-container {
+                grid-template-columns: 320px 1fr;
+            }
+        }
+
+        .svg-icon {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+        
+        [data-lang="en"] { display: none; }
+        html[lang="en"] [data-lang="ja"] { display: none; }
+        html[lang="en"] [data-lang="en"] { display: block; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- Language Toggle -->
+    <div class="lang-switch flex gap-2">
+        <button onclick="setLang('ja')" id="btn-ja" class="lang-btn active">JP</button>
+        <button onclick="setLang('en')" id="btn-en" class="lang-btn">EN</button>
+    </div>
+
+    <!-- 1. Header Section -->
+    <header class="max-w-7xl mx-auto mb-12 text-center">
+        <div class="inline-flex items-center justify-center p-3 bg-kk-orange rounded-full mb-4 shadow-lg">
+            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold text-kk-orange mb-4">
+            <span data-lang="ja">アイデアを形にする（会議編）</span>
+            <span data-lang="en">Turning Ideas into Reality (Meeting Edition)</span>
+        </h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto font-medium">
+            <span data-lang="ja">会議は「情報共有の場」ではなく、組織を動かすための「能動的なツール」である。</span>
+            <span data-lang="en">Meetings are not just "information sharing" venues; they are "active tools" to move the organization.</span>
+        </p>
+    </header>
+
+    <div class="max-w-7xl mx-auto flow-container">
+        
+        <!-- 2. Left Section: 8 Meeting Types -->
+        <aside class="space-y-6">
+            <h2 class="text-2xl font-bold border-l-4 border-kk-orange pl-4 mb-6">
+                <span data-lang="ja">会議の類型：フェーズと目的</span>
+                <span data-lang="en">Meeting Types: Phases & Goals</span>
+            </h2>
+
+            <!-- Group: Foundation -->
+            <div class="space-y-3">
+                <h3 class="text-sm font-bold text-orange-600 uppercase tracking-wider">
+                    <span data-lang="ja">土台を作る</span>
+                    <span data-lang="en">Build the Foundation</span>
+                </h3>
+                <!-- Type 1 -->
+                <div class="card-gradient-1 p-4 rounded-xl border border-orange-100 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="bg-kk-orange text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">1</span>
+                        <span class="font-bold" data-lang="ja">ナレッジ移転型</span>
+                        <span class="font-bold" data-lang="en">Knowledge Transfer</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-2">
+                        <span data-lang="ja">判断のための知識・前提の共有</span>
+                        <span data-lang="en">Sharing knowledge/premises for judgment</span>
+                    </p>
+                    <div class="bg-white/50 p-2 rounded text-xs italic text-kk-orange">
+                        <span data-lang="ja">「参考にしてほしい」</span>
+                        <span data-lang="en">"Please use this for reference"</span>
+                    </div>
+                </div>
+                <!-- Type 2 -->
+                <div class="card-gradient-1 p-4 rounded-xl border border-orange-100 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="bg-kk-orange text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">2</span>
+                        <span class="font-bold" data-lang="ja">関係構築型</span>
+                        <span class="font-bold" data-lang="en">Relationship Building</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-2">
+                        <span data-lang="ja">連携意志の表明・信頼の醸成</span>
+                        <span data-lang="en">Expressing will to collaborate</span>
+                    </p>
+                    <div class="bg-white/50 p-2 rounded text-xs italic text-kk-orange">
+                        <span data-lang="ja">「一緒に考えたい」</span>
+                        <span data-lang="en">"I want to think together"</span>
+                    </div>
+                </div>
+                <!-- Type 3 -->
+                <div class="card-gradient-1 p-4 rounded-xl border border-orange-100 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="bg-kk-orange text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">3</span>
+                        <span class="font-bold" data-lang="ja">認識共有型</span>
+                        <span class="font-bold" data-lang="en">Awareness Building</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-2">
+                        <span data-lang="ja">問題意識の醸成・共感の形成</span>
+                        <span data-lang="en">Fostering problem awareness</span>
+                    </p>
+                    <div class="bg-white/50 p-2 rounded text-xs italic text-kk-orange">
+                        <span data-lang="ja">「どう見えますか？」</span>
+                        <span data-lang="en">"How do you see this?"</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group: Action -->
+            <div class="space-y-3">
+                <h3 class="text-sm font-bold text-orange-700 uppercase tracking-wider">
+                    <span data-lang="ja">動かす</span>
+                    <span data-lang="en">Take Action</span>
+                </h3>
+                <div class="card-gradient-2 p-4 rounded-xl border border-orange-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="bg-orange-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">4</span>
+                        <span class="font-bold" data-lang="ja">アライメント確認型</span>
+                        <span class="font-bold" data-lang="en">Alignment Check</span>
+                    </div>
+                    <div class="bg-white/50 p-2 rounded text-xs italic text-orange-700">
+                        <span data-lang="ja">「同じ方向を向いているか」</span>
+                        <span data-lang="en">"Are we facing the same direction?"</span>
+                    </div>
+                </div>
+                <div class="card-gradient-2 p-4 rounded-xl border border-orange-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="bg-orange-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">5</span>
+                        <span class="font-bold" data-lang="ja">行動誘発型</span>
+                        <span class="font-bold" data-lang="en">Call to Action</span>
+                    </div>
+                    <div class="bg-white/50 p-2 rounded text-xs italic text-orange-700">
+                        <span data-lang="ja">「参加してほしい」</span>
+                        <span data-lang="en">"I want you to join"</span>
+                    </div>
+                </div>
+                <div class="card-gradient-2 p-4 rounded-xl border border-orange-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="bg-orange-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">6</span>
+                        <span class="font-bold" data-lang="ja">決裁要請型</span>
+                        <span class="font-bold" data-lang="en">Decision Meeting</span>
+                    </div>
+                    <div class="bg-white/50 p-2 rounded text-xs italic text-orange-700">
+                        <span data-lang="ja">「判断をお願いしたい」</span>
+                        <span data-lang="en">"I need a decision"</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group: Exceptions -->
+            <div class="space-y-3">
+                <h3 class="text-sm font-bold text-red-600 uppercase tracking-wider">
+                    <span data-lang="ja">例外介入</span>
+                    <span data-lang="en">Exception Intervention</span>
+                </h3>
+                <div class="card-gradient-3 p-4 rounded-xl border border-red-100 shadow-sm">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="bg-red-500 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">7</span>
+                        <span class="font-bold" data-lang="ja">課題直面型</span>
+                        <span class="font-bold" data-lang="en">Confronting Issues</span>
+                    </div>
+                    <p class="text-xs text-red-700 font-medium" data-lang="ja">問題を顕在化・再起動</p>
+                    <p class="text-xs text-red-700 font-medium" data-lang="en">Surfacing issues</p>
+                </div>
+                <div class="card-gradient-3 p-4 rounded-xl border border-red-100 shadow-sm">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="bg-red-500 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">8</span>
+                        <span class="font-bold" data-lang="ja">異議申し立て型</span>
+                        <span class="font-bold" data-lang="en">Challenging / Dissent</span>
+                    </div>
+                    <p class="text-xs text-red-700 font-medium" data-lang="ja">現状方針への再考促進</p>
+                    <p class="text-xs text-red-700 font-medium" data-lang="en">Prompting reconsideration</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 3. Right Section: Flowchart -->
+        <main class="bg-white p-6 md:p-10 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden">
+            <!-- Decorative Background -->
+            <div class="absolute inset-0 pointer-events-none opacity-5">
+                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#F39200" stroke-width="1"/>
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#grid)" />
+                </svg>
+            </div>
+
+            <h2 class="text-2xl font-bold mb-10 flex items-center gap-3">
+                <span class="text-kk-orange">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                </span>
+                <span data-lang="ja">プロセス：アイデアから行動までの道のり</span>
+                <span data-lang="en">Process: Path from Idea to Action</span>
+            </h2>
+
+            <!-- The Flow -->
+            <div class="relative z-10 space-y-12">
+                
+                <!-- START -->
+                <div class="flex justify-center">
+                    <div class="bg-indigo-50 text-indigo-700 px-6 py-3 rounded-full font-bold border-2 border-indigo-200 flex items-center gap-2 shadow-sm">
+                        <span>🚀</span>
+                        <span data-lang="ja">アイデアの起点</span>
+                        <span data-lang="en">Starting Point of Idea</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-center">
+                    <div class="h-8 w-1 bg-gradient-to-b from-indigo-200 to-kk-orange"></div>
+                </div>
+
+                <!-- STEP 1: Knowledge -->
+                <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-6">
+                    <div class="md:col-start-2 flow-node bg-kk-orange text-white p-6 rounded-2xl text-center relative">
+                        <div class="text-xs font-bold mb-1 opacity-80">Phase 1</div>
+                        <div class="text-lg font-bold mb-2">
+                            <span data-lang="ja">📚 ナレッジ移転型</span>
+                            <span data-lang="en">📚 Knowledge Transfer</span>
+                        </div>
+                        <div class="text-sm opacity-90">
+                            <span data-lang="ja">判断のための知識・前提の共有</span>
+                            <span data-lang="en">Sharing knowledge for judgment</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="bg-amber-50 border-2 border-amber-200 p-4 rounded-lg text-xs font-bold text-amber-800 shadow-sm max-w-[200px]">
+                            <span data-lang="ja">聴衆の理解度は十分か？</span>
+                            <span data-lang="en">Is the audience's understanding sufficient?</span>
+                            <div class="mt-2 text-[10px] text-green-600 flex items-center gap-1">
+                                <span>✅</span>
+                                <span data-lang="ja">自分の文脈に引寄せた発言</span>
+                                <span data-lang="en">Relating to own context</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2 & 3: Relationship & Awareness -->
+                <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-6">
+                    <div class="hidden md:block flex justify-center">
+                        <div class="text-xs text-gray-400 font-bold flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                            <span data-lang="ja">不十分なら 1 へ</span>
+                            <span data-lang="en">Return to 1 if insufficient</span>
+                        </div>
+                    </div>
+                    <div class="flow-node bg-orange-500 text-white p-6 rounded-2xl text-center">
+                        <div class="text-xs font-bold mb-1 opacity-80">Phase 2 & 3</div>
+                        <div class="text-lg font-bold mb-2">
+                            <span data-lang="ja">🤝 関係構築・🔍 認識共有</span>
+                            <span data-lang="en">🤝 Relations & 🔍 Awareness</span>
+                        </div>
+                        <div class="text-sm opacity-90">
+                            <span data-lang="ja">信頼醸成と問題意識の共有</span>
+                            <span data-lang="en">Building trust and shared awareness</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="bg-amber-50 border-2 border-amber-200 p-4 rounded-lg text-xs font-bold text-amber-800 shadow-sm max-w-[200px]">
+                            <span data-lang="ja">自分たちの問題と思えたか？</span>
+                            <span data-lang="en">Do they see it as "their problem"?</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 4 & 5: Alignment & Action -->
+                <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-6">
+                    <div class="hidden md:block"></div>
+                    <div class="flow-node bg-orange-600 text-white p-6 rounded-2xl text-center">
+                        <div class="text-xs font-bold mb-1 opacity-80">Phase 4 & 5</div>
+                        <div class="text-lg font-bold mb-2">
+                            <span data-lang="ja">🧭 アライメント・⚡ 行動誘発</span>
+                            <span data-lang="en">🧭 Alignment & ⚡ Action</span>
+                        </div>
+                        <div class="text-sm opacity-90">
+                            <span data-lang="ja">方向性合意と具体的コミット</span>
+                            <span data-lang="en">Consensus and concrete commitment</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="bg-amber-50 border-2 border-amber-200 p-4 rounded-lg text-xs font-bold text-amber-800 shadow-sm max-w-[200px]">
+                            <span data-lang="ja">誰がいつ何をするか明確か？</span>
+                            <span data-lang="en">Is "who, when, what" clear?</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GOAL -->
+                <div class="flex justify-center pt-8">
+                    <div class="bg-orange-700 text-white px-10 py-5 rounded-2xl font-bold border-4 border-orange-200 flex flex-col items-center gap-2 shadow-2xl scale-110">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">🎯</span>
+                            <span class="text-xl" data-lang="ja">次フェーズへ（行動開始）</span>
+                            <span class="text-xl" data-lang="en">Next Phase (Action Starts)</span>
+                        </div>
+                        <div class="text-xs font-normal opacity-80" data-lang="ja">組織があなたのアイデアで動き出します</div>
+                        <div class="text-xs font-normal opacity-80" data-lang="en">The organization begins to move with your idea</div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- 4. Footer Section -->
+    <footer class="max-w-7xl mx-auto mt-16">
+        <div class="bg-gray-800 text-white p-8 rounded-3xl flex flex-col md:flex-row items-center gap-6 shadow-xl">
+            <div class="bg-kk-orange p-4 rounded-full">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+            </div>
+            <div class="flex-1">
+                <h4 class="text-xl font-bold mb-2">
+                    <span data-lang="ja">この資料の使い方：これは「羅針盤」です。</span>
+                    <span data-lang="en">How to use this guide: This is a "Compass".</span>
+                </h4>
+                <p class="text-gray-300 leading-relaxed">
+                    <span data-lang="ja">順序を守ることが目的ではありません。行き詰まったときに、今どこにいるかを確認するために使ってください。</span>
+                    <span data-lang="en">Following the sequence is not the goal. Use it to check where you are when you feel stuck.</span>
+                </p>
+            </div>
+            <div class="text-right border-t md:border-t-0 md:border-l border-gray-600 pt-4 md:pt-0 md:pl-8">
+                <p class="text-xs text-gray-400 mb-1 uppercase tracking-widest">Appendix</p>
+                <p class="text-sm font-bold text-kk-orange">
+                    <span data-lang="ja">チェックリストで現在地を確認しましょう</span>
+                    <span data-lang="en">Check your current position with the checklist</span>
+                </p>
+            </div>
+        </div>
+        <p class="text-center text-gray-400 text-xs mt-8">© Idea to Reality - Meeting Framework Infographic</p>
+    </footer>
+
+    <script>
+        function setLang(lang) {
+            document.documentElement.lang = lang;
+            
+            // Update buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+            
+            // Local Storage (optional)
+            localStorage.setItem('preferred-lang', lang);
+        }
+
+        // Initialize from local storage or default
+        window.onload = () => {
+            const savedLang = localStorage.getItem('preferred-lang') || 'ja';
+            setLang(savedLang);
+        };
+    </script>
+</body>
+</html>
