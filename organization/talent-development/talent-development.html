@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT部門におけるタレントデベロップメント</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 1. SETUP & THEME */
+        * { box-sizing: border-box; }
+        body {
+            background-color: #e2e8f0;
+            display: grid;
+            gap: 20px;
+            grid-template-columns: 1fr;
+            margin: 0;
+            min-height: 100vh;
+            place-items: center;
+            font-family: 'Noto Sans JP', sans-serif;
+            padding: 40px 0;
+        }
+
+        .slide-container {
+            background-color: #FAF9F6;
+            border-radius: 0;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            height: 720px;
+            padding: 60px 80px;
+            position: relative;
+            width: 1280px;
+            overflow: hidden;
+            border-top: 10px solid #F47920;
+        }
+
+        /* 2. TYPOGRAPHY */
+        h1, h2, h3 { 
+            color: #2D2D2D; 
+            margin: 0;
+            font-family: 'Poppins', 'Noto Sans JP', sans-serif;
+        }
+
+        .slide-title {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            border-left: 8px solid #F47920;
+            padding-left: 20px;
+            line-height: 1.2;
+        }
+
+        p, li { 
+            color: #4A4A4A; 
+            font-size: 22px; 
+            line-height: 1.6;
+        }
+
+        /* 3. LAYOUTS */
+        .content-area {
+            flex-grow: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Title Slide Layout */
+        .title-layout {
+            text-align: left;
+            margin-top: 100px;
+        }
+        .title-layout h1 {
+            font-size: 72px;
+            color: #2D2D2D;
+            margin-bottom: 20px;
+        }
+        .title-layout .subtitle {
+            font-size: 32px;
+            color: #F47920;
+            font-weight: 600;
+        }
+
+        /* Flow Diagram (Slide 2) */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 40px;
+        }
+        .flow-box {
+            background: #FFF;
+            border: 2px solid #F47920;
+            border-radius: 12px;
+            padding: 30px;
+            width: 28%;
+            text-align: center;
+            font-weight: 700;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .flow-arrow {
+            color: #F47920;
+            font-size: 40px;
+        }
+
+        /* 2 Column Tiled */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        .tile {
+            background: #FFF;
+            border: 1px solid #E0E0E0;
+            padding: 40px;
+            border-radius: 15px;
+        }
+        .tile h3 {
+            color: #F47920;
+            font-size: 28px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #F47920;
+            display: inline-block;
+        }
+
+        /* Bullet List */
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+        }
+        .bullet-list li {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 20px;
+        }
+        .bullet-list li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: #F47920;
+        }
+
+        /* --- Normal SWOT Layout (Slide 3.5) --- */
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+            height: 400px;
+            position: relative;
+        }
+        .swot-quad {
+            background: #FFF;
+            border-radius: 12px;
+            padding: 20px 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            position: relative;
+            border-top: 6px solid;
+        }
+        .swot-s { border-color: #4CAF50; }
+        .swot-w { border-color: #F44336; }
+        .swot-o { border-color: #2196F3; }
+        .swot-t { border-color: #FF9800; }
+
+        .swot-title-box {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #EEE;
+            padding-bottom: 10px;
+        }
+        .swot-s .swot-title-box { color: #4CAF50; }
+        .swot-w .swot-title-box { color: #F44336; }
+        .swot-o .swot-title-box { color: #2196F3; }
+        .swot-t .swot-title-box { color: #FF9800; }
+
+        .swot-list {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin: 0;
+        }
+        .swot-list li {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .swot-list li::before { content: none; }
+
+        .swot-axis-x {
+            text-align: center;
+            font-weight: bold;
+            color: #999;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        /* --- Cross SWOT Logic Layout (Slide 3.6) --- */
+        .swot-logic-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: 100%;
+            margin-top: -10px;
+        }
+        .swot-top-row {
+            display: flex;
+            gap: 30px;
+        }
+        .swot-env-box {
+            flex: 1;
+            background: #FFF;
+            border-radius: 12px;
+            padding: 20px 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-top: 6px solid;
+            position: relative;
+        }
+        .swot-env-box.external { border-color: #2196F3; }
+        .swot-env-box.internal { border-color: #FF9800; }
+
+        .env-header {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2D2D2D;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #EEE;
+            padding-bottom: 10px;
+        }
+        .env-sub {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        .swot-env-box.external .env-sub { color: #2196F3; }
+        .swot-env-box.internal .env-sub { color: #FF9800; }
+
+        .swot-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .swot-item h4 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .swot-item.o h4 { color: #2196F3; }
+        .swot-item.t h4 { color: #E91E63; }
+        .swot-item.s h4 { color: #4CAF50; }
+        .swot-item.w h4 { color: #F44336; }
+
+        .swot-item ul {
+            margin: 0;
+            padding-left: 25px;
+            list-style-type: disc;
+        }
+        .swot-item li {
+            font-size: 17px;
+            color: #4A4A4A;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+        .swot-item li::before { content: none; }
+
+        .swot-arrow-down {
+            text-align: center;
+            font-size: 32px;
+            color: #BDBDBD;
+            margin: -5px 0;
+        }
+
+        .swot-conclusion-box {
+            background: #FFF3E0;
+            border: 2px solid #F47920;
+            border-radius: 12px;
+            padding: 20px 30px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .cross-analysis {
+            font-size: 20px;
+            font-weight: bold;
+            color: #F47920;
+            margin-bottom: 10px;
+        }
+        .swot-conclusion-box p {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #4A4A4A;
+            font-weight: bold;
+        }
+        .conclusion-highlight {
+            background: #F47920;
+            color: #FFF;
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(244, 121, 32, 0.3);
+        }
+
+        /* --- Summary Table (Slide 11) --- */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: #FFF;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .summary-table th, .summary-table td {
+            padding: 25px 30px;
+            border-bottom: 1px solid #E0E0E0;
+            text-align: left;
+            font-size: 22px;
+        }
+        .summary-table .col-header th {
+            background: #2D2D2D;
+            color: #FFF;
+            font-size: 20px;
+            padding: 15px 30px;
+            border-bottom: none;
+        }
+        .summary-table .row-header {
+            background: #F47920;
+            color: #FFF;
+            font-weight: bold;
+            width: 25%;
+            font-size: 28px;
+            text-align: center;
+            vertical-align: middle;
+            border-right: 1px solid #FFF;
+        }
+        .summary-table td {
+            color: #4A4A4A;
+            line-height: 1.6;
+            vertical-align: middle;
+        }
+        .summary-table tr:last-child td, .summary-table tr:last-child th {
+            border-bottom: none;
+        }
+
+        /* SFIA Layout (Slide 7) */
+        .image-right {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 50px;
+            align-items: center;
+        }
+        .image-container img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* --- Career Ladder Infographic (Slide 8) --- */
+        .benefit-box {
+            background: #FFF3E0;
+            border-left: 6px solid #F47920;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #E65100;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .ladder-grid-multi {
+            display: grid;
+            grid-template-columns: 80px 1fr 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .ladder-cell-multi {
+            background: #FAFAFA;
+            border: 1px solid #E0E0E0;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            border-radius: 8px;
+            padding: 5px;
+        }
+        .role-block {
+            width: 30%;
+            height: 100%;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        .role-block.fill { color: #FFF; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .role-block.empty {
+            background: transparent;
+            border: 2px dashed #BDBDBD;
+            color: #9E9E9E;
+            font-size: 11px;
+        }
+        .sd.fill { background: #4A90E2; }
+        .sec.fill { background: #E24A4A; }
+        .ai.fill { background: #F47920; }
+        .sfia-foundation-bar {
+            background: #2D2D2D; color: #FFF; width: 100%; text-align: center;
+            padding: 15px; font-size: 20px; font-weight: 700; border-radius: 8px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2); letter-spacing: 2px;
+            display: flex; align-items: center; justify-content: center; gap: 15px;
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 30px;
+            left: 80px;
+            right: 80px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #999;
+            border-top: 1px solid #EEE;
+            padding-top: 10px;
+            align-items: center;
+        }
+
+        /* Infographic Elements */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .info-card {
+            background: #FFF; border-radius: 12px; padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #F47920;
+            display: flex; align-items: flex-start; gap: 20px;
+        }
+        .info-card i { font-size: 32px; color: #F47920; margin-top: 5px; flex-shrink: 0;}
+        .info-card p { margin: 0; font-size: 18px; line-height: 1.5; }
+        
+        .step-row { display: flex; justify-content: space-between; gap: 30px; margin-top: 30px; width: 100%; }
+        .step-card {
+            flex: 1; background: #FFF; padding: 40px 25px 30px 25px; border-radius: 15px;
+            text-align: center; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+            position: relative; border-top: 5px solid #F47920;
+        }
+        .step-num {
+            background: #F47920; color: #FFF; width: 46px; height: 46px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 22px; position: absolute; top: -23px; left: calc(50% - 23px);
+            box-shadow: 0 4px 8px rgba(244, 121, 32, 0.3);
+        }
+        .step-card i { font-size: 48px; color: #4A4A4A; margin-bottom: 20px; display: block;}
+        .step-card p { font-size: 18px; margin: 0; line-height: 1.6;}
+
+        .timeline { display: flex; justify-content: space-between; position: relative; margin-top: 60px; padding: 0 20px; width: 100%;}
+        .timeline::before {
+            content: ''; position: absolute; top: 38px; left: 80px; right: 80px;
+            height: 4px; background: #E0E0E0; z-index: 0;
+        }
+        .timeline-item { position: relative; z-index: 1; text-align: center; flex: 1; }
+        .timeline-icon {
+            width: 80px; height: 80px; background: #F47920; color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 32px;
+            margin: 0 auto 25px auto; border: 6px solid #FAF9F6; box-shadow: 0 0 0 4px rgba(244, 121, 32, 0.2);
+        }
+        .timeline-item p { font-size: 18px; font-weight: 700; background: #FFF; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin: 0 15px;}
+        
+        /* Decorative Background */
+        .bg-shapes { position: absolute; top: 0; right: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 0; }
+        .shape1 { position: absolute; top: -150px; right: -100px; width: 600px; height: 600px; background: rgba(244, 121, 32, 0.08); border-radius: 50%; }
+        .shape2 { position: absolute; bottom: 50px; right: 400px; width: 250px; height: 250px; background: rgba(244, 121, 32, 0.04); border-radius: 50%; }
+        .shape3 { position: absolute; top: 200px; right: 300px; width: 100px; height: 100px; background: rgba(244, 121, 32, 0.1); border-radius: 50%; }
+
+        /* Language Switcher */
+        .lang-switch {
+            position: fixed;
+            top: 20px;
+            right: 40px;
+            background: white;
+            border: 2px solid #F47920;
+            border-radius: 30px;
+            display: flex;
+            overflow: hidden;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            color: #4A4A4A;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        .lang-btn.active { background: #F47920; color: white; }
+
+        /* Print: one slide per page */
+        @media print {
+            body { background: #e2e8f0; padding: 0; gap: 0; min-height: auto; }
+            .lang-switch { display: none !important; }
+            .slide-container {
+                width: 1280px !important;
+                height: 720px !important;
+                margin: 0 auto 0 auto !important;
+                box-shadow: none !important;
+                page-break-after: always;
+            }
+            .slide-container:last-child { page-break-after: auto; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Language Switcher -->
+<div class="lang-switch">
+    <button class="lang-btn active" onclick="setLang('ja')" id="btn-ja">JP</button>
+    <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
+
+<!-- Slide 1: Title Slide -->
+<div class="slide-container" id="slide1">
+    <div class="bg-shapes">
+        <div class="shape1"></div>
+        <div class="shape2"></div>
+        <div class="shape3"></div>
+    </div>
+    <div class="title-layout">
+        <h1 data-i18n="title">IT部門における<br>タレントデベロップメント</h1>
+        <p class="subtitle" data-i18n="subtitle">スキル基盤の強化とグローバル展開</p>
+    </div>
+    <div class="footer">
+        <span>Strategic Initiative 2024-2026</span>
+        <span data-i18n="confidential">Confidential</span>
+    </div>
+</div>
+
+<!-- Slide 2: Overview -->
+<div class="slide-container" id="slide2">
+    <h2 class="slide-title" data-i18n="overview_title">全体像</h2>
+    <div class="content-area">
+        <p data-i18n="overview_desc">これまでのスキル開発の取り組みを振り返り、Lessons Learned を踏まえ、今後3年間で「スキル基盤の強化」と「グローバル対応」の2つのチャレンジに取り組んでいます。</p>
+        
+        <div class="flow-container">
+            <div class="flow-box" data-i18n="flow1">これまでの振り返り</div>
+            <div class="flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="flow-box" data-i18n="flow2">Lessons Learned</div>
+            <div class="flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="flow-box" style="background: #F47920; color: #FFF;" data-i18n="flow3">今後の2つのチャレンジ</div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3: Lessons Learned -->
+<div class="slide-container" id="slide3">
+    <h2 class="slide-title" data-i18n="ll_title">Lessons Learned</h2>
+    <div class="content-area">
+        <p style="margin-bottom: 30px;" data-i18n="ll_desc">これまでのスキル開発の取り組みを振り返り、得られた学びを今後の施策に反映します。</p>
+        <div class="info-grid">
+            <div class="info-card">
+                <i class="fa-solid fa-chart-pie"></i>
+                <p data-i18n="ll1">スキルの可視化・標準化が、配置・育成・採用の意思決定の前提となる</p>
+            </div>
+            <div class="info-card">
+                <i class="fa-solid fa-server"></i>
+                <p data-i18n="ll2">人材データが散在すると、組織全体のスキル状況把握や計画立案が困難になる</p>
+            </div>
+            <div class="info-card">
+                <i class="fa-solid fa-link-slash"></i>
+                <p data-i18n="ll3">学習と評価・キャリアがつながっていないと、個人の成長が制度に反映されにくい</p>
+            </div>
+            <div class="info-card">
+                <i class="fa-solid fa-comments"></i>
+                <p data-i18n="ll4">共通フレーム（例：SFIA）の導入により、リージョンや職種を超えた対話が可能になる</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3.5: Normal SWOT Matrix -->
+<div class="slide-container" id="slide3-5">
+    <h2 class="slide-title" data-i18n="swot_title">戦略的背景 (SWOT分析)</h2>
+    <div class="content-area">
+        <p style="margin-bottom: 20px;" data-i18n="swot_desc">外部環境の急激な変化と、内部の現状課題を照らし合わせます。</p>
+        <div class="swot-axis-x">
+            <div>INTERNAL (内部環境)</div>
+            <div>EXTERNAL (外部環境)</div>
+        </div>
+        <div class="swot-grid">
+            <!-- Strengths -->
+            <div class="swot-quad swot-s">
+                <div class="swot-title-box"><i class="fa-solid fa-plus-circle"></i> <span data-i18n="swot_s_title">Strengths (強み)</span></div>
+                <ul class="swot-list">
+                    <li data-i18n="swot_s_1">これまでのスキル開発の蓄積</li>
+                    <li data-i18n="swot_s_2">Lessons Learnedの基盤と参加意欲</li>
+                </ul>
+            </div>
+            <!-- Opportunities -->
+            <div class="swot-quad swot-o">
+                <div class="swot-title-box"><i class="fa-solid fa-lightbulb"></i> <span data-i18n="swot_o_title">Opportunities (機会)</span></div>
+                <ul class="swot-list">
+                    <li data-i18n="swot_o_1">生成AI等の急速な進展</li>
+                    <li data-i18n="swot_o_2">グローバルでの知見共有の加速</li>
+                </ul>
+            </div>
+            <!-- Weaknesses -->
+            <div class="swot-quad swot-w">
+                <div class="swot-title-box"><i class="fa-solid fa-minus-circle"></i> <span data-i18n="swot_w_title">Weaknesses (弱み)</span></div>
+                <ul class="swot-list">
+                    <li data-i18n="swot_w_1">リージョン間のサイロ化</li>
+                    <li data-i18n="swot_w_2">データの断絶、共通言語（SFIA）の欠如</li>
+                </ul>
+            </div>
+            <!-- Threats -->
+            <div class="swot-quad swot-t">
+                <div class="swot-title-box"><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="swot_t_title">Threats (脅威)</span></div>
+                <ul class="swot-list">
+                    <li data-i18n="swot_t_1">IT人材不足の深刻化</li>
+                    <li data-i18n="swot_t_2">技術変化のスピードアップ</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3.6: Cross SWOT Logic Diagram -->
+<div class="slide-container" id="slide3-6">
+    <h2 class="slide-title" data-i18n="swot_cross_title">戦略の導出 (クロスSWOT分析)</h2>
+    <div class="content-area">
+        <div class="swot-logic-container">
+            <!-- Top Row: External vs Internal -->
+            <div class="swot-top-row">
+                
+                <!-- External Factors -->
+                <div class="swot-env-box external">
+                    <div class="env-header">
+                        <span data-i18n="swot_ext_title">1. 外部要因 (External)</span>
+                        <span class="env-sub" data-i18n="swot_ext_sub">市場は待ってくれない（変革の強制力）</span>
+                    </div>
+                    <div class="swot-items">
+                        <div class="swot-item o">
+                            <h4 data-i18n="swot_o_title"><i class="fa-solid fa-lightbulb"></i> 機会 (O)</h4>
+                            <ul>
+                                <li data-i18n="swot_o_1">生成AI等の急速な進展</li>
+                                <li data-i18n="swot_o_2">グローバルでの知見共有の加速</li>
+                            </ul>
+                        </div>
+                        <div class="swot-item t">
+                            <h4 data-i18n="swot_t_title"><i class="fa-solid fa-triangle-exclamation"></i> 脅威 (T)</h4>
+                            <ul>
+                                <li data-i18n="swot_t_1">IT人材不足の深刻化</li>
+                                <li data-i18n="swot_t_2">技術変化のスピードアップ</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Internal Factors -->
+                <div class="swot-env-box internal">
+                    <div class="env-header">
+                        <span data-i18n="swot_int_title">2. 内部要因 (Internal)</span>
+                        <span class="env-sub" data-i18n="swot_int_sub">仕組みがバラバラで限界（今のままでは勝てない）</span>
+                    </div>
+                    <div class="swot-items">
+                        <div class="swot-item s">
+                            <h4 data-i18n="swot_s_title"><i class="fa-solid fa-plus-circle"></i> 強み (S)</h4>
+                            <ul>
+                                <li data-i18n="swot_s_1">これまでのスキル開発の蓄積</li>
+                            </ul>
+                        </div>
+                        <div class="swot-item w">
+                            <h4 data-i18n="swot_w_title"><i class="fa-solid fa-minus-circle"></i> 弱み (W)</h4>
+                            <ul>
+                                <li data-i18n="swot_w_1">リージョン間のサイロ化</li>
+                                <li data-i18n="swot_w_2">データの断絶、共通言語（SFIA）の欠如</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Connection Arrow -->
+            <div class="swot-arrow-down"><i class="fa-solid fa-angles-down"></i></div>
+            
+            <!-- Conclusion Box -->
+            <div class="swot-conclusion-box">
+                <div class="cross-analysis" data-i18n="swot_cross">3. クロス分析</div>
+                <p data-i18n="swot_conc_text">強みを活かしつつ弱みを克服し、機会を掴むために「2つのチャレンジ」へ舵を切る</p>
+                <div class="conclusion-highlight" data-i18n="swot_conc_high"><strong>「基盤の統一」</strong> と <strong>「グローバルの統合」</strong> が不可欠</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: Two Challenges -->
+<div class="slide-container" id="slide4">
+    <h2 class="slide-title" data-i18n="chal_title">今後3年間の2つのチャレンジ</h2>
+    <div class="content-area">
+        <p style="margin-bottom: 25px; font-weight: bold; color: #F47920; background: rgba(244, 121, 32, 0.1); padding: 10px 20px; border-radius: 8px; display: inline-block;" data-i18n="chal_intro"><i class="fa-solid fa-magnifying-glass-chart"></i> SWOT分析による現状把握に基づき、以下の2軸を最優先課題として特定しました。</p>
+        <div class="two-column">
+            <div class="tile">
+                <h3 data-i18n="chal1_h"><i class="fa-solid fa-layer-group" style="margin-right: 10px;"></i> ① スキル基盤の強化</h3>
+                <ul class="bullet-list" style="font-size: 18px;">
+                    <li data-i18n="chal1_1">スキルインベントリーのアップデート、SFIA 9 採用</li>
+                    <li data-i18n="chal1_2">スキルアセスメント・可視化・ラーニングプラットフォームの強化</li>
+                    <li data-i18n="chal1_3">タレントマネジメントシステムとの連携</li>
+                </ul>
+            </div>
+            <div class="tile">
+                <h3 data-i18n="chal2_h"><i class="fa-solid fa-globe" style="margin-right: 10px;"></i> ② グローバル対応</h3>
+                <ul class="bullet-list" style="font-size: 18px;">
+                    <li data-i18n="chal2_1">北米・EMEA へのタレントデベロップメント拡張</li>
+                    <li data-i18n="chal2_2">リージョンごとの最適人材配置の合意形成</li>
+                    <li data-i18n="chal2_3">リージョン横断のキャリアラダー・ジョブチャレンジ制度の土台</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: Challenge 1 Details -->
+<div class="slide-container" id="slide5">
+    <h2 class="slide-title" data-i18n="c1_title">チャレンジ1 — スキル基盤の強化</h2>
+    <div class="content-area">
+        <div class="step-row">
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <i class="fa-solid fa-cubes"></i>
+                <p data-i18n="c1_1">スキルインベントリーをアップデートし、<strong>SFIA 9</strong> を採用する</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">2</div>
+                <i class="fa-solid fa-laptop-code"></i>
+                <p data-i18n="c1_2">スキルアセスメント・スキル可視化・ラーニングプラットフォームを強化する</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">3</div>
+                <i class="fa-solid fa-database"></i>
+                <p data-i18n="c1_3">タレントマネジメントシステムと連携し、人材データを一元管理する</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6: Challenge 2 Details -->
+<div class="slide-container" id="slide6">
+    <h2 class="slide-title" data-i18n="c2_title">チャレンジ2 — グローバル対応</h2>
+    <div class="content-area">
+        <div class="step-row">
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <i class="fa-solid fa-earth-americas"></i>
+                <p data-i18n="c2_1">これまで日本国内に閉じていたタレントデベロップメント活動を、<strong>北米・EMEA</strong> にも拡張する</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">2</div>
+                <i class="fa-solid fa-users-gear"></i>
+                <p data-i18n="c2_2">リージョンごとの最適人材配置を合意形成する</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">3</div>
+                <i class="fa-solid fa-route"></i>
+                <p data-i18n="c2_3">リージョンを跨いだキャリアラダーとジョブチャレンジ制度の土台を整備する</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7: SFIA Introduction -->
+<div class="slide-container" id="slide7">
+    <h2 class="slide-title" data-i18n="sfia_title">SFIA（Skills Framework for the Information Age）とは</h2>
+    <div class="content-area">
+        <div class="image-right">
+            <div>
+                <p data-i18n="sfia_desc">SFIA は、デジタル世界を支えるテクノロジーを設計・開発・実装・管理・保護するプロフェッショナルに必要なスキルとコンピテンシーを定義した、グローバル共通フレームワークです。</p>
+                <ul class="bullet-list" style="margin-top: 20px; font-size: 18px;">
+                    <li data-i18n="sfia1">責任レベル（7段階）とプロフェッショナルスキルで能力を定義</li>
+                    <li data-i18n="sfia2">ソフトウェア、データ、サイバーセキュリティなど多様な職種をカバー</li>
+                    <li data-i18n="sfia3">政府・企業・個人が約200カ国で採用（SFIA 9 は2024年10月公開）</li>
+                </ul>
+            </div>
+            <div class="image-container">
+                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop" alt="ビジネスプランニングとスキルのコンセプト画像">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 8: Career Ladder Diagram -->
+<div class="slide-container" id="slide8">
+    <h2 class="slide-title" data-i18n="ladder_title">キャリアラダー・ジョブチャレンジのイメージ</h2>
+    <div class="content-area">
+        <div class="benefit-box">
+            <i class="fa-solid fa-lightbulb"></i> <span data-i18n="ladder_benefit">【メリット】自リージョンに上位ラダーがなくても、SFIA共通評価により他リージョンのポジションへ挑戦可能</span>
+        </div>
+        <div class="ladder-legend" style="display: flex; justify-content: center; gap: 30px; margin-bottom: 10px; font-size: 16px; font-weight: 700; color: #4A4A4A;">
+            <div style="display: flex; align-items: center; gap: 8px;"><span class="role-block sd fill" style="width: 20px; height: 20px; border-radius: 4px;"></span> <span data-i18n="matrix_sd">SD (サービスデリバリ)</span></div>
+            <div style="display: flex; align-items: center; gap: 8px;"><span class="role-block sec fill" style="width: 20px; height: 20px; border-radius: 4px;"></span> <span data-i18n="matrix_sec">Sec (セキュリティ)</span></div>
+            <div style="display: flex; align-items: center; gap: 8px;"><span class="role-block ai fill" style="width: 20px; height: 20px; border-radius: 4px;"></span> <span data-i18n="matrix_ai">AI (AIエンジニア)</span></div>
+        </div>
+        <div class="ladder-grid-multi">
+            <div></div>
+            <div class="ladder-header">Japan</div>
+            <div class="ladder-header">North America</div>
+            <div class="ladder-header">EMEA</div>
+            <!-- L4 -->
+            <div class="level-label">L4</div>
+            <div class="ladder-cell-multi">
+                <div class="role-block sd empty"><span>NA</span><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="role-block sec empty"><span>EMEA</span><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="role-block ai fill">AI</div>
+            </div>
+            <div class="ladder-cell-multi">
+                <div class="role-block sd fill">SD</div>
+                <div class="role-block sec empty"><span>EMEA</span><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="role-block ai empty"><i class="fa-solid fa-arrow-left"></i><span>JP</span></div>
+            </div>
+            <div class="ladder-cell-multi">
+                <div class="role-block sd empty"><i class="fa-solid fa-arrow-left"></i><span>NA</span></div>
+                <div class="role-block sec fill">Sec</div>
+                <div class="role-block ai empty"><i class="fa-solid fa-arrow-left"></i><span>JP</span></div>
+            </div>
+            <!-- L3 -->
+            <div class="level-label">L3</div>
+            <div class="ladder-cell-multi">
+                <div class="role-block sd empty"><span>NA</span><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="role-block sec empty"><span>EMEA</span><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="role-block ai fill">AI</div>
+            </div>
+            <div class="ladder-cell-multi">
+                <div class="role-block sd fill">SD</div>
+                <div class="role-block sec empty"><span>EMEA</span><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="role-block ai empty"><i class="fa-solid fa-arrow-left"></i><span>JP</span></div>
+            </div>
+            <div class="ladder-cell-multi">
+                <div class="role-block sd empty"><i class="fa-solid fa-arrow-left"></i><span>NA</span></div>
+                <div class="role-block sec fill">Sec</div>
+                <div class="role-block ai empty"><i class="fa-solid fa-arrow-left"></i><span>JP</span></div>
+            </div>
+            <!-- L2 -->
+            <div class="level-label">L2</div>
+            <div class="ladder-cell-multi">
+                <div class="role-block sd fill">SD</div>
+                <div class="role-block sec fill">Sec</div>
+                <div class="role-block ai fill">AI</div>
+            </div>
+            <div class="ladder-cell-multi">
+                <div class="role-block sd fill">SD</div>
+                <div class="role-block sec fill">Sec</div>
+                <div class="role-block ai fill">AI</div>
+            </div>
+            <div class="ladder-cell-multi">
+                <div class="role-block sd fill">SD</div>
+                <div class="role-block sec fill">Sec</div>
+                <div class="role-block ai fill">AI</div>
+            </div>
+            <!-- L1 -->
+            <div class="level-label">L1</div>
+            <div class="ladder-cell-multi">
+                <div class="role-block sd fill">SD</div>
+                <div class="role-block sec fill">Sec</div>
+                <div class="role-block ai fill">AI</div>
+            </div>
+            <div class="ladder-cell-multi">
+                <div class="role-block sd empty" style="border-color: transparent;" data-i18n="ladder_na_na">N/A</div>
+                <div class="role-block sec fill">Sec</div>
+                <div class="role-block ai fill">AI</div>
+            </div>
+            <div class="ladder-cell-multi">
+                <div class="role-block sd fill">SD</div>
+                <div class="role-block sec fill">Sec</div>
+                <div class="role-block ai fill">AI</div>
+            </div>
+            <!-- Foundation -->
+            <div style="grid-column: 2 / 5; margin-top: 5px;">
+                <div class="sfia-foundation-bar" data-i18n="ladder_sfia_base">
+                    <i class="fa-solid fa-globe"></i> SFIA 共通スキル評価基盤
+                </div>
+            </div>
+        </div>
+        <p style="text-align: center; font-size: 14px; margin-top: 15px; color: #757575;" data-i18n="challenge_note">※ 破線の枠と矢印は、自リージョンにポジションがない場合の他リージョンへのジョブチャレンジ（異動パス）を表します。</p>
+    </div>
+</div>
+
+<!-- Slide 9: Roadmap -->
+<div class="slide-container" id="slide9">
+    <h2 class="slide-title" data-i18n="road_title">ロードマップ — 今期の目標</h2>
+    <div class="content-area">
+        <div style="text-align: center; margin-bottom: -20px;">
+            <span style="background: rgba(244, 121, 32, 0.1); color: #F47920; font-weight: bold; padding: 10px 30px; border-radius: 30px; font-size: 24px;" data-i18n="road_badge">今期の目標</span>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fa-solid fa-rocket"></i></div>
+                <p data-i18n="road1">各施策の立ち上げ</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fa-solid fa-server"></i></div>
+                <p data-i18n="road2">人材データベースの構築</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fa-solid fa-rotate"></i></div>
+                <p data-i18n="road3">ほぼリアルタイムでスキルインベントリーが更新される仕組みの実現</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 10: Summary (WHY / WHAT / HOW) -->
+<div class="slide-container" id="slide10">
+    <h2 class="slide-title" data-i18n="summary_title">まとめ：タレントデベロップメント戦略</h2>
+    <div class="content-area">
+        <table class="summary-table">
+            <thead>
+                <tr class="col-header">
+                    <th data-i18n="summary_item">項目</th>
+                    <th data-i18n="summary_content">内容</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="row-header" data-i18n="why_label">WHY<br><span style="font-size:16px; font-weight:normal;">(背景・目的)</span></td>
+                    <td data-i18n="why_desc">外部環境の急激な変化（生成AIの進展・IT人材不足）と内部課題（リージョン間のサイロ化・データの断絶）により、既存路線の改善では不十分であり、抜本的な変革が必要なため。</td>
+                </tr>
+                <tr>
+                    <td class="row-header" data-i18n="what_label">WHAT<br><span style="font-size:16px; font-weight:normal;">(目標・挑戦)</span></td>
+                    <td data-i18n="what_desc">今後3年間で、<strong>「① スキル基盤の強化」</strong>と<strong>「② グローバル対応」</strong>の2つのチャレンジに最優先で取り組む。</td>
+                </tr>
+                <tr>
+                    <td class="row-header" data-i18n="how_label">HOW<br><span style="font-size:16px; font-weight:normal;">(実行アプローチ)</span></td>
+                    <td data-i18n="how_desc">世界標準<strong>「SFIA 9」</strong>を採用してアセスメント・可視化・ラーニング・タレマネを連携し、北米・EMEAに拡張して<strong>リージョン横断のキャリアラダーとジョブチャレンジ制度</strong>を構築する。</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer">
+        <div style="font-size: 16px; opacity: 0.6; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-users-line"></i> Global IT Team
+        </div>
+        <span>&copy; 2024 IT Department Talent Strategy</span>
+    </div>
+</div>
+
+<script>
+    // i18n Dictionary
+    const translations = {
+        ja: {
+            title: "IT部門における<br>タレントデベロップメント",
+            subtitle: "スキル基盤の強化とグローバル展開",
+            confidential: "Confidential",
+            overview_title: "全体像",
+            overview_desc: "これまでのスキル開発の取り組みを振り返り、Lessons Learned を踏まえ、今後3年間で「スキル基盤の強化」と「グローバル対応」の2つのチャレンジに取り組んでいます。",
+            flow1: "これまでの振り返り",
+            flow2: "Lessons Learned",
+            flow3: "今後の2つのチャレンジ",
+            ll_title: "Lessons Learned",
+            ll_desc: "これまでのスキル開発の取り組みを振り返り、得られた学びを今後の施策に反映します。",
+            ll1: "スキルの可視化・標準化が、配置・育成・採用の意思決定の前提となる",
+            ll2: "人材データが散在すると、組織全体のスキル状況把握や計画立案が困難になる",
+            ll3: "学習と評価・キャリアがつながっていないと、個人の成長が制度に反映されにくい",
+            ll4: "共通フレーム（例：SFIA）の導入により、リージョンや職種を超えた対話が可能になる",
+            
+            // SWOT Additions
+            swot_title: "戦略的背景 (SWOT分析)",
+            swot_desc: "外部環境の急激な変化と、内部の現状課題を照らし合わせます。",
+            swot_cross_title: "戦略の導出 (クロスSWOT分析)",
+            swot_ext_title: "1. 外部要因 (External)",
+            swot_ext_sub: "市場は待ってくれない（変革の強制力）",
+            swot_int_title: "2. 内部要因 (Internal)",
+            swot_int_sub: "仕組みがバラバラで限界（今のままでは勝てない）",
+            swot_o_title: "<i class='fa-solid fa-lightbulb'></i> 機会 (O)",
+            swot_o_1: "生成AI等の急速な進展",
+            swot_o_2: "グローバルでの知見共有の加速",
+            swot_t_title: "<i class='fa-solid fa-triangle-exclamation'></i> 脅威 (T)",
+            swot_t_1: "IT人材不足の深刻化",
+            swot_t_2: "技術変化のスピードアップ",
+            swot_s_title: "<i class='fa-solid fa-plus-circle'></i> 強み (S)",
+            swot_s_1: "これまでのスキル開発の蓄積",
+            swot_s_2: "Lessons Learnedの基盤と参加意欲",
+            swot_w_title: "<i class='fa-solid fa-minus-circle'></i> 弱み (W)",
+            swot_w_1: "リージョン間のサイロ化",
+            swot_w_2: "データの断絶、共通言語（SFIA）の欠如",
+            swot_cross: "3. クロス分析",
+            swot_conc_text: "強みを活かしつつ弱みを克服し、機会を掴むために「2つのチャレンジ」へ舵を切る",
+            swot_conc_high: "<strong>「基盤の統一」</strong> と <strong>「グローバルの統合」</strong> が不可欠",
+            
+            chal_title: "今後3年間の2つのチャレンジ",
+            chal_intro: "<i class='fa-solid fa-magnifying-glass-chart'></i> SWOT分析による現状把握に基づき、以下の2軸を最優先課題として特定しました。",
+            chal1_h: "<i class='fa-solid fa-layer-group' style='margin-right: 10px;'></i> ① スキル基盤の強化",
+            chal1_1: "スキルインベントリーのアップデート、SFIA 9 採用",
+            chal1_2: "スキルアセスメント・可視化・ラーニングプラットフォームの強化",
+            chal1_3: "タレントマネジメントシステムとの連携",
+            chal2_h: "<i class='fa-solid fa-globe' style='margin-right: 10px;'></i> ② グローバル対応",
+            chal2_1: "北米・EMEA へのタレントデベロップメント拡張",
+            chal2_2: "リージョンごとの最適人材配置の合意形成",
+            chal2_3: "リージョン横断のキャリアラダー・ジョブチャレンジ制度の土台",
+            c1_title: "チャレンジ1 — スキル基盤の強化",
+            c1_1: "スキルインベントリーをアップデートし、<strong>SFIA 9</strong> を採用する",
+            c1_2: "スキルアセスメント・スキル可視化・ラーニングプラットフォームを強化する",
+            c1_3: "タレントマネジメントシステムと連携し、人材データを一元管理する",
+            c2_title: "チャレンジ2 — グローバル対応",
+            c2_1: "これまで日本国内に閉じていたタレントデベロップメント活動を、<strong>北米・EMEA</strong> にも拡張する",
+            c2_2: "リージョンごとの最適人材配置を合意形成する",
+            c2_3: "リージョンを跨いだキャリアラダーとジョブチャレンジ制度の土台を整備する",
+            sfia_title: "SFIA（Skills Framework for the Information Age）とは",
+            sfia_desc: "SFIA は、デジタル世界を支えるテクノロジーを設計・開発・実装・管理・保護するプロフェッショナルに必要なスキルとコンピテンシーを定義した、グローバル共通フレームワークです。",
+            sfia1: "責任レベル（7段階）とプロフェッショナルスキルで能力を定義",
+            sfia2: "ソフトウェア、データ、サイバーセキュリティなど多様な職種をカバー",
+            sfia3: "政府・企業・個人が約200カ国で採用（SFIA 9 は2024年10月公開）",
+            ladder_title: "キャリアラダー・ジョブチャレンジのイメージ",
+            ladder_benefit: "【メリット】自リージョンに上位ラダーがなくても、SFIA共通評価により他リージョンのポジションへ挑戦可能",
+            ladder_sfia_base: "<i class='fa-solid fa-globe'></i> SFIA 共通スキル評価基盤",
+            matrix_sd: "SD (サービスデリバリ)",
+            matrix_sec: "Sec (セキュリティ)",
+            matrix_ai: "AI (AIエンジニア)",
+            ladder_na_na: "N/A",
+            challenge_note: "※ 破線の枠と矢印は、自リージョンにポジションがない場合の他リージョンへのジョブチャレンジ（異動パス）を表します。",
+            road_title: "ロードマップ — 今期の目標",
+            road_badge: "今期の目標",
+            road1: "各施策の立ち上げ",
+            road2: "人材データベースの構築",
+            road3: "ほぼリアルタイムでスキルインベントリーが更新される仕組みの実現",
+            
+            // Summary additions
+            summary_title: "まとめ：タレントデベロップメント戦略",
+            summary_item: "項目",
+            summary_content: "内容",
+            why_label: "WHY<br><span style='font-size:16px; font-weight:normal;'>(背景・目的)</span>",
+            what_label: "WHAT<br><span style='font-size:16px; font-weight:normal;'>(目標・挑戦)</span>",
+            how_label: "HOW<br><span style='font-size:16px; font-weight:normal;'>(実行アプローチ)</span>",
+            why_desc: "外部環境の急激な変化（生成AIの進展・IT人材不足）と内部課題（リージョン間のサイロ化・データの断絶）により、既存路線の改善では不十分であり、抜本的な変革が必要なため。",
+            what_desc: "今後3年間で、<strong>「① スキル基盤の強化」</strong>と<strong>「② グローバル対応」</strong>の2つのチャレンジに最優先で取り組む。",
+            how_desc: "世界標準<strong>「SFIA 9」</strong>を採用してアセスメント・可視化・ラーニング・タレマネを連携し、北米・EMEAに拡張して<strong>リージョン横断のキャリアラダーとジョブチャレンジ制度</strong>を構築する。"
+        },
+        en: {
+            title: "IT Department<br>Talent Development",
+            subtitle: "Strengthening the Skill Foundation & Global Expansion",
+            confidential: "Confidential",
+            overview_title: "Overview",
+            overview_desc: "Reflecting on our past skill development initiatives and incorporating Lessons Learned, we are taking on two challenges over the next 3 years: 'Strengthening the Skill Foundation' and 'Global Expansion'.",
+            flow1: "Past Reflection",
+            flow2: "Lessons Learned",
+            flow3: "Two Upcoming Challenges",
+            ll_title: "Lessons Learned",
+            ll_desc: "We reflect on past skill development efforts to apply the insights gained to our future initiatives.",
+            ll1: "Visualization and standardization of skills are prerequisites for placement, training, and hiring decisions.",
+            ll2: "Scattered talent data makes it difficult to understand the organization's overall skill status and to plan effectively.",
+            ll3: "If learning is disconnected from evaluation and careers, individual growth is hard to reflect in the system.",
+            ll4: "Adopting a common framework (e.g., SFIA) enables dialogue across regions and roles.",
+            
+            // SWOT Additions (EN)
+            swot_title: "Strategic Background (SWOT Analysis)",
+            swot_desc: "Aligning rapid changes in the external environment with current internal challenges.",
+            swot_cross_title: "Strategy Derivation (Cross SWOT Analysis)",
+            swot_ext_title: "1. External Factors",
+            swot_ext_sub: "The market won't wait (Force for change)",
+            swot_int_title: "2. Internal Factors",
+            swot_int_sub: "Fragmented systems reached limits (Cannot win as is)",
+            swot_o_title: "<i class='fa-solid fa-lightbulb'></i> Opportunities (O)",
+            swot_o_1: "Rapid advancement of GenAI, etc.",
+            swot_o_2: "Acceleration of global knowledge sharing",
+            swot_t_title: "<i class='fa-solid fa-triangle-exclamation'></i> Threats (T)",
+            swot_t_1: "Severe shortage of IT talent",
+            swot_t_2: "Accelerated speed of technological change",
+            swot_s_title: "<i class='fa-solid fa-plus-circle'></i> Strengths (S)",
+            swot_s_1: "Accumulated skill development efforts",
+            swot_s_2: "Lessons Learned base and high motivation",
+            swot_w_title: "<i class='fa-solid fa-minus-circle'></i> Weaknesses (W)",
+            swot_w_1: "Silos across regions",
+            swot_w_2: "Data disconnect, lack of a common language (SFIA)",
+            swot_cross: "3. Cross Analysis",
+            swot_conc_text: "To leverage strengths, overcome weaknesses, and seize opportunities, we must steer towards the 'Two Challenges'.",
+            swot_conc_high: "<strong>'Unifying the Foundation'</strong> and <strong>'Global Integration'</strong> are essential",
+            
+            chal_title: "Two Challenges for the Next 3 Years",
+            chal_intro: "<i class='fa-solid fa-magnifying-glass-chart'></i> Based on the SWOT analysis, we have identified the following two pillars as our top priorities.",
+            chal1_h: "<i class='fa-solid fa-layer-group' style='margin-right: 10px;'></i> 1. Skill Foundation",
+            chal1_1: "Update the skill inventory and adopt SFIA 9",
+            chal1_2: "Enhance skill assessment, visualization, and learning platforms",
+            chal1_3: "Integrate with the talent management system",
+            chal2_h: "<i class='fa-solid fa-globe' style='margin-right: 10px;'></i> 2. Global Expansion",
+            chal2_1: "Expand talent development to North America and EMEA",
+            chal2_2: "Build consensus on optimal talent placement per region",
+            chal2_3: "Lay the foundation for cross-regional career ladders and job challenge programs",
+            c1_title: "Challenge 1 — Skill Foundation",
+            c1_1: "Update the skill inventory and adopt <strong>SFIA 9</strong>",
+            c1_2: "Strengthen skill assessment, visualization, and learning platforms",
+            c1_3: "Integrate with the talent management system to centralize talent data",
+            c2_title: "Challenge 2 — Global Expansion",
+            c2_1: "Expand talent development activities, previously limited to Japan, to <strong>North America & EMEA</strong>",
+            c2_2: "Reach a consensus on optimal talent placement for each region",
+            c2_3: "Establish the foundation for cross-regional career ladders and job challenge systems",
+            sfia_title: "What is SFIA?",
+            sfia_desc: "SFIA defines the skills and competencies required by professionals who design, develop, implement, manage, and protect the data and technology that power the digital world.",
+            sfia1: "Defines capabilities via 7 levels of responsibility and professional skills",
+            sfia2: "Covers diverse roles like software engineering, data science, and cybersecurity",
+            sfia3: "Adopted in ~200 countries by governments, enterprises, and individuals",
+            ladder_title: "Career Ladder & Job Challenge Concept",
+            ladder_benefit: "[Benefit] Even without a local ladder, common evaluation (SFIA) enables applying to positions in other regions",
+            ladder_sfia_base: "<i class='fa-solid fa-globe'></i> SFIA Common Skill Evaluation Foundation",
+            matrix_sd: "SD (Service Delivery)",
+            matrix_sec: "Sec (Security)",
+            matrix_ai: "AI (AI Engineer)",
+            ladder_na_na: "N/A",
+            challenge_note: "* Dashed boxes and arrows indicate Job Challenge paths to open positions in other regions.",
+            road_title: "Roadmap — Current Term Goals",
+            road_badge: "Current Term Goals",
+            road1: "Launch of each initiative",
+            road2: "Construction of the talent database",
+            road3: "Realize near real-time updates for the skill inventory",
+            
+            // Summary additions (EN)
+            summary_title: "Summary: Talent Development Strategy",
+            summary_item: "Item",
+            summary_content: "Content",
+            why_label: "WHY<br><span style='font-size:16px; font-weight:normal;'>(Background & Purpose)</span>",
+            what_label: "WHAT<br><span style='font-size:16px; font-weight:normal;'>(Goals & Challenges)</span>",
+            how_label: "HOW<br><span style='font-size:16px; font-weight:normal;'>(Execution Approach)</span>",
+            why_desc: "Existing improvements are insufficient due to rapid external changes (GenAI, talent shortage) and internal issues (silos, data disconnect), requiring fundamental transformation.",
+            what_desc: "Take on two top-priority challenges over the next 3 years: <strong>'1. Strengthening the Skill Foundation'</strong> and <strong>'2. Global Expansion'</strong>.",
+            how_desc: "Adopt the global standard <strong>'SFIA 9'</strong> to integrate assessment, visualization, learning, and talent management, expand to North America/EMEA, and build <strong>cross-regional career ladders and job challenge programs</strong>."
+        }
+    };
+
+    function setLang(lang) {
+        document.getElementById('btn-ja').classList.remove('active');
+        document.getElementById('btn-en').classList.remove('active');
+        document.getElementById('btn-' + lang).classList.add('active');
+
+        const dict = translations[lang];
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key]) {
+                el.innerHTML = dict[key];
+            }
+        });
+    }
+
+    // PDF export: set language from URL ?lang=ja or ?lang=en
+    document.addEventListener('DOMContentLoaded', function() {
+        var m = window.location.search.match(/[?&]lang=(ja|en)/i);
+        if (m) setLang(m[1].toLowerCase());
+    });
+</script>
+</body>
+</html>
+```
