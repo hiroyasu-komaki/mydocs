@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drug Discovery Process and Veeva Vault Infographics</title>
+    <link rel="preconnect" href="https://www.google.com/search?q=https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://www.google.com/search?q=https://fonts.gstatic.com" crossorigin>
+    <link href="https://www.google.com/search?q=https://fonts.googleapis.com/css2%3Ffamily%3DNoto%2BSans%2BJP:wght%40400%3B500%3B700%26family%3DLato:wght%40400%3B700%26display%3Dswap" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.google.com/search?q=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+      /* --- Core Variables & Setup --- */
+      :root {
+        --primary-orange: #F39200; /* Kyowa Kirin Orange */
+        --primary-blue: #005697;   /* Veeva Blue */
+        --light-bg: #F8F9FA;
+        --white-bg: #FFFFFF;
+        --text-dark: #333333;
+        --text-muted: #666666;
+        --border-color: #E2E8F0;
+        --accent-orange-light: #FFF0DB;
+        --accent-blue-light: #E6F0F9;
+      }
+
+      * { box-sizing: border-box; }
+      p, h1, h2, h3, h4, ul, li { margin: 0; padding: 0; }
+
+      body {
+        background-color: #e2e8f0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin: 0;
+        min-height: 100vh;
+        padding: 20px 0;
+        font-family: 'Noto Sans JP', sans-serif;
+        color: var(--text-dark);
+      }
+
+      /* --- Multi-language Support --- */
+      .lang-toggle-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: var(--white-bg);
+        padding: 5px;
+        border-radius: 30px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        display: flex;
+        gap: 5px;
+      }
+      .lang-btn {
+        border: none;
+        background: transparent;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 500;
+        font-family: 'Lato', sans-serif;
+        color: var(--text-muted);
+        transition: all 0.2s;
+      }
+      .lang-btn.active {
+        background: var(--primary-orange);
+        color: white;
+      }
+
+      /* Hide elements based on body class */
+      body.lang-ja .en { display: none !important; }
+      body.lang-en .ja { display: none !important; }
+      /* Inline block to allow text wrapping inside elements */
+      .ja, .en { display: inline; }
+      div.ja, div.en, h1.ja, h1.en, h2.ja, h2.en, h3.ja, h3.en, li.ja, li.en, th.ja, th.en, td.ja, td.en { display: block; }
+      span.ja, span.en { display: inline; }
+
+      /* --- Slide Container --- */
+      .slide-container {
+        background-color: var(--white-bg);
+        border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        height: 720px;
+        width: 1280px;
+        overflow: hidden;
+        padding: 50px 60px;
+        position: relative;
+      }
+
+      /* Abstract Background Design */
+      .slide-container::before {
+        content: '';
+        position: absolute;
+        top: -50%; left: -50%;
+        width: 200%; height: 200%;
+        background: radial-gradient(circle at 20% 80%, rgba(243, 146, 0, 0.05) 0%, transparent 40%),
+          radial-gradient(circle at 80% 20%, rgba(0, 86, 151, 0.04) 0%, transparent 40%);
+        z-index: 0;
+        pointer-events: none;
+      }
+      .slide-container > * { position: relative; z-index: 1; }
+
+      /* --- Typography --- */
+      h1 { font-size: 54px; font-weight: 700; color: var(--primary-blue); line-height: 1.2; }
+      h2.slide-title { font-size: 36px; font-weight: 700; color: var(--text-dark); margin-bottom: 30px; border-left: 6px solid var(--primary-orange); padding-left: 15px; width: 100%; }
+      h3 { font-size: 24px; font-weight: 700; color: var(--primary-blue); margin-bottom: 15px; }
+      p, li, td, th { font-size: 18px; line-height: 1.6; color: var(--text-dark); }
+      .subtitle { font-size: 20px; color: var(--text-muted); margin-top: 15px; }
+
+      /* --- Layouts --- */
+      .content-area { flex-grow: 1; display: flex; flex-direction: column; width: 100%; }
+
+      /* Two Column */
+      .two-column { display: flex; gap: 40px; width: 100%; height: 100%; align-items: stretch; }
+      .two-column > div { flex: 1; display: flex; flex-direction: column; }
+
+      /* Tiled */
+      .tiled-content { display: flex; gap: 30px; width: 100%; flex-wrap: wrap; justify-content: center; }
+      .tile { background: var(--light-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; flex: 1; display: flex; flex-direction: column; align-items: flex-start; }
+      .tile .icon { color: var(--primary-orange); font-size: 32px; margin-bottom: 15px; }
+
+      /* Table */
+      .table-layout { width: 100%; border-collapse: collapse; }
+      .table-layout th, .table-layout td { border: 1px solid var(--border-color); padding: 12px 16px; text-align: left; font-size: 16px; }
+      .table-layout th { background-color: var(--accent-blue-light); color: var(--primary-blue); font-weight: 700; }
+      .table-layout tr:nth-child(even) { background-color: var(--light-bg); }
+
+      /* Timeline (Standard) */
+      .timeline-layout { display: flex; width: 100%; justify-content: space-between; position: relative; margin-top: 20px; }
+      .timeline-line { position: absolute; top: 25px; left: 0; width: 100%; height: 4px; background-color: var(--border-color); z-index: 0; }
+      .timeline-item { width: 18%; position: relative; text-align: center; z-index: 1; }
+      .timeline-dot { width: 24px; height: 24px; background: white; border: 4px solid var(--primary-orange); border-radius: 50%; margin: 15px auto; }
+
+      /* --- Infographic Custom Components --- */
+
+      /* Funnel (Slide 1) */
+      .funnel-container { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 40px; }
+      .funnel-step { background: var(--primary-blue); color: white; text-align: center; padding: 12px; border-radius: 6px; font-weight: bold; }
+
+      /* Circular Diagram (Slide 3) */
+      .circle-hub-container { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 20px; }
+      .circle-core { background: var(--primary-blue); color: white; border-radius: 50%; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; text-align: center; flex-shrink: 0; }
+      .satellite-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex-grow: 1; }
+      .satellite-node { background: var(--accent-orange-light); border: 1px solid var(--primary-orange); border-radius: 8px; padding: 15px; display: flex; align-items: center; gap: 15px; }
+      .satellite-node i { color: var(--primary-orange); font-size: 24px; }
+
+      /* Process Flow (Slide 4) */
+      .process-steps { display: flex; align-items: center; justify-content: space-between; background: var(--light-bg); padding: 20px; border-radius: 12px; }
+      .p-step { text-align: center; flex: 1; }
+      .p-arrow { color: var(--primary-orange); font-size: 24px; }
+
+      /* System Flow (Slide 6 & 11) */
+      .system-flow { display: flex; align-items: stretch; justify-content: space-between; gap: 20px; height: 100%; }
+      .s-box { background: var(--white-bg); border: 2px solid var(--primary-blue); border-radius: 12px; padding: 20px; flex: 1; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+      .s-box.vault { background: var(--accent-blue-light); }
+      .s-arrow-container { display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--primary-orange); font-weight: bold; }
+
+      /* Pyramid (Slide 8) */
+      .pyramid-container { display: flex; flex-direction: column; align-items: center; gap: 5px; width: 100%; margin-top: 20px; }
+      .pyr-layer { text-align: center; color: white; padding: 10px; font-weight: bold; border-radius: 4px; }
+      .pyr-m1 { width: 30%; background: #94a3b8; }
+      .pyr-m2 { width: 50%; background: #64748b; }
+      .pyr-m3 { width: 70%; background: var(--primary-orange); font-size: 20px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+      .pyr-m4 { width: 85%; background: #475569; }
+      .pyr-m5 { width: 100%; background: #334155; }
+
+      /* Cycle Diagram (Slide 10) */
+      .cycle-container { position: relative; width: 500px; height: 500px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+      .cycle-center { background: var(--primary-blue); color: white; width: 140px; height: 140px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px; text-align: center; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+      .cycle-node { position: absolute; width: 160px; height: 100px; background: var(--white-bg); border: 2px solid var(--primary-orange); border-radius: 12px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px; font-weight: bold; color: var(--primary-blue); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+      .cn-top { top: 0; left: 50%; transform: translateX(-50%); }
+      .cn-left { bottom: 50px; left: 0; }
+      .cn-right { bottom: 50px; right: 0; }
+
+      /* Comparison Panel (Slide 4) */
+      .vs-panel { display: flex; gap: 20px; background: var(--light-bg); padding: 20px; border-radius: 12px; }
+      .vs-col { flex: 1; background: white; padding: 20px; border-radius: 8px; border-top: 4px solid var(--primary-blue); }
+      .vs-col.bio { border-top-color: var(--primary-orange); }
+
+      /* Utility */
+      .mb-15 { margin-bottom: 15px; }
+      .mt-20 { margin-top: 20px; }
+      .text-center { text-align: center; }
+      .highlight { color: var(--primary-orange); font-weight: bold; }
+      ul.styled-list { list-style: none; }
+      ul.styled-list li { margin-bottom: 10px; padding-left: 25px; position: relative; }
+      ul.styled-list li::before { content: '\f0da'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--primary-orange); position: absolute; left: 0; top: 2px; }
+    </style>
+  </head>
+  <body class="lang-ja">
+
+    <!-- Language Toggle -->
+    <div class="lang-toggle-container">
+      <button class="lang-btn active" onclick="setLang('ja')">日本語</button>
+      <button class="lang-btn" onclick="setLang('en')">English</button>
+    </div>
+
+    <!-- Slide 1: Title & Overview -->
+    <div class="slide-container" id="slide1">
+      <div style="text-align: center; margin-top: 40px;">
+        <h1 class="ja">創薬プロセスと Veeva Vault</h1>
+        <h1 class="en">Drug Discovery Process & Veeva Vault</h1>
+        <p class="subtitle ja">約10〜15年を要する、新薬開発の全体像とシステム基盤</p>
+        <p class="subtitle en">A 10-15 year journey and the system foundation for drug development</p>
+      </div>
+
+      <div class="content-area mt-20" style="justify-content: center;">
+        <div class="timeline-layout">
+          <div class="timeline-line"></div>
+          <div class="timeline-item">
+            <div class="ja"><h3>基礎研究</h3><p>標的特定・探索</p></div>
+            <div class="en"><h3>Basic Research</h3><p>Target ID & Discovery</p></div>
+            <div class="timeline-dot"></div><p>2-3 <span class="ja">年</span><span class="en">yrs</span></p>
+          </div>
+          <div class="timeline-item">
+            <div class="ja"><h3>非臨床試験</h3><p>動物実験・CMC開始</p></div>
+            <div class="en"><h3>Nonclinical</h3><p>Animal Studies, CMC</p></div>
+            <div class="timeline-dot"></div><p>2-6 <span class="ja">年</span><span class="en">yrs</span></p>
+          </div>
+          <div class="timeline-item">
+            <div class="ja"><h3>臨床試験</h3><p>Phase I - III (CRO連携)</p></div>
+            <div class="en"><h3>Clinical Trials</h3><p>Phase I - III (with CRO)</p></div>
+            <div class="timeline-dot"></div><p>3-7 <span class="ja">年</span><span class="en">yrs</span></p>
+          </div>
+          <div class="timeline-item">
+            <div class="ja"><h3>承認審査</h3><p>PMDA / FDA (CTD提出)</p></div>
+            <div class="en"><h3>Review & Appr.</h3><p>PMDA / FDA (CTD)</p></div>
+            <div class="timeline-dot"></div><p>1-2 <span class="ja">年</span><span class="en">yrs</span></p>
+          </div>
+          <div class="timeline-item">
+            <div class="ja"><h3>上市・市販後</h3><p>PMS, PV, MSL活動</p></div>
+            <div class="en"><h3>Launch & PMS</h3><p>PMS, PV, MSL</p></div>
+            <div class="timeline-dot" style="border-color: var(--primary-blue);"></div><p>Ongoing</p>
+          </div>
+        </div>
+
+        <div class="funnel-container">
+          <div class="funnel-step" style="width: 500px; opacity: 0.7;">
+            <span class="ja">数万の化合物・ターゲット候補</span>
+            <span class="en">Tens of Thousands of Candidates</span>
+          </div>
+          <div class="funnel-step" style="width: 300px; opacity: 0.85;">
+            <span class="ja">臨床試験 (数百名〜数千名)</span>
+            <span class="en">Clinical Trials (100s - 1,000s)</span>
+          </div>
+          <div class="funnel-step" style="width: 150px; background: var(--primary-orange); font-size: 20px;">
+            <i class="fa-solid fa-pills"></i>
+            <span class="ja">1つの新薬</span>
+            <span class="en">1 Approved Drug</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: 6 Key Phases -->
+    <div class="slide-container" id="slide2">
+      <h2 class="slide-title ja">創薬の6つの主要フェーズ</h2>
+      <h2 class="slide-title en">6 Key Phases of Drug Discovery</h2>
+      <div class="content-area">
+        <div class="tiled-content">
+          <div class="tile">
+            <div class="icon"><i class="fa-solid fa-microscope"></i></div>
+            <h3 class="ja">1. 基礎研究</h3><h3 class="en">1. Basic Research</h3>
+            <p class="ja">疾患標的の特定と化合物探索。
+
+
+
+<b>担当:</b> 研究者</p>
+            <p class="en">Target ID & drug discovery.
+
+
+
+<b>By:</b> Researchers</p>
+          </div>
+          <div class="tile">
+            <div class="icon"><i class="fa-solid fa-flask"></i></div>
+            <h3 class="ja">2. 非臨床試験</h3><h3 class="en">2. Nonclinical Studies</h3>
+            <p class="ja">動物・細胞での薬効・毒性評価。
+
+
+
+<b>担当:</b> CMC, 研究者</p>
+            <p class="en">Efficacy & toxicity in animals/cells.
+
+
+
+<b>By:</b> CMC, Researchers</p>
+          </div>
+          <div class="tile" style="border-top: 4px solid var(--primary-blue);">
+            <div class="icon"><i class="fa-solid fa-user-nurse"></i></div>
+            <h3 class="ja">3. 臨床試験 (Phase I-III)</h3><h3 class="en">3. Clinical Trials (I-III)</h3>
+            <p class="ja">ヒトでの安全性と有効性の厳格な検証。
+
+
+
+<b>担当:</b> CRO, 開発部門</p>
+            <p class="en">Strict safety/efficacy testing in humans.
+
+
+
+<b>By:</b> CRO, Clinical Dev</p>
+          </div>
+          <div class="tile">
+            <div class="icon"><i class="fa-solid fa-file-contract"></i></div>
+            <h3 class="ja">4. 承認申請・審査</h3><h3 class="en">4. Regulatory Approval</h3>
+            <p class="ja">CTD(CMC含む)提出と当局審査対応。
+
+
+
+<b>担当:</b> RA (規制担当)</p>
+            <p class="en">CTD submission & authority review.
+
+
+
+<b>By:</b> Regulatory Affairs (RA)</p>
+          </div>
+          <div class="tile">
+            <div class="icon"><i class="fa-solid fa-truck-medical"></i></div>
+            <h3 class="ja">5. 上市 (Launch)</h3><h3 class="en">5. Launch</h3>
+            <p class="ja">製造販売承認取得後の市場供給開始。
+
+
+
+<b>担当:</b> 製造, SCM, 営業</p>
+            <p class="en">Market supply after approval.
+
+
+
+<b>By:</b> Mfg, SCM, Sales</p>
+          </div>
+          <div class="tile" style="border-top: 4px solid var(--primary-orange);">
+            <div class="icon"><i class="fa-solid fa-chart-line"></i></div>
+            <h3 class="ja">6. 市販後 (PMS/PV/MSL)</h3><h3 class="en">6. Post-Marketing</h3>
+            <p class="ja">副作用監視とKOLとの科学的交流。
+
+
+
+<b>担当:</b> PV, MSL, PMS</p>
+            <p class="en">Safety monitoring & KOL scientific exchange.
+
+
+
+<b>By:</b> PV, MSL, PMS</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: CMC Role -->
+    <div class="slide-container" id="slide3">
+      <h2 class="slide-title ja">創薬におけるCMCの役割</h2>
+      <h2 class="slide-title en">The Role of CMC in Drug Discovery</h2>
+      <div class="content-area">
+        <div class="ja mb-15"><p>CMC (Chemistry, Manufacturing and Controls) は、新薬候補を「研究」から「商業製品」へ橋渡しする開発の要です。</p></div>
+        <div class="en mb-15"><p>CMC is the crucial bridge that turns drug candidates from "research" into commercial "medicines".</p></div>
+
+        <div class="circle-hub-container">
+          <div class="text-center" style="width: 200px;">
+            <i class="fa-solid fa-vial fa-3x" style="color:var(--primary-blue);"></i>
+            <h3 class="ja mt-20">創薬研究</h3><h3 class="en mt-20">Discovery</h3>
+            <p class="ja">レシピの発明</p><p class="en">Inventing the recipe</p>
+          </div>
+
+          <i class="fa-solid fa-arrow-right-long fa-2x" style="color:var(--text-muted);"></i>
+
+          <div class="circle-core">
+            CMC<br><span style="font-size:14px;font-weight:normal;">Bridge</span>
+          </div>
+
+          <i class="fa-solid fa-arrow-right-long fa-2x" style="color:var(--text-muted);"></i>
+
+          <div class="text-center" style="width: 200px;">
+            <i class="fa-solid fa-industry fa-3x" style="color:var(--primary-orange);"></i>
+            <h3 class="ja mt-20">商業製造</h3><h3 class="en mt-20">Manufacturing</h3>
+            <p class="ja">安定した大量調理</p><p class="en">Stable mass cooking</p>
+          </div>
+        </div>
+
+        <h3 class="ja mt-20" style="text-align:center;">CMCの5つの主要業務領域</h3>
+        <h3 class="en mt-20" style="text-align:center;">5 Key Business Areas of CMC</h3>
+
+        <div class="satellite-grid">
+          <div class="satellite-node"><i class="fa-solid fa-gem"></i> <div><b class="ja">原薬プロセス:</b><b class="en">API Process:</b> <span class="ja">合成・製造法確立</span><span class="en">Synthesis & method est.</span></div></div>
+          <div class="satellite-node"><i class="fa-solid fa-tablets"></i> <div><b class="ja">製剤開発:</b><b class="en">Formulation:</b> <span class="ja">剤形・処方設計</span><span class="en">Dosage & formulation design</span></div></div>
+          <div class="satellite-node"><i class="fa-solid fa-check-double"></i> <div><b class="ja">品質評価・分析:</b><b class="en">Quality/Analysis:</b> <span class="ja">試験法・規格設定</span><span class="en">Testing methods & specs</span></div></div>
+          <div class="satellite-node"><i class="fa-solid fa-arrow-up-right-dots"></i> <div><b class="ja">スケールアップ:</b><b class="en">Scale-up:</b> <span class="ja">ラボから商業生産へ</span><span class="en">From lab to commercial</span></div></div>
+          <div class="satellite-node" style="grid-column: 1 / -1; justify-content: center;"><i class="fa-solid fa-handshake"></i> <div><b class="ja">技術移転:</b><b class="en">Tech Transfer:</b> <span class="ja">CDMO/CMO等パートナーとの連携管理</span><span class="en">Collaboration with CDMO/CMO partners</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Bio vs Small Molecule -->
+    <div class="slide-container" id="slide4">
+      <h2 class="slide-title ja">バイオ医薬品CMCと低分子の違い</h2>
+      <h2 class="slide-title en">Biopharmaceutical CMC vs Small Molecule</h2>
+      <div class="content-area">
+        <div class="vs-panel mb-15">
+          <div class="vs-col">
+            <h3 class="ja"><i class="fa-solid fa-capsules"></i> 低分子医薬品 (Small Molecule)</h3>
+            <h3 class="en"><i class="fa-solid fa-capsules"></i> Small Molecule</h3>
+            <ul class="styled-list">
+              <li><span class="ja"><b>生産:</b> 化学合成 (単純、再現性が高い)</span><span class="en"><b>Production:</b> Chem synthesis (Simple, reproducible)</span></li>
+              <li><span class="ja"><b>課題:</b> 不純物、結晶多形</span><span class="en"><b>Issues:</b> Impurities, polymorphism</span></li>
+              <li><span class="ja"><b>重点:</b> 合成ルートの最適化</span><span class="en"><b>Focus:</b> Route optimization</span></li>
+            </ul>
+          </div>
+          <div class="vs-col bio">
+            <h3 class="ja" style="color:var(--primary-orange);"><i class="fa-solid fa-dna"></i> バイオ医薬品 (Biopharma)</h3>
+            <h3 class="en" style="color:var(--primary-orange);"><i class="fa-solid fa-dna"></i> Biopharma</h3>
+            <ul class="styled-list">
+              <li><span class="ja"><b>生産:</b> 細胞培養・精製 (生細胞依存、複雑)</span><span class="en"><b>Production:</b> Cell culture (Complex, biological var)</span></li>
+              <li><span class="ja"><b>課題:</b> 糖鎖異性体、凝集、宿主由来不純物</span><span class="en"><b>Issues:</b> Glycans, aggregation, host impurities</span></li>
+              <li><span class="ja"><b>重点:</b> プロセス耐性(QbD)、継続的検証</span><span class="en"><b>Focus:</b> Process robustness (QbD), CPV</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="ja text-center mt-20">バイオ医薬品のCMCプロセスフロー</h3>
+        <h3 class="en text-center mt-20">Biopharma CMC Process Flow</h3>
+
+        <div class="process-steps">
+          <div class="p-step">
+            <i class="fa-solid fa-disease fa-2x" style="color:var(--primary-blue);"></i>
+            <div class="ja mt-20"><b>1. セルライン開発</b><br>安定生産細胞の構築</div>
+            <div class="en mt-20"><b>1. Cell Line Dev</b><br>Stable cell construction</div>
+          </div>
+          <i class="fa-solid fa-chevron-right p-arrow"></i>
+          <div class="p-step">
+            <i class="fa-solid fa-water fa-2x" style="color:var(--primary-blue);"></i>
+            <div class="ja mt-20"><b>2. アップストリーム</b><br>培養・タンパク生産</div>
+            <div class="en mt-20"><b>2. Upstream</b><br>Cell culture & production</div>
+          </div>
+          <i class="fa-solid fa-chevron-right p-arrow"></i>
+          <div class="p-step">
+            <i class="fa-solid fa-filter fa-2x" style="color:var(--primary-blue);"></i>
+            <div class="ja mt-20"><b>3. ダウンストリーム</b><br>各種クロマト等で精製</div>
+            <div class="en mt-20"><b>3. Downstream</b><br>Purification (Chromatography)</div>
+          </div>
+          <i class="fa-solid fa-chevron-right p-arrow"></i>
+          <div class="p-step">
+            <i class="fa-solid fa-syringe fa-2x" style="color:var(--primary-blue);"></i>
+            <div class="ja mt-20"><b>4. 製剤・充填</b><br>安定化剤添加・無菌充填</div>
+            <div class="en mt-20"><b>4. Formulation/Fill</b><br>Stabilization & sterile fill</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: CMC Swimlane -->
+    <div class="slide-container" id="slide5">
+      <h2 class="slide-title ja">CMC業務フロー：候補取得から申請まで</h2>
+      <h2 class="slide-title en">CMC Process: Candidate to Submission</h2>
+      <div class="content-area" style="justify-content: center;">
+        <table class="table-layout" style="font-size: 15px; text-align: center;">
+          <thead>
+            <tr>
+              <th style="width: 20%;"><span class="ja">アクター (役割)</span><span class="en">Actor (Role)</span></th>
+              <th style="width: 26%; background: #e0f2fe;"><span class="ja">Phase 1: 治験薬供給</span><span class="en">Ph1: Clinical Supply</span></th>
+              <th style="width: 26%; background: #ffedd5;"><span class="ja">Phase 2: 商業生産準備</span><span class="en">Ph2: Commercial Prep</span></th>
+              <th style="width: 28%; background: #f1f5f9;"><span class="ja">Phase 3: CTD作成・申請</span><span class="en">Ph3: CTD & Submission</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>CMC研究</b>
+
+
+
+<span style="font-size: 12px; color: var(--text-muted);"><span class="ja">(プロセス・製剤)</span><span class="en">(Process/Formulation)</span></span></td>
+              <td><span class="ja">プロセス開発・製剤設計
+
+
+
+↓
+
+
+
+製造指図書作成</span><span class="en">Process/Formulation Design
+
+
+
+↓
+
+
+
+Batch Record Prep</span></td>
+              <td><span class="ja">管理戦略更新
+
+
+
+商業プロセス確定</span><span class="en">Update Control Strategy
+
+
+
+Finalize Com. Process</span></td>
+              <td><span class="ja">CMC技術文書の提供
+
+
+
+(製造法, 安定性等)</span><span class="en">Provide Tech Docs
+
+
+
+(Method, Stability, etc.)</span></td>
+            </tr>
+            <tr>
+              <td><b>製造 (MFG)</b>
+
+
+
+<span style="font-size: 12px; color: var(--text-muted);"><span class="ja">(工場・スケールUP)</span><span class="en">(Plant/Scale-up)</span></span></td>
+              <td><span class="ja">パイロット製造
+
+
+
+治験薬の製造</span><span class="en">Pilot Mfg
+
+
+
+Clinical Batch Mfg</span></td>
+              <td><span class="ja">PPQバッチ製造
+
+
+
+結果とりまとめ</span><span class="en">PPQ Batch Mfg
+
+
+
+Result Summary</span></td>
+              <td><span class="ja">工場・設備・GMP情報提供</span><span class="en">Provide Facility/GMP Info</span></td>
+            </tr>
+            <tr>
+              <td><b>品質 (QA/QC)</b></td>
+              <td><span class="ja">分析法確立・規格案作成
+
+
+
+治験薬ロット出荷判定</span><span class="en">Method Est. / Specs
+
+
+
+Clinical Batch Release</span></td>
+              <td><span class="ja">プロセスバリデーション評価
+
+
+
+CPV計画</span><span class="en">Process Validation Eval.
+
+
+
+CPV Planning</span></td>
+              <td><span class="ja">規格値・分析データ提供</span><span class="en">Provide Spec/Analytic Data</span></td>
+            </tr>
+            <tr>
+              <td><b>規制 (RA)</b>
+
+
+
+<span style="font-size: 12px; color: var(--text-muted);"><span class="ja">(CMC薬事)</span><span class="en">(CMC Regulatory)</span></span></td>
+              <td colspan="2"><span class="ja" style="color:var(--text-muted);">（データ蓄積と戦略立案）</span><span class="en" style="color:var(--text-muted);">(Data Accumulation & Strategy)</span></td>
+              <td style="border: 2px solid var(--primary-orange);"><span class="ja"><b>CTD M3 作成</b>
+
+
+
+↓
+
+
+
+PMDA/FDA申請・照会対応</span><span class="en"><b>Draft CTD Module 3</b>
+
+
+
+↓
+
+
+
+Submit & Answer Queries</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Slide 6: Veeva Vault in CMC -->
+    <div class="slide-container" id="slide6">
+      <h2 class="slide-title ja">CMCにおけるVeeva Vault活用</h2>
+      <h2 class="slide-title en">Veeva Vault Usage in CMC</h2>
+      <div class="content-area">
+        <div class="ja mb-15"><p>CMC業務の実務(GxP)文書管理と、規制提出(CTD)のためのRIMシステム連携フロー。</p></div>
+        <div class="en mb-15"><p>Integration flow between CMC operational (GxP) document management and RIM systems for regulatory submission.</p></div>
+
+        <div class="system-flow mt-20">
+          <!-- Actors -->
+          <div style="display:flex; flex-direction:column; gap:20px; justify-content:center; width: 15%;">
+            <div class="s-box" style="padding: 10px;"><b>CMC</b><br><span style="font-size:12px;">プロセス/製剤</span></div>
+            <div class="s-box" style="padding: 10px;"><b>QA/QC</b><br><span style="font-size:12px;">品質部門</span></div>
+            <div class="s-box" style="padding: 10px; border-color:var(--primary-orange);"><b>RA</b><br><span style="font-size:12px;">CMC薬事</span></div>
+          </div>
+
+          <div class="s-arrow-container"><i class="fa-solid fa-arrow-right-long fa-2x"></i><span style="font-size:12px;">作成/承認</span></div>
+
+          <!-- QualityDocs -->
+          <div class="s-box vault" style="flex: 1.5;">
+            <i class="fa-solid fa-file-shield fa-2x mb-15" style="color:var(--primary-blue);"></i>
+            <h3 style="font-size:18px;">Vault QualityDocs</h3>
+            <p class="ja" style="font-size:14px;">製造SOP, バッチ記録, 分析法等の<b>GxP文書の単一ソース</b>。</p>
+            <p class="en" style="font-size:14px;">Single source of truth for <b>GxP documents</b> (SOPs, batch records).</p>
+          </div>
+
+          <div class="s-arrow-container"><i class="fa-solid fa-link fa-2x"></i><span style="font-size:12px;">リンク/連携</span></div>
+
+          <!-- RIM -->
+          <div style="display:flex; flex-direction:column; gap:10px; flex: 2;">
+            <div class="s-box vault" style="flex-direction:row; align-items:center; gap: 15px; padding: 15px;">
+              <i class="fa-solid fa-folder-tree fa-2x" style="color:var(--primary-blue);"></i>
+              <div style="text-align:left;">
+                <h3 style="font-size:16px; margin:0;">Vault Submissions (RIM)</h3>
+                <p class="ja" style="font-size:12px;">CTD M3用CMCコンテンツの収集・承認。</p>
+                <p class="en" style="font-size:12px;">Collect & approve CMC content for CTD M3.</p>
+              </div>
+            </div>
+            <div class="s-box vault" style="flex-direction:row; align-items:center; gap: 15px; padding: 15px;">
+              <i class="fa-solid fa-file-export fa-2x" style="color:var(--primary-blue);"></i>
+              <div style="text-align:left;">
+                <h3 style="font-size:16px; margin:0;">Vault Publishing (RIM)</h3>
+                <p class="ja" style="font-size:12px;">eCTD形式へ自動レンダリング・整形。</p>
+                <p class="en" style="font-size:12px;">Auto-render into compliant eCTD format.</p>
+              </div>
+            </div>
+            <div class="s-box vault" style="flex-direction:row; align-items:center; gap: 15px; padding: 15px; border-color:var(--primary-orange);">
+              <i class="fa-solid fa-layer-group fa-2x" style="color:var(--primary-orange);"></i>
+              <div style="text-align:left;">
+                <h3 style="font-size:16px; margin:0; color:var(--primary-orange);">Vault Active Dossier</h3>
+                <p class="ja" style="font-size:12px;">現在有効なCMC文書を俯瞰(変更管理用)。</p>
+                <p class="en" style="font-size:12px;">View currently effective CMC docs for LC mgmt.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="s-arrow-container"><i class="fa-solid fa-paper-plane fa-2x"></i><span style="font-size:12px;">電子提出</span></div>
+
+          <!-- Authorities -->
+          <div class="s-box" style="width: 15%; justify-content:center; background:#f1f5f9;">
+            <i class="fa-solid fa-building-columns fa-3x mb-15" style="color:var(--text-muted);"></i>
+            <h3 style="font-size:20px;">PMDA<br>FDA</h3>
+            <p class="ja" style="font-size:12px;">規制当局</p><p class="en" style="font-size:12px;">Authorities</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: CRO and Authorities -->
+    <div class="slide-container" id="slide7">
+      <h2 class="slide-title ja">主要パートナー：CROと規制当局</h2>
+      <h2 class="slide-title en">Key Partners: CRO & Regulatory Authorities</h2>
+      <div class="content-area">
+        <div class="two-column">
+          <!-- CRO -->
+          <div style="background: var(--light-bg); padding: 30px; border-radius: 12px; border-top: 4px solid var(--primary-blue);">
+            <div style="display:flex; align-items:center; gap:15px; margin-bottom: 20px;">
+              <i class="fa-solid fa-users-gear fa-3x" style="color:var(--primary-blue);"></i>
+              <div>
+                <h3 style="margin:0;">CRO</h3>
+                <p class="ja" style="font-size:14px; color:var(--text-muted);">Contract Research Organization</p>
+                <p class="en" style="font-size:14px; color:var(--text-muted);">Contract Research Organization</p>
+              </div>
+            </div>
+            <p class="ja mb-15">製薬企業から治験(Phase I-III)や市販後調査を請け負い、試験の質・スピードを確保するサポーター。</p>
+            <p class="en mb-15">Supports pharma by executing clinical trials (I-III) and PMS, ensuring quality and speed.</p>
+
+            <ul class="styled-list">
+              <li><span class="ja"><b>試験計画:</b> プロトコル作成、医療機関選定</span><span class="en"><b>Planning:</b> Protocol prep, site selection</span></li>
+              <li><span class="ja"><b>モニタリング(CRA):</b> 現場監視、GCP遵守検証</span><span class="en"><b>Monitoring (CRA):</b> Site visits, GCP compliance</span></li>
+              <li><span class="ja"><b>データ管理:</b> データベース化、統計解析</span><span class="en"><b>Data Mgmt:</b> DB creation, statistical analysis</span></li>
+              <li><span class="ja"><b>薬事支援:</b> 当局相談、MW(メディカルライティング)</span><span class="en"><b>Reg Support:</b> Authority consults, Med Writing</span></li>
+            </ul>
+          </div>
+
+          <!-- Authorities -->
+          <div style="background: var(--light-bg); padding: 30px; border-radius: 12px; border-top: 4px solid var(--primary-orange);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 20px;">
+              <h3 style="margin:0; color:var(--primary-orange);">Regulatory Authorities</h3>
+              <span style="background:white; padding:5px 10px; border-radius:20px; font-size:12px; font-weight:bold; border:1px solid var(--border-color);">ICH Guidelines Compliant</span>
+            </div>
+
+            <table class="table-layout" style="background: white;">
+              <tr>
+                <th style="width: 50%;"><i class="fa-solid fa-map-location-dot"></i> PMDA <span class="ja">(日本)</span><span class="en">(Japan)</span></th>
+                <th><i class="fa-solid fa-map-location-dot"></i> FDA <span class="ja">(米国)</span><span class="en">(USA)</span></th>
+              </tr>
+              <tr>
+                <td>
+                  <ul class="styled-list" style="font-size:15px;">
+                    <li><span class="ja">厚労省所管の独立行政法人</span><span class="en">Under MHLW</span></li>
+                    <li><span class="ja">審査期間: 約<b>12ヶ月</b></span><span class="en">Review: ~<b>12 months</b></span></li>
+                    <li><span class="ja">申請形式: J-eCTD</span><span class="en">Format: J-eCTD</span></li>
+                  </ul>
+                </td>
+                <td>
+                  <ul class="styled-list" style="font-size:15px;">
+                    <li><span class="ja">米国保健福祉省下の連邦機関</span><span class="en">Under HHS</span></li>
+                    <li><span class="ja">審査期間: <b>6〜10ヶ月</b></span><span class="en">Review: <b>6-10 months</b></span></li>
+                    <li><span class="ja">形式: eCTD (NDA/BLA)</span><span class="en">Format: eCTD (NDA/BLA)</span></li>
+                  </ul>
+                </td>
+              </tr>
+            </table>
+            <p class="ja mt-20" style="font-size:14px;">※両当局とも、CMCチームが提出する「モジュール3」のデータを厳格に審査し、製品の品質と安定供給能力を検証します。</p>
+            <p class="en mt-20" style="font-size:14px;">* Both agencies rigorously review "Module 3" submitted by the CMC team to verify product quality.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: CTD Submission -->
+    <div class="slide-container" id="slide8">
+      <h2 class="slide-title ja">CTD提出と審査プロセス</h2>
+      <h2 class="slide-title en">CTD Submission & Review Process</h2>
+      <div class="content-area">
+        <div class="two-column">
+          <!-- CTD Pyramid -->
+          <div style="flex: 0.8; border-right: 1px solid var(--border-color); padding-right: 30px;">
+            <h3 class="ja text-center" style="font-size:20px;">CTD モジュール構成</h3>
+            <h3 class="en text-center" style="font-size:20px;">CTD Module Structure</h3>
+            <div class="pyramid-container">
+              <div class="pyr-layer pyr-m1">M1: <span class="ja">地域特異</span><span class="en">Regional</span></div>
+              <div class="pyr-layer pyr-m2">M2: <span class="ja">サマリー (QOS等)</span><span class="en">Summaries</span></div>
+              <div class="pyr-layer pyr-m3">M3: 品質 / Quality (CMC)</div>
+              <div class="pyr-layer pyr-m4">M4: <span class="ja">非臨床試験</span><span class="en">Nonclinical</span></div>
+              <div class="pyr-layer pyr-m5">M5: <span class="ja">臨床試験 (Phase I-III)</span><span class="en">Clinical</span></div>
+            </div>
+            <p class="ja mt-20" style="font-size:14px; text-align:center;">CMCはM3を担当。原薬(3.2.S)と製剤(3.2.P)の科学的根拠を記述。</p>
+            <p class="en mt-20" style="font-size:14px; text-align:center;">CMC owns M3, providing scientific rationale for API (3.2.S) & Drug Product (3.2.P).</p>
+          </div>
+
+          <!-- Process & Vault -->
+          <div style="flex: 1.2; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <h3 class="ja" style="font-size:20px;">提出・審査フロー</h3>
+              <h3 class="en" style="font-size:20px;">Submission & Review Flow</h3>
+              <div style="display:flex; justify-content:space-between; align-items:center; background:var(--light-bg); padding:15px; border-radius:8px;">
+                <div class="text-center"><i class="fa-solid fa-file-pdf fa-2x" style="color:#ef4444;"></i><br><span style="font-size:12px; font-weight:bold;">eCTD Compile</span></div>
+                <i class="fa-solid fa-arrow-right"></i>
+                <div class="text-center"><i class="fa-solid fa-comments fa-2x" style="color:var(--primary-blue);"></i><br><span style="font-size:12px; font-weight:bold;"><span class="ja">事前相談</span><span class="en">Pre-Meeting</span></span></div>
+                <i class="fa-solid fa-arrow-right"></i>
+                <div class="text-center" style="background:white; border:2px solid var(--primary-orange); padding:5px; border-radius:4px;"><span class="highlight">Submit</span><br><span style="font-size:12px;">to PMDA/FDA</span></div>
+                <i class="fa-solid fa-arrow-right"></i>
+                <div class="text-center"><i class="fa-solid fa-magnifying-glass fa-2x" style="color:var(--text-dark);"></i><br><span style="font-size:12px; font-weight:bold;"><span class="ja">審査・照会</span><span class="en">Review/Queries</span></span></div>
+                <i class="fa-solid fa-arrow-right"></i>
+                <div class="text-center"><i class="fa-solid fa-check-circle fa-2x" style="color:#22c55e;"></i><br><span style="font-size:12px; font-weight:bold;"><span class="ja">承認</span><span class="en">Approval</span></span></div>
+              </div>
+            </div>
+
+            <div class="mt-20" style="background: var(--accent-blue-light); padding: 15px; border-radius: 8px;">
+              <h3 class="ja" style="font-size:16px; margin-bottom:10px;"><i class="fa-solid fa-cloud"></i> 提出プロセスと Vault RIM システム仲介</h3>
+              <h3 class="en" style="font-size:16px; margin-bottom:10px;"><i class="fa-solid fa-cloud"></i> Vault RIM Mediation</h3>
+              <div style="display:flex; justify-content:center; align-items:center; gap:10px;">
+                <div style="background:white; padding:10px; border-radius:4px; font-size:12px; text-align:center; border:1px solid #ccc;">Data<br>(CMC/CRO)</div>
+                <i class="fa-solid fa-arrow-right" style="color:var(--primary-blue);"></i>
+                <div style="background:var(--primary-blue); color:white; padding:10px; border-radius:8px; font-size:12px; text-align:center;">
+                  <b>Vault Submissions</b><br>+ Publishing + HA
+                </div>
+                <i class="fa-solid fa-arrow-right" style="color:var(--primary-orange);"></i>
+                <div style="background:white; padding:10px; border-radius:4px; font-size:12px; text-align:center; border:1px solid var(--primary-orange);">PMDA/FDA<br>Gateway</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9: MSL and Medical Affairs -->
+    <div class="slide-container" id="slide9">
+      <h2 class="slide-title ja">メディカルアフェアーズとMSLの役割</h2>
+      <h2 class="slide-title en">The Role of Medical Affairs and MSL</h2>
+      <div class="content-area">
+        <div class="two-column">
+          <div style="flex: 1.2;">
+            <div class="ja mb-15"><p>MSL (Medical Science Liaison) は、社内外をつなぐ<b>「科学の架け橋」</b>です。</p></div>
+            <div class="en mb-15"><p>MSL is the <b>"Scientific Bridge"</b> connecting internal teams and external stakeholders.</p></div>
+
+            <div style="display:flex; align-items:center; justify-content:space-between; background:var(--light-bg); padding:30px; border-radius:50px; position:relative; margin-top:30px;">
+              <!-- Internal -->
+              <div class="text-center" style="width: 120px; z-index:2;">
+                <i class="fa-solid fa-building fa-2x" style="color:var(--text-muted);"></i>
+                <p class="ja" style="font-size:14px; font-weight:bold; margin-top:5px;">社内<br>(開発/マーケ)</p>
+                <p class="en" style="font-size:14px; font-weight:bold; margin-top:5px;">Internal<br>(R&D/Marketing)</p>
+              </div>
+
+              <!-- Arrows Left -->
+              <div style="display:flex; flex-direction:column; align-items:center; width: 100px;">
+                <span class="ja" style="font-size:10px; color:var(--primary-blue);">インサイト還元 (Inside-out)</span>
+                <span class="en" style="font-size:10px; color:var(--primary-blue);">Insights (Inside-out)</span>
+                <i class="fa-solid fa-arrow-left-long fa-2x" style="color:var(--primary-blue);"></i>
+              </div>
+
+              <!-- MSL Core -->
+              <div class="text-center" style="background:var(--primary-orange); color:white; padding:20px; border-radius:50%; width:100px; height:100px; display:flex; flex-direction:column; justify-content:center; z-index:2; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
+                <i class="fa-solid fa-user-doctor fa-2x"></i>
+                <b style="font-size:18px;">MSL</b>
+              </div>
+
+              <!-- Arrows Right -->
+              <div style="display:flex; flex-direction:column; align-items:center; width: 100px;">
+                <span class="ja" style="font-size:10px; color:var(--primary-blue);">科学的議論 (Outside-in)</span>
+                <span class="en" style="font-size:10px; color:var(--primary-blue);">Discussion (Outside-in)</span>
+                <i class="fa-solid fa-arrow-right-long fa-2x" style="color:var(--primary-blue);"></i>
+              </div>
+
+              <!-- External -->
+              <div class="text-center" style="width: 120px; z-index:2;">
+                <i class="fa-solid fa-hospital-user fa-2x" style="color:var(--text-muted);"></i>
+                <p class="ja" style="font-size:14px; font-weight:bold; margin-top:5px;">社外<br>(KOL/HCP)</p>
+                <p class="en" style="font-size:14px; font-weight:bold; margin-top:5px;">External<br>(KOL/HCP)</p>
+              </div>
+            </div>
+
+            <p class="ja mt-20" style="font-size:15px;">※KOL (Key Opinion Leader): 影響力のある医師・研究者</p>
+            <p class="en mt-20" style="font-size:15px;">*KOL: Key Opinion Leader</p>
+          </div>
+
+          <div style="flex: 0.8; border-left: 1px solid var(--border-color); padding-left: 30px;">
+            <h3 class="ja" style="font-size:20px;">MR と MSL の違い</h3>
+            <h3 class="en" style="font-size:20px;">MR vs MSL</h3>
+            <table class="table-layout mt-20" style="font-size:14px;">
+              <tr>
+                <th style="width: 25%;"></th>
+                <th style="width: 37.5%; background:#e0f2fe; color:var(--text-dark);"><span class="ja">MR (営業)</span><span class="en">MR (Sales)</span></th>
+                <th style="width: 37.5%; background:#ffedd5; color:var(--primary-orange);"><span class="ja">MSL (科学)</span><span class="en">MSL (Medical)</span></th>
+              </tr>
+              <tr>
+                <td><b><span class="ja">目的</span><span class="en">Purpose</span></b></td>
+                <td><span class="ja">自社製品の売上貢献</span><span class="en">Sales generation</span></td>
+                <td><span class="highlight ja">適正使用・エビデンス創出</span><span class="highlight en">Proper use, Evidence gen.</span></td>
+              </tr>
+              <tr>
+                <td><b><span class="ja">活動</span><span class="en">Activity</span></b></td>
+                <td><span class="ja">プロモーション活動</span><span class="en">Promotional</span></td>
+                <td><span class="highlight ja">非プロモーション活動</span><span class="highlight en">Non-promotional</span></td>
+              </tr>
+              <tr>
+                <td><b><span class="ja">対象</span><span class="en">Target</span></b></td>
+                <td><span class="ja">一般の処方医</span><span class="en">Prescribing HCPs</span></td>
+                <td><span class="ja">専門医 (KOL)</span><span class="en">Specialists (KOLs)</span></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10: Post-Approval Collaboration -->
+    <div class="slide-container" id="slide10">
+      <h2 class="slide-title ja">承認後の連携プロセス：MSL, PV, PMS</h2>
+      <h2 class="slide-title en">Post-Approval Collaboration: MSL, PV, PMS</h2>
+      <div class="content-area">
+        <div class="ja mb-15 text-center"><p>HCP(医療現場)を中心とした、上市後の3つの情報・監視ループ。</p></div>
+        <div class="en mb-15 text-center"><p>Three post-market loops centered around HCPs.</p></div>
+
+        <div class="cycle-container">
+          <!-- Center -->
+          <div class="cycle-center">
+            <i class="fa-solid fa-stethoscope"></i><br>HCP<br><span style="font-size:12px; font-weight:normal;"><span class="ja">(医療現場)</span><span class="en">(Clinical Site)</span></span>
+          </div>
+
+          <!-- Nodes -->
+          <div class="cycle-node cn-top">
+            <i class="fa-solid fa-user-doctor" style="color:var(--primary-orange); margin-right:10px; font-size:24px;"></i>
+            <div style="text-align:left;">
+              <span style="font-size:18px;">MSL</span><br>
+              <span class="ja" style="font-size:10px; color:var(--text-dark);">科学交流ループ</span>
+              <span class="en" style="font-size:10px; color:var(--text-dark);">Sci. Exchange</span>
+            </div>
+          </div>
+          <div class="cycle-node cn-left">
+            <i class="fa-solid fa-shield-heart" style="color:#ef4444; margin-right:10px; font-size:24px;"></i>
+            <div style="text-align:left;">
+              <span style="font-size:18px;">PV</span><br>
+              <span class="ja" style="font-size:10px; color:var(--text-dark);">副作用報告ループ</span>
+              <span class="en" style="font-size:10px; color:var(--text-dark);">Safety Loop</span>
+            </div>
+          </div>
+          <div class="cycle-node cn-right">
+            <i class="fa-solid fa-clipboard-list" style="color:#22c55e; margin-right:10px; font-size:24px;"></i>
+            <div style="text-align:left;">
+              <span style="font-size:18px;">PMS</span><br>
+              <span class="ja" style="font-size:10px; color:var(--text-dark);">調査データループ</span>
+              <span class="en" style="font-size:10px; color:var(--text-dark);">Surveillance Loop</span>
+            </div>
+          </div>
+
+          <!-- SVG Arrows for Cycle (Decorative) -->
+          <svg style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;">
+            <defs>
+              <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="#cbd5e1" />
+              </marker>
+            </defs>
+            <!-- Simplified curved dashed lines connecting nodes to center -->
+            <path d="M 250 100 Q 200 170 180 250" fill="transparent" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+            <path d="M 160 380 Q 200 300 250 320" fill="transparent" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+            <path d="M 340 380 Q 300 300 250 320" fill="transparent" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+          </svg>
+        </div>
+
+        <p class="ja text-center mt-20" style="font-size:14px; color:var(--text-muted);">※承認取得後、RA(規制担当)からの引き継ぎを受け、これら3部門が連携してラベリング改訂・安全対策を実施します。</p>
+        <p class="en text-center mt-20" style="font-size:14px; color:var(--text-muted);">* Post-approval, these 3 functions collaborate to update labeling and ensure patient safety.</p>
+      </div>
+    </div>
+
+    <!-- Slide 11: PV Use Case & Vault Safety -->
+    <div class="slide-container" id="slide11">
+      <h2 class="slide-title ja">PV業務とVault Safety (自発報告ユースケース)</h2>
+      <h2 class="slide-title en">PV Process & Vault Safety (Use Case)</h2>
+      <div class="content-area">
+        <!-- 6 Steps -->
+        <div class="timeline-layout" style="margin-top:0;">
+          <div class="timeline-line" style="top: 15px;"></div>
+          <div class="timeline-item"><div class="timeline-dot" style="margin-top:5px; width:20px; height:20px; border-width:3px;"></div><p style="font-size:12px; font-weight:bold;"><span class="ja">1. 受付/トリアージ</span><span class="en">1. Triage</span></p></div>
+          <div class="timeline-item"><div class="timeline-dot" style="margin-top:5px; width:20px; height:20px; border-width:3px;"></div><p style="font-size:12px; font-weight:bold;"><span class="ja">2. ケース登録</span><span class="en">2. Data Entry</span></p></div>
+          <div class="timeline-item"><div class="timeline-dot" style="margin-top:5px; width:20px; height:20px; border-width:3px;"></div><p style="font-size:12px; font-weight:bold;"><span class="ja">3. 医学評価</span><span class="en">3. Med Eval</span></p></div>
+          <div class="timeline-item"><div class="timeline-dot" style="margin-top:5px; width:20px; height:20px; border-width:3px;"></div><p style="font-size:12px; font-weight:bold;"><span class="ja">4. ICSR報告</span><span class="en">4. ICSR Subm.</span></p></div>
+          <div class="timeline-item"><div class="timeline-dot" style="margin-top:5px; width:20px; height:20px; border-width:3px;"></div><p style="font-size:12px; font-weight:bold;"><span class="ja">5. シグナル検出</span><span class="en">5. Signal Det.</span></p></div>
+          <div class="timeline-item"><div class="timeline-dot" style="margin-top:5px; width:20px; height:20px; border-width:3px; border-color:var(--primary-blue);"></div><p style="font-size:12px; font-weight:bold;"><span class="ja">6. ラベリング反映</span><span class="en">6. Labeling</span></p></div>
+        </div>
+
+        <hr style="width:100%; border:0; border-top:1px dashed var(--border-color); margin: 25px 0;">
+
+        <!-- Vault System Loop -->
+        <div class="system-flow">
+          <!-- Left: Inputs -->
+          <div style="display:flex; flex-direction:column; justify-content:center; width: 15%;">
+            <div class="s-box" style="padding: 10px; border-color:var(--text-muted);">
+              <i class="fa-solid fa-user-doctor mb-15"></i><b>HCP</b><br>
+              <span class="ja" style="font-size:12px;">副作用報告</span><span class="en" style="font-size:12px;">AE Report</span>
+            </div>
+          </div>
+
+          <div class="s-arrow-container"><i class="fa-solid fa-arrow-right-long fa-2x"></i></div>
+
+          <!-- Center: Vault Safety Suite -->
+          <div style="display:flex; flex-direction:column; gap:15px; flex: 2; position:relative;">
+            <div style="position:absolute; top:-10px; left:10px; background:var(--primary-orange); color:white; padding:2px 10px; font-size:12px; border-radius:10px; z-index:2;">Veeva Vault Safety Suite</div>
+
+            <div class="s-box vault" style="border-color:var(--primary-orange); padding-top:30px;">
+              <h3 style="font-size:16px; margin:0;"><i class="fa-solid fa-database"></i> Vault Safety</h3>
+              <p class="ja" style="font-size:12px;">症例受付・評価・ICSR生成・E2B送信・シグナル</p>
+              <p class="en" style="font-size:12px;">Case Intake, Eval, ICSR Gen, E2B Transmit</p>
+            </div>
+
+            <div class="s-arrow-container" style="flex-direction:row; gap:10px;">
+              <i class="fa-solid fa-arrow-up"></i><span class="ja" style="font-size:10px;">連携</span><span class="en" style="font-size:10px;">Link</span><i class="fa-solid fa-arrow-down"></i>
+            </div>
+
+            <div class="s-box vault" style="border-color:var(--primary-blue);">
+              <h3 style="font-size:16px; margin:0;"><i class="fa-solid fa-file-contract"></i> Vault SafetyDocs</h3>
+              <p class="ja" style="font-size:12px;">PSMF/RMP/PSUR等 安全性文書の管理・WF</p>
+              <p class="en" style="font-size:12px;">Safety Docs Mgmt (PSMF, RMP, PSUR)</p>
+            </div>
+          </div>
+
+          <div class="s-arrow-container">
+            <i class="fa-solid fa-arrow-right-long fa-2x"></i>
+            <span class="ja" style="font-size:10px; text-align:center;">電子送信<br>(E2B)</span>
+            <span class="en" style="font-size:10px; text-align:center;">Transmit<br>(E2B)</span>
+          </div>
+
+          <!-- Right: HA & Feedback -->
+          <div style="display:flex; flex-direction:column; justify-content:center; width: 18%;">
+            <div class="s-box" style="padding: 10px; background:#f1f5f9; border-color:var(--text-muted);">
+              <i class="fa-solid fa-building-columns mb-15"></i><b>PMDA / FDA</b>
+            </div>
+            <!-- Feedback arrow going back -->
+            <div style="text-align:center; margin-top:10px; color:var(--primary-orange);">
+              <i class="fa-solid fa-reply"></i><br>
+              <span class="ja" style="font-size:12px; font-weight:bold;">指示・ラベリング改訂</span>
+              <span class="en" style="font-size:12px; font-weight:bold;">Labeling Update</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function setLang(lang) {
+        document.body.className = 'lang-' + lang;
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITSM: ServiceNow vs Veeva Comparison (Table Update)</title>
+    <style>
+        :root {
+            --brand-orange: #F47920;
+            --brand-orange-light: #fff5ec;
+            --text-dark: #333;
+            --text-light: #666;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --snow-blue: #293E40;
+            --snow-blue-light: #eef2f3;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; padding: 0; background-color: var(--bg-light); color: var(--text-dark); overflow: hidden;
+        }
+
+        /* Controls & Nav */
+        .controls-container {
+            position: fixed; top: 20px; right: 20px; z-index: 100; display: flex; gap: 10px;
+            background: rgba(255,255,255,0.9); padding: 10px; border-radius: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .lang-switch { display: flex; border: 2px solid var(--brand-orange); border-radius: 20px; overflow: hidden; }
+        .lang-btn { border: none; padding: 8px 16px; cursor: pointer; font-weight: bold; transition: all 0.3s ease; }
+        .lang-btn.active { background-color: var(--brand-orange); color: var(--white); }
+        .lang-btn:not(.active) { background-color: var(--white); color: var(--brand-orange); }
+        .nav-btn {
+            background-color: var(--brand-orange); color: var(--white); border: none; width: 40px; height: 40px;
+            border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s;
+        }
+        .nav-btn:hover { background-color: #d66a1b; }
+        .nav-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        /* Slider */
+        .slider-container { height: 100vh; display: flex; transition: transform 0.5s ease-in-out; }
+        .slide {
+            min-width: 100vw; height: 100vh; box-sizing: border-box; padding: 60px 40px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; overflow-y: auto;
+        }
+        h1 { color: var(--brand-orange); margin-bottom: 10px; text-align: center; }
+        h2 { color: var(--text-dark); margin-bottom: 30px; text-align: center; font-weight: 300; }
+        h3 { color: var(--brand-orange); margin-bottom: 15px; text-align: center;}
+        h3.snow { color: var(--snow-blue); }
+
+        /* Cards */
+        .card-container { display: flex; gap: 30px; max-width: 1200px; width: 100%; justify-content: center; flex-wrap: wrap; }
+        .card {
+            background: var(--white); padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            flex: 1; min-width: 300px; border-top: 5px solid var(--brand-orange); transition: transform 0.3s;
+        }
+        .card.snow { border-top-color: var(--snow-blue); }
+        .card:hover { transform: translateY(-5px); }
+        .vs-connector { display: flex; align-items: center; font-size: 2em; font-weight: bold; color: var(--text-light); }
+
+        /* Detailed Horizontal Flows (Slides 4 & 5) */
+        .flow-container-horizontal { display: flex; flex-direction: column; gap: 30px; width: 100%; max-width: 1100px; margin-top: 20px; }
+        .flow-row { display: flex; align-items: center; gap: 10px; }
+        .flow-step-h {
+            background: var(--white); border: 2px solid var(--brand-orange); padding: 15px; border-radius: 10px;
+            text-align: center; flex: 1; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 0.9em; display: flex; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .flow-step-h small { font-weight: normal; margin-top: 4px; display: block; }
+        .flow-step-h.snow { border-color: var(--snow-blue); }
+        .flow-step-h.highlight { background: var(--brand-orange); color: white; }
+        .flow-step-h.highlight.snow { background: var(--snow-blue); }
+        .flow-step-h.trigger { background: #eee; border-color: #ccc; }
+        .flow-arrow-h { color: var(--brand-orange); font-size: 1.5em; }
+        .flow-arrow-h.snow { color: var(--snow-blue); }
+
+        /* Comparison Split Flow (Slide 6) */
+        .split-flow-container { display: flex; gap: 40px; width: 100%; max-width: 1300px; justify-content: center; align-items: stretch; margin-top: 20px; }
+        .flow-column { flex: 1; background: var(--white); padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+        .flow-column h3 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        .flow-column.snow h3 { color: var(--snow-blue); border-bottom-color: var(--snow-blue); }
+        .flow-vertical { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .flow-step-v {
+            background: var(--white); border: 2px solid var(--brand-orange); padding: 12px; border-radius: 8px;
+            text-align: center; width: 80%; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .flow-step-v.snow { border-color: var(--snow-blue); }
+        .flow-arrow-v { color: var(--brand-orange); font-size: 1.2em; }
+        .flow-arrow-v.snow { color: var(--snow-blue); }
+
+        /* Comparison Table (Slide 7) */
+        .table-container { width: 100%; max-width: 1200px; overflow-x: auto; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border-radius: 15px; background: white;}
+        .comparison-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .comparison-table th, .comparison-table td { padding: 15px 20px; border-bottom: 1px solid #eee; vertical-align: top; }
+        .comparison-table th { background-color: var(--brand-orange); color: white; font-weight: bold; text-align: center; white-space: nowrap;}
+        .comparison-table tr.recommended { background-color: var(--brand-orange-light); border-left: 5px solid var(--brand-orange); }
+        .comparison-table tr.recommended td { font-weight: 500; }
+        .comparison-table ul { margin: 0; padding-left: 20px; }
+        .comparison-table li { margin-bottom: 5px; font-size: 0.9em; }
+        .rank-icon { font-size: 1.5em; text-align: center; display: block; }
+
+        /* Recommendation (Slide 8) */
+        .recommendation-hero { background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(244, 121, 32, 0.2); border: 3px solid var(--brand-orange); text-align: center; max-width: 900px; }
+        .benefits-grid { display: flex; gap: 20px; text-align: left; margin-top: 30px; }
+        .benefit-col { flex: 1; }
+        .benefit-col h4 { color: var(--brand-orange); margin-bottom: 10px; }
+        .benefit-col.snow h4 { color: var(--snow-blue); }
+
+        /* Funnel (Slide 9) */
+        .funnel-container { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 800px; }
+        .funnel-stage { text-align: center; color: var(--white); padding: 20px; font-weight: bold; width: 100%; margin-bottom: 5px; }
+        .funnel-top { background: #FBC02D; clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%); }
+        .funnel-middle { background: #F57C00; clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%); width: 80%; }
+        .funnel-bottom { background: #E64A19; clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%); width: 60%; }
+        .funnel-arrow { font-size: 2em; color: var(--text-dark); margin: 5px 0; }
+
+        /* Misc */
+        body.lang-jp .lang-en { display: none; } body.lang-en .lang-jp { display: none; }
+        .slide-indicator { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.8); padding: 5px 15px; border-radius: 20px; font-weight: bold; color: var(--brand-orange); }
+
+        @media (max-width: 768px) {
+            .card-container, .split-flow-container, .benefits-grid { flex-direction: column; }
+            .vs-connector { transform: rotate(90deg); margin: 10px 0; }
+            .flow-column { width: 100%; }
+            .flow-row { flex-wrap: wrap; justify-content: center; gap: 5px;}
+            .flow-arrow-h { transform: rotate(90deg); margin: 5px 0; width: 100%; text-align: center;}
+            .comparison-table th, .comparison-table td { padding: 10px; font-size: 0.9em; }
+            .flow-step-h { padding: 10px; font-size: 0.8em; }
+             h1 { font-size: 1.8em; } h2 { font-size: 1.2em; }
+        }
+    </style>
+</head>
+<body class="lang-jp">
+
+    <div class="controls-container">
+        <div class="lang-switch">
+            <button class="lang-btn active" onclick="setLanguage('jp')">日本語</button>
+            <button class="lang-btn" onclick="setLanguage('en')">English</button>
+        </div>
+        <button class="nav-btn" id="prevBtn" onclick="moveSlide(-1)" disabled>&#10094;</button>
+        <button class="nav-btn" id="nextBtn" onclick="moveSlide(1)">&#10095;</button>
+    </div>
+
+    <div class="slider-container" id="slider">
+
+        <div class="slide">
+            <h1 class="lang-jp">ライフサイエンスITSMにおける<br>ServiceNow と Veeva Systems の比較</h1>
+            <h1 class="lang-en">Comparing ServiceNow & Veeva Systems<br>in Life Sciences ITSM</h1>
+            <h2 class="lang-jp">GxP規制対応、品質管理、そして最適な統合戦略へ向けて</h2>
+            <h2 class="lang-en">Navigating GxP Compliance, Quality Management, and Optimal Integration Strategies</h2>
+            <div style="font-size: 5em;">🤝</div>
+        </div>
+
+        <div class="slide">
+            <h1 class="lang-jp">課題：IT運用とGxP規制の交差点</h1>
+            <h1 class="lang-en">The Challenge: Where IT Operations Meet GxP Regulations</h1>
+            <div class="card-container" style="align-items: stretch;">
+                <div class="card" style="background: #eee; border-top-color: #999;">
+                    <h3 class="lang-jp" style="color: #666;">一般的なIT運用 (ITSM)</h3>
+                    <h3 class="lang-en" style="color: #666;">General IT Operations (ITSM)</h3>
+                    <p class="lang-jp">効率性、スピード、SLA遵守が重要。柔軟な変更管理が求められる領域。</p>
+                    <p class="lang-en">Focus on efficiency, speed, and SLA compliance. Requires flexible change management.</p>
+                    <div style="text-align:center; font-size: 3em;">⚡</div>
+                </div>
+                <div class="vs-connector">⚡ vs 🛡️</div>
+                <div class="card">
+                    <h3 class="lang-jp">GxP規制要件 (Quality)</h3>
+                    <h3 class="lang-en">GxP Regulatory Requirements (Quality)</h3>
+                    <p class="lang-jp">FDA 21 CFR Part 11、データ完全性（ALCOA+）、厳格なバリデーション（CSV）が必須の領域。</p>
+                    <p class="lang-en">Mandatory FDA 21 CFR Part 11, Data Integrity (ALCOA+), and strict validation (CSV).</p>
+                    <div style="text-align:center; font-size: 3em; color: var(--brand-orange);">🛡️</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1 class="lang-jp">基本的な違い：プラットフォーム vs 専門SaaS</h1>
+            <h1 class="lang-en">Fundamental Difference: Platform vs. Specialized SaaS</h1>
+            <div class="card-container">
+                <div class="card snow">
+                    <div style="text-align:center; font-size: 3em; margin-bottom:10px; color: var(--snow-blue);">🛠️</div>
+                    <h3 class="lang-jp snow">ServiceNow (汎用ITSM PaaS)</h3>
+                    <h3 class="lang-en snow">ServiceNow (General ITSM PaaS)</h3>
+                    <ul class="lang-jp">
+                        <li><strong>強力なITSM基盤</strong>：ITIL準拠のプロセスを標準装備。</li>
+                        <li><strong>GxP対応は「自社設計」が前提</strong>：プラットフォームはコンパチブルだが、プロセス構築とCSVは顧客責任。</li>
+                    </ul>
+                    <ul class="lang-en">
+                        <li><strong>Powerful ITSM Foundation</strong>: Standardized on ITIL processes.</li>
+                        <li><strong>GxP Compliance needs "Self-Design"</strong>: Platform is compatible, but process build & CSV are customer responsibility.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div style="text-align:center; font-size: 3em; margin-bottom:10px; color: var(--brand-orange);">🏥</div>
+                    <h3 class="lang-jp">Veeva Systems (GxP特化SaaS)</h3>
+                    <h3 class="lang-en">Veeva Systems (GxP Specialized SaaS)</h3>
+                    <ul class="lang-jp">
+                        <li><strong>GxP/品質業務に特化</strong>：ライフサイエンス品質管理のために設計。</li>
+                        <li><strong>標準機能が充実</strong>：Part 11対応、逸脱・CAPA等のベストプラクティスが事前実装済み。</li>
+                    </ul>
+                    <ul class="lang-en">
+                        <li><strong>Specialized for GxP/Quality</strong>: Designed for Life Sciences quality management.</li>
+                        <li><strong>Rich Standard Features</strong>: Pre-implemented Part 11 compliance, Deviation/CAPA best practices.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1 class="lang-jp">Veeva QMSにおける標準品質フロー（詳細）</h1>
+            <h1 class="lang-en">Standard Quality Flows in Veeva QMS (Detailed)</h1>
+            <p class="lang-jp">GxPで求められる典型的な3つの主要プロセス。</p>
+            <p class="lang-en">Three key standardized processes required for GxP.</p>
+            
+            <div class="flow-container-horizontal">
+                <h3 class="lang-jp">1. 逸脱 (Deviation)</h3><h3 class="lang-en">1. Deviation</h3>
+                <div class="flow-row">
+                    <div class="flow-step-h"><span class="lang-jp">発生・起票</span><span class="lang-en">Occur/Report</span></div>
+                    <div class="flow-arrow-h">→</div>
+                    <div class="flow-step-h"><span class="lang-jp">調査・原因究明</span><span class="lang-en">Investigate</span></div>
+                    <div class="flow-arrow-h">→</div>
+                    <div class="flow-step-h"><span class="lang-jp">処置決定</span><span class="lang-en">Determine Action</span></div>
+                    <div class="flow-arrow-h">→</div>
+                    <div class="flow-step-h highlight"><span class="lang-jp">QA承認・クローズ</span><span class="lang-en">QA Approval</span></div>
+                </div>
+
+                <h3 class="lang-jp">2. CAPA (是正予防措置)</h3><h3 class="lang-en">2. CAPA (Corrective & Preventive Action)</h3>
+                <div class="flow-row">
+                    <div class="flow-step-h trigger"><span class="lang-jp">トリガー<small>(逸脱等)</small></span><span class="lang-en">Trigger<small>(Deviation etc)</small></span></div>
+                    <div class="flow-arrow-h">→</div>
+                    <div class="flow-step-h"><span class="lang-jp">根本原因分析</span><span class="lang-en">Root Cause Analysis</span></div>
+                    <div class="flow-arrow-h">→</div>
+                    <div class="flow-step-h"><span class="lang-jp">計画・実行</span><span class="lang-en">Plan & Execute</span></div>
+                    <div class="flow-arrow-h">→</div>
+                    <div class="flow-step-h highlight"><span class="lang-jp">効果確認</span><span class="lang-en">Effectiveness Check</span></div>
+                </div>
+
+                <h3 class="lang-jp">3. 変更管理 (Change Control)</h3><h3 class="lang-en">3. Change Control</h3>
+                <div class="flow-row">
+                    <div class="flow-step-h trigger"><span class="lang-jp">変更提案<small>(CAPA等)</small></span><span class="lang-en">Proposal<small>(CAPA etc)</small></span></div>
+                    <div class="flow-arrow-h">→</div>
+                    <div class="flow-step-h"><span class="lang-jp">影響評価</span><span class="lang-en">Impact Assessment</span></div>
+                    <div class="flow-arrow-h">→</div>
+                    <div class="flow-step-h"><span class="lang-jp">承認・計画</span><span class="lang-en">Approve/Plan</span></div>
+                    <div class="flow-arrow-h">→</div>
+                    <div class="flow-step-h highlight"><span class="lang-jp">実施・検証</span><span class="lang-en">Execute/Verify</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1 class="lang-jp">ServiceNow ITSMにおける標準フロー（詳細）</h1>
+            <h1 class="lang-en">Standard ITSM Flows in ServiceNow (Detailed)</h1>
+            <p class="lang-jp">ITILに準拠した、サービスの安定化と変更のための標準プロセス。</p>
+            <p class="lang-en">ITIL-compliant standard processes for service stabilization and change.</p>
+            
+            <div class="flow-container-horizontal">
+                <h3 class="lang-jp snow">1. インシデント管理 (Incident Mgmt)</h3><h3 class="lang-en snow">1. Incident Mgmt</h3>
+                <div class="flow-row">
+                    <div class="flow-step-h snow"><span class="lang-jp">発生・受付</span><span class="lang-en">Occur/Log</span></div>
+                    <div class="flow-arrow-h snow">→</div>
+                    <div class="flow-step-h snow"><span class="lang-jp">分類・優先度</span><span class="lang-en">Classify/Prioritize</span></div>
+                    <div class="flow-arrow-h snow">→</div>
+                    <div class="flow-step-h snow"><span class="lang-jp">調査・診断</span><span class="lang-en">Investigate/Diagnose</span></div>
+                    <div class="flow-arrow-h snow">→</div>
+                    <div class="flow-step-h highlight snow"><span class="lang-jp">解決・復旧</span><span class="lang-en">Resolve/Restore</span></div>
+                </div>
+
+                <h3 class="lang-jp snow">2. 問題管理 (Problem Mgmt)</h3><h3 class="lang-en snow">2. Problem Mgmt</h3>
+                <div class="flow-row">
+                    <div class="flow-step-h trigger"><span class="lang-jp">トリガー<small>(インシデント)</small></span><span class="lang-en">Trigger<small>(Incident)</small></span></div>
+                    <div class="flow-arrow-h snow">→</div>
+                    <div class="flow-step-h snow"><span class="lang-jp">根本原因分析(RCA)</span><span class="lang-en">Root Cause Analysis</span></div>
+                    <div class="flow-arrow-h snow">→</div>
+                    <div class="flow-step-h snow"><span class="lang-jp">既知のエラー化</span><span class="lang-en">Known Error</span></div>
+                    <div class="flow-arrow-h snow">→</div>
+                    <div class="flow-step-h highlight snow"><span class="lang-jp">恒久対策提案</span><span class="lang-en">Propose Solution</span></div>
+                </div>
+
+                <h3 class="lang-jp snow">3. 変更管理 (Change Mgmt)</h3><h3 class="lang-en snow">3. Change Mgmt</h3>
+                <div class="flow-row">
+                    <div class="flow-step-h trigger"><span class="lang-jp">変更要求(RFC)</span><span class="lang-en">Request for Change</span></div>
+                    <div class="flow-arrow-h snow">→</div>
+                    <div class="flow-step-h snow"><span class="lang-jp">計画・評価</span><span class="lang-en">Plan & Evaluate</span></div>
+                    <div class="flow-arrow-h snow">→</div>
+                    <div class="flow-step-h snow"><span class="lang-jp">CAB承認</span><span class="lang-en">CAB Approval</span></div>
+                    <div class="flow-arrow-h snow">→</div>
+                    <div class="flow-step-h highlight snow"><span class="lang-jp">実装・レビュー</span><span class="lang-en">Implement/Review</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1 class="lang-jp">標準フローの比較まとめ：ITSM vs QMS</h1>
+            <h1 class="lang-en">Standard Flow Comparison Summary: ITSM vs QMS</h1>
+            <p class="lang-jp">目的とアプローチの違いの全体像。</p>
+            <p class="lang-en">Overview of differences in purpose and approach.</p>
+            
+            <div class="split-flow-container">
+                <div class="flow-column snow">
+                    <h3 class="lang-jp snow">ServiceNow (ITSM/ITIL)</h3>
+                    <h3 class="lang-en snow">ServiceNow (ITSM/ITIL)</h3>
+                    <p class="lang-jp" style="font-size:0.9em; text-align:center;">目的：サービスの迅速な復旧と安定化</p>
+                    <p class="lang-en" style="font-size:0.9em; text-align:center;">Goal: Rapid service restoration & stabilization</p>
+                    <div class="flow-vertical">
+                        <div class="flow-step-v snow"><span class="lang-jp">インシデント管理</span><span class="lang-en">Incident Mgmt</span></div>
+                        <div class="flow-arrow-v snow">↓</div>
+                        <div class="flow-step-v snow"><span class="lang-jp">問題管理</span><span class="lang-en">Problem Mgmt</span></div>
+                        <div class="flow-arrow-v snow">↓</div>
+                        <div class="flow-step-v snow"><span class="lang-jp">変更管理</span><span class="lang-en">Change Mgmt</span></div>
+                    </div>
+                </div>
+
+                <div class="flow-column">
+                    <h3 class="lang-jp">Veeva (QMS/GxP)</h3>
+                    <h3 class="lang-en">Veeva (QMS/GxP)</h3>
+                    <p class="lang-jp" style="font-size:0.9em; text-align:center;">目的：品質是正と再発防止、規制遵守</p>
+                    <p class="lang-en" style="font-size:0.9em; text-align:center;">Goal: Correction, prevention & compliance</p>
+                    <div class="flow-vertical">
+                        <div class="flow-step-v"><span class="lang-jp">逸脱 (Deviation)</span><span class="lang-en">Deviation</span></div>
+                        <div class="flow-arrow-v">↓</div>
+                        <div class="flow-step-v"><span class="lang-jp">CAPA (是正予防措置)</span><span class="lang-en">CAPA</span></div>
+                        <div class="flow-arrow-v">↓</div>
+                        <div class="flow-step-v"><span class="lang-jp">変更管理 (Change Control)</span><span class="lang-en">Change Control</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1 class="lang-jp">3つの導入・連携パターン比較表</h1>
+            <h1 class="lang-en">Comparison Table of 3 Integration Patterns</h1>
+            
+            <div class="table-container">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th class="lang-jp">パターン / 概要</th>
+                            <th class="lang-en">Pattern / Overview</th>
+                            <th class="lang-jp" style="background:var(--snow-blue);">ITSM窓口 (SNOW)</th>
+                            <th class="lang-en" style="background:var(--snow-blue);">ITSM Intake (SNOW)</th>
+                            <th class="lang-jp" style="background:var(--brand-orange);">品質窓口 (Veeva)</th>
+                            <th class="lang-en" style="background:var(--brand-orange);">Quality Intake (Veeva)</th>
+                            <th class="lang-jp">メリット・デメリット</th>
+                            <th class="lang-en">Pros & Cons</th>
+                            <th class="lang-jp">コスト・リスク</th>
+                            <th class="lang-en">Cost & Risk</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <strong class="lang-jp">① SNOW受付 → Veeva連携</strong>
+                                <strong class="lang-en">① SNOW Intake → Veeva Integration</strong>
+                                <br><small class="lang-jp">IT窓口で全受付し、品質事案のみVeevaへ連携</small>
+                                <small class="lang-en">Central IT intake, relay quality issues to Veeva</small>
+                            </td>
+                            <td style="text-align:center; background:var(--snow-blue-light);"><strong>一次受付 (Primary)</strong><br>↓<br>トリアージ・連携</td>
+                            <td style="text-align:center; background:var(--brand-orange-light);">連携受入<br>↓<br>品質処理実行</td>
+                            <td>
+                                <ul class="lang-jp">
+                                    <li>✅ IT全体の可視化が向上</li>
+                                    <li>❌ 現場の運用変更が必要</li>
+                                    <li>❌ IT側での判定ミスリスク</li>
+                                </ul>
+                                <ul class="lang-en">
+                                    <li>✅ Improved overall IT visibility</li>
+                                    <li>❌ Requires changing floor ops</li>
+                                    <li>❌ Risk of IT triage errors</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <span class="lang-jp">中 (連携開発・教育コスト)</span>
+                                <span class="lang-en">Medium (Dev & Training cost)</span>
+                            </td>
+                        </tr>
+                        <tr class="recommended">
+                            <td style="border-left: 5px solid var(--brand-orange);">
+                                <span class="rank-icon">👑</span>
+                                <strong class="lang-jp" style="color:var(--brand-orange);">② Veeva起点 ＋ SNOW同期 【推奨】</strong>
+                                <strong class="lang-en" style="color:var(--brand-orange);">② Veeva Origin + SNOW Sync [Recommended]</strong>
+                                <br><small class="lang-jp">現場はVeeva利用継続。ステータスをSNOWへ同期</small>
+                                <small class="lang-en">Floor uses Veeva as is. Status syncs to SNOW.</small>
+                            </td>
+                            <td style="text-align:center; background:var(--snow-blue-light);">ステータス参照<br>(同期表示)</td>
+                            <td style="text-align:center; background:var(--brand-orange-light);"><strong>一次受付・処理 (Primary)</strong><br>↓<br>SNOWへ同期</td>
+                            <td>
+                                <ul class="lang-jp">
+                                    <li>✅ <strong>現場の抵抗ゼロ (運用そのまま)</strong></li>
+                                    <li>✅ Veeva標準をフル活用</li>
+                                    <li>✅ SNOWで一元管理も実現</li>
+                                    <li>❌ 窓口が2つに分かれる</li>
+                                </ul>
+                                <ul class="lang-en">
+                                    <li>✅ <strong>Zero floor resistance (Ops unchanged)</strong></li>
+                                    <li>✅ Full use of Veeva standards</li>
+                                    <li>✅ Centralized view in SNOW achieved</li>
+                                    <li>❌ Two separate intake channels</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <span class="lang-jp"><strong>低</strong> (同期I/F開発のみ)</span>
+                                <span class="lang-en"><strong>Low</strong> (Sync I/F dev only)</span>
+                            </td>
+                        </tr>
+                        <tr style="opacity: 0.7; background: #eee;">
+                            <td style="border-left: 5px solid #999;">
+                                <strong class="lang-jp">③ SNOW完全一本化 (非推奨)</strong>
+                                <strong class="lang-en">③ SNOW Consolidation (Not Recommended)</strong>
+                                <br><small class="lang-jp">Veevaを廃止し、全てSNOW上でスクラッチ開発</small>
+                                <small class="lang-en">Abolish Veeva, build everything from scratch on SNOW</small>
+                            </td>
+                            <td style="text-align:center; background:var(--snow-blue-light); border-right:none;"><strong>全機能実装</strong><br>(受付・処理・管理)</td>
+                            <td style="text-align:center; background:#ddd; border-left:none;">(未使用・廃止)</td>
+                            <td>
+                                <ul class="lang-jp">
+                                    <li>✅ プラットフォームの完全統一</li>
+                                    <li>❌ Veevaライセンスが無駄</li>
+                                    <li>❌ GxPフローの「車輪の再発明」</li>
+                                </ul>
+                                <ul class="lang-en">
+                                    <li>✅ Complete platform unification</li>
+                                    <li>❌ Wasted Veeva licenses</li>
+                                    <li>❌ "Re-inventing" GxP flows</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <span class="lang-jp" style="color:red;"><strong>極大</strong> (CSV・開発・保守)</span>
+                                <span class="lang-en" style="color:red;"><strong>Highest</strong> (CSV, Dev, Maint.)</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1 class="lang-jp">推奨案：パターン② Veeva起点＋ServiceNow同期</h1>
+            <h1 class="lang-en">Recommendation: Pattern ② Veeva Origin + ServiceNow Sync</h1>
+            <div class="recommendation-hero">
+                <h2 class="lang-jp" style="margin-bottom: 10px; font-weight: bold;">現場の利便性とIT管理の効率性を両立するハイブリッド構成</h2>
+                <h2 class="lang-en" style="margin-bottom: 10px; font-weight: bold;">A hybrid setup balancing floor convenience and IT management efficiency.</h2>
+                
+                <div class="benefits-grid">
+                    <div class="benefit-col">
+                        <h4 class="lang-jp">🏥 Veeva (現場・QA視点) のメリット</h4>
+                        <h4 class="lang-en">🏥 Veeva (Floor/QA Perspective) Benefits</h4>
+                        <ul class="lang-jp" style="text-align:left;">
+                            <li><strong>現場抵抗ゼロ</strong>：使い慣れたVeevaでの入力フローはそのまま。</li>
+                            <li><strong>標準機能の活用</strong>：事前バリデーション済みのGxPテンプレートをフル活用できる。</li>
+                        </ul>
+                        <ul class="lang-en" style="text-align:left;">
+                            <li><strong>Zero Floor Resistance</strong>: Input workflows remain unchanged in familiar Veeva.</li>
+                            <li><strong>Utilize Standards</strong>: Full use of pre-validated GxP templates.</li>
+                        </ul>
+                    </div>
+                    <div class="benefit-col snow">
+                        <h4 class="lang-jp snow">🛠️ ServiceNow (IT視点) のメリット</h4>
+                        <h4 class="lang-en snow">🛠️ ServiceNow (IT Perspective) Benefits</h4>
+                        <ul class="lang-jp" style="text-align:left;">
+                            <li><strong>一元的な可視化</strong>：ITインシデントと同様に、品質イベントの進捗もServiceNowダッシュボードで統合管理。</li>
+                            <li><strong>CSV負担の最小化</strong>：同期用インターフェースの検証のみで済み、複雑なプロセス開発が不要。</li>
+                        </ul>
+                        <ul class="lang-en" style="text-align:left;">
+                            <li><strong>Centralized Visibility</strong>: Integrated management of quality event progress alongside IT incidents on ServiceNow dashboards.</li>
+                            <li><strong>Minimized CSV Burden</strong>: Only interface validation is needed; no complex process development required.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1 class="lang-jp">品質イベントの報告・管理運用フロー (Veeva側)</h1>
+            <h1 class="lang-en">Quality Event Reporting & Management Flow (Veeva Side)</h1>
+            <p class="lang-jp">推奨案における、Veeva側での品質イベント処理の流れ。</p>
+            <p class="lang-en">The quality event processing flow within Veeva in the recommended scenario.</p>
+            <br>
+            <div class="funnel-container">
+                <div class="funnel-stage funnel-top">
+                    <span class="lang-jp">【誰でも起票】初期報告 / Quality Incident</span>
+                    <span class="lang-en">[Report by Anyone] Initial Report / Quality Incident</span>
+                    <br><small class="lang-jp">(疑わしい事象、主観でOK。ここからSNOWへ情報が同期される)</small>
+                    <small class="lang-en">(Suspicious events, Subjective OK. Info syncs to SNOW from here.)</small>
+                </div>
+                <div class="funnel-arrow">↓</div>
+                <div class="funnel-stage funnel-middle">
+                    <span class="lang-jp">QAによる一次評価・トリアージ</span>
+                    <span class="lang-en">Primary Evaluation & Triage by QA</span>
+                </div>
+                <div class="funnel-arrow">↓</div>
+                <div class="funnel-stage funnel-bottom">
+                    <span class="lang-jp">【QMS認定後】正式な逸脱 (Deviation)</span>
+                    <span class="lang-en">[Post-QMS Certification] Official Deviation</span>
+                    <br><small class="lang-jp">(調査・CAPA・変更管理へ。ステータスは随時SNOWへ同期)</small>
+                    <small class="lang-en">(To Investigation/CAPA/Change. Status syncs to SNOW continuously.)</small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <div class="slide-indicator" id="slideIndicator">1 / 9</div>
+
+    <script>
+        function setLanguage(lang) {
+            document.body.className = 'lang-' + lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const slider = document.getElementById('slider');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const indicator = document.getElementById('slideIndicator');
+        const totalSlides = slides.length;
+        function moveSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide >= totalSlides) currentSlide = totalSlides - 1;
+            updateSlider();
+        }
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+            indicator.textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+        updateSlider();
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') moveSlide(1);
+            if (e.key === 'ArrowLeft') moveSlide(-1);
+        });
+    </script>
+</body>
+</html>

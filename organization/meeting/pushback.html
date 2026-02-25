@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>戦略的アラインメントの確保 | インフォグラフィック</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans JP -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        kkorange: '#F47920',
+                        kkdarkorange: '#D84315', // リスク・警告用
+                        kklightorange: '#FFF3E0', // 背景用
+                        kkgray: '#374151',
+                        kklightgray: '#F3F4F6'
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans JP"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f9fafb;
+            color: #374151;
+        }
+        .info-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+        /* 矢印の形状を作るためのCSS */
+        .track-arrow {
+            position: relative;
+        }
+        .track-arrow::after {
+            content: '';
+            position: absolute;
+            right: -20px;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-top: 50px solid transparent;
+            border-bottom: 50px solid transparent;
+            border-left: 20px solid;
+            z-index: 10;
+        }
+        .track-a::after { border-left-color: #f3f4f6; }
+        .track-b::after { border-left-color: #e5e7eb; }
+        
+        /* 言語切り替え用スタイル */
+        body.en-mode .lang-ja { display: none !important; }
+        body:not(.en-mode) .lang-en { display: none !important; }
+    </style>
+</head>
+<body class="py-10 px-4 antialiased">
+
+    <div class="info-container rounded-xl relative">
+        
+        <!-- HEADER -->
+        <header class="bg-kkorange text-white p-8 text-center relative overflow-hidden">
+            <!-- 言語切り替えトグル -->
+            <div class="absolute top-4 right-4 z-50 flex items-center bg-black/10 rounded-full p-1 border border-white/20">
+                <button onclick="setLang('ja')" id="btn-ja" class="px-3 py-1 text-sm font-bold rounded-full bg-white text-kkorange shadow-sm transition-all duration-200">JP</button>
+                <button onclick="setLang('en')" id="btn-en" class="px-3 py-1 text-sm font-bold rounded-full text-white hover:bg-white/20 transition-all duration-200">EN</button>
+            </div>
+
+            <!-- 背景の装飾 -->
+            <div class="absolute top-0 left-0 w-full h-full opacity-10">
+                <i class="fa-solid fa-chart-line text-9xl absolute -top-10 -right-10"></i>
+                <i class="fa-solid fa-bullseye text-9xl absolute -bottom-10 -left-10"></i>
+            </div>
+            
+            <div class="relative z-10 mt-6 md:mt-0">
+                <h1 class="text-3xl md:text-4xl font-black mb-2 tracking-tight">
+                    <span class="lang-ja">
+                        戦略的アラインメントの確保<br>
+                        <span class="text-xl md:text-2xl font-bold opacity-90 mt-2 block">施策Aと施策Bの構造的ギャップへの対応</span>
+                    </span>
+                    <span class="lang-en">
+                        Ensuring Strategic Alignment<br>
+                        <span class="text-xl md:text-2xl font-bold opacity-90 mt-2 block">Addressing the Structural Gap Between Initiatives A & B</span>
+                    </span>
+                </h1>
+                <h2 class="lang-ja text-sm md:text-base font-medium opacity-80 mt-1 uppercase tracking-wider">
+                    Ensuring Strategic Alignment: Addressing the Structural Gap Between Initiatives A & B
+                </h2>
+                
+                <div class="w-24 h-1 bg-white mx-auto my-6 opacity-50 rounded"></div>
+                
+                <p class="lang-ja text-lg md:text-xl font-bold bg-white/20 inline-block px-6 py-2 rounded-full backdrop-blur-sm shadow-inner">
+                    成功のための同期：二重の負担と手戻りを防ぐための調整の場
+                </p>
+                <p class="lang-ja text-xs font-medium opacity-80 mt-1">
+                    Sync for Success: A Coordination Space to Prevent Double Burden and Rework
+                </p>
+
+                <p class="lang-en text-lg md:text-xl font-bold bg-white/20 inline-block px-6 py-2 rounded-full backdrop-blur-sm shadow-inner">
+                    Sync for Success: A Coordination Space to Prevent Double Burden and Rework
+                </p>
+            </div>
+        </header>
+
+        <div class="p-8 md:p-12">
+            
+            <!-- SECTION 1: 現状の並行走行 -->
+            <section class="mb-12 relative">
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl font-bold text-kkgray border-b-2 border-kkorange inline-block pb-1">
+                        <span class="lang-ja">1. 現状の並行走行 <span class="text-base text-gray-500 font-normal ml-2">The Current Parallel Tracks</span></span>
+                        <span class="lang-en">1. The Current Parallel Tracks</span>
+                    </h3>
+                </div>
+
+                <div class="relative">
+                    <!-- 中央の分離ラベル -->
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 bg-white border-2 border-gray-300 rounded-full px-6 py-2 shadow-md text-center flex flex-col items-center">
+                        <i class="fa-solid fa-arrows-left-right text-gray-400 mb-1"></i>
+                        <span class="lang-ja text-sm font-bold text-gray-600">独立した進行トラック</span>
+                        <span class="lang-ja text-xs text-gray-400">Separate Tracks</span>
+                        <span class="lang-en text-sm font-bold text-gray-600">Separate Tracks</span>
+                    </div>
+
+                    <!-- 施策A トラック -->
+                    <div class="track-arrow track-a bg-gray-100 rounded-l-lg border-l-8 border-kkorange mb-6 flex h-[100px] shadow-sm mr-[20px]">
+                        <div class="flex-shrink-0 w-24 flex items-center justify-center bg-gray-200 rounded-l-md">
+                            <i class="fa-solid fa-headset text-3xl text-kkorange"></i>
+                        </div>
+                        <div class="flex-1 px-6 py-3 flex flex-col justify-center">
+                            <div class="lang-ja">
+                                <h4 class="font-bold text-lg text-kkgray">施策A：L0サポート機能の集約（進行中）</h4>
+                                <p class="text-sm text-gray-600 font-medium">既存ベンダーへのエスカレーションを前提に設計・進行中。</p>
+                                <div class="mt-1 flex justify-between items-center">
+                                    <span class="text-xs text-gray-400">Initiative A: Consolidation of L0 Support (In Motion)</span>
+                                    <span class="text-xs text-gray-400 italic">Designing for existing vendors</span>
+                                </div>
+                            </div>
+                            <div class="lang-en">
+                                <h4 class="font-bold text-lg text-kkgray">Initiative A: Consolidation of L0 Support (In Motion)</h4>
+                                <p class="text-sm text-gray-600 font-medium mt-1">Designing for existing vendors.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 施策B トラック -->
+                    <div class="track-arrow track-b bg-gray-200 rounded-l-lg border-l-8 border-kkorange flex h-[100px] shadow-sm mr-[20px]">
+                        <div class="flex-shrink-0 w-24 flex items-center justify-center bg-gray-300 rounded-l-md">
+                            <i class="fa-solid fa-ticket text-3xl text-kkorange"></i>
+                        </div>
+                        <div class="flex-1 px-6 py-3 flex flex-col justify-center">
+                            <div class="lang-ja">
+                                <h4 class="font-bold text-lg text-kkgray">施策B：L1ベンダー統合と標準化（将来）</h4>
+                                <p class="text-sm text-gray-600 font-medium">将来的にベンダー構成とツールが根本的に変更される。</p>
+                                <div class="mt-1 flex justify-between items-center">
+                                    <span class="text-xs text-gray-400">Initiative B: L1 Vendor Consolidation (Future)</span>
+                                    <span class="text-xs text-gray-400 italic">Future landscape will change</span>
+                                </div>
+                            </div>
+                            <div class="lang-en">
+                                <h4 class="font-bold text-lg text-kkgray">Initiative B: L1 Vendor Consolidation (Future)</h4>
+                                <p class="text-sm text-gray-600 font-medium mt-1">Future landscape and tools will fundamentally change.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 矢印マーカー -->
+            <div class="flex justify-center text-gray-300 my-6">
+                <i class="fa-solid fa-chevron-down text-4xl"></i>
+            </div>
+
+            <!-- SECTION 2: 構造的なズレ -->
+            <section class="mb-12 bg-gray-50 p-8 rounded-xl border border-gray-100 shadow-inner relative overflow-hidden">
+                <!-- 背景グリッドパターン -->
+                <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#374151 1px, transparent 1px); background-size: 20px 20px;"></div>
+                
+                <div class="relative z-10">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-kkdarkorange pb-1">
+                            <i class="fa-solid fa-triangle-exclamation mr-2"></i>
+                            <span class="lang-ja">構造的な設計前提のズレ</span>
+                            <span class="lang-en">The Structural Design Gap</span>
+                        </h3>
+                        <p class="lang-ja text-sm text-gray-500 mt-1 uppercase tracking-wider">The Structural Design Gap</p>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+                        <div class="text-center max-w-xs">
+                            <div class="bg-white p-4 rounded-lg shadow-sm mb-3 border-t-4 border-gray-300">
+                                <p class="lang-ja text-sm font-bold text-gray-600">施策Aが想定する<br>エスカレーション先</p>
+                                <p class="lang-en text-sm font-bold text-gray-600">Assumed Escalation Point<br>by Initiative A</p>
+                            </div>
+                            <i class="fa-solid fa-puzzle-piece text-7xl text-gray-300 transform -rotate-12"></i>
+                        </div>
+
+                        <div class="relative z-10 my-4 md:my-0">
+                            <!-- ギザギザの円を表現 -->
+                            <div class="w-24 h-24 bg-kkdarkorange rounded-full flex items-center justify-center text-white text-4xl shadow-lg relative animate-pulse" style="clip-path: polygon(50% 0%, 61% 16%, 80% 10%, 82% 29%, 98% 35%, 89% 51%, 98% 68%, 82% 71%, 80% 90%, 61% 85%, 50% 100%, 39% 85%, 20% 90%, 18% 71%, 2% 68%, 11% 51%, 2% 35%, 18% 29%, 20% 10%, 39% 16%);">
+                                <i class="fa-solid fa-question"></i>
+                            </div>
+                        </div>
+
+                        <div class="text-center max-w-xs">
+                            <i class="fa-solid fa-puzzle-piece text-7xl text-kkorange transform rotate-12 scale-x-[-1]"></i>
+                            <div class="bg-white p-4 rounded-lg shadow-sm mt-3 border-t-4 border-kkorange">
+                                <p class="lang-ja text-sm font-bold text-gray-600">施策Bが構築する<br>実際の受け入れ口</p>
+                                <p class="lang-en text-sm font-bold text-gray-600">Actual Entry Point<br>built by Initiative B</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center bg-white p-4 rounded-lg shadow-sm max-w-2xl mx-auto border border-red-100">
+                        <div class="lang-ja">
+                            <p class="text-lg font-bold text-gray-800">施策Aの現在の設計前提が、施策Bの導入によって覆るリスク。</p>
+                            <p class="text-sm text-gray-500 mt-1">Risk of Initiative A's design assumptions being overturned by Initiative B.</p>
+                        </div>
+                        <div class="lang-en">
+                            <p class="text-lg font-bold text-gray-800">Risk of Initiative A's design assumptions being overturned by Initiative B.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 矢印マーカー -->
+            <div class="flex justify-center text-gray-300 my-6">
+                <i class="fa-solid fa-chevron-down text-4xl"></i>
+            </div>
+
+            <!-- SECTION 3: 3つの主要リスク -->
+            <section class="mb-12">
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl font-bold text-kkgray border-b-2 border-kkorange inline-block pb-1">
+                        <span class="lang-ja">3. 放置した場合の主要リスク <span class="text-base text-gray-500 font-normal ml-2">Key Risks of Inaction</span></span>
+                        <span class="lang-en">3. Key Risks of Inaction</span>
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- リスク1 -->
+                    <div class="bg-kklightorange rounded-xl p-6 border-t-4 border-kkdarkorange shadow-md flex flex-col items-center text-center transition-transform hover:-translate-y-1">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-kkdarkorange text-2xl shadow-sm mb-4 relative">
+                            <i class="fa-solid fa-user-injured relative z-10"></i>
+                            <div class="absolute -right-2 -bottom-2 text-blue-400 text-lg"><i class="fa-solid fa-water"></i></div>
+                        </div>
+                        <span class="text-xs font-bold text-kkdarkorange tracking-widest uppercase mb-1">User Burden</span>
+                        
+                        <h4 class="lang-ja font-bold text-xl text-gray-800 mb-3">ユーザー負担<br><span class="text-base text-gray-600">（二重の混乱）</span></h4>
+                        <h4 class="lang-en font-bold text-xl text-gray-800 mb-3">User Burden<br><span class="text-base text-gray-600">(Double Disruption)</span></h4>
+                        
+                        <p class="lang-ja text-sm text-gray-700 leading-relaxed mb-3">短期間に2度の業務変更が発生。現場のビジネスユーザーへの過度なストレス。</p>
+                        <p class="lang-en text-sm text-gray-700 leading-relaxed mb-3">Two consecutive operational changes causing excessive stress on end-users.</p>
+                        
+                        <p class="lang-ja text-xs text-gray-500 mt-auto pt-4 border-t border-orange-200">Two consecutive operational changes causing excessive stress on end-users.</p>
+                    </div>
+
+                    <!-- リスク2 -->
+                    <div class="bg-kklightorange rounded-xl p-6 border-t-4 border-kkdarkorange shadow-md flex flex-col items-center text-center transition-transform hover:-translate-y-1">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-kkdarkorange text-2xl shadow-sm mb-4 relative">
+                            <i class="fa-solid fa-gears relative z-10 opacity-50"></i>
+                            <div class="absolute inset-0 flex items-center justify-center text-red-500"><i class="fa-solid fa-ban text-4xl opacity-80"></i></div>
+                        </div>
+                        <span class="text-xs font-bold text-kkdarkorange tracking-widest uppercase mb-1">Rework</span>
+                        
+                        <h4 class="lang-ja font-bold text-xl text-gray-800 mb-3">手戻り<br><span class="text-base text-gray-600">（回避可能なコスト）</span></h4>
+                        <h4 class="lang-en font-bold text-xl text-gray-800 mb-3">Rework<br><span class="text-base text-gray-600">(Avoidable Cost)</span></h4>
+                        
+                        <p class="lang-ja text-sm text-gray-700 leading-relaxed mb-3">施策B導入後、施策Aで構築した運用モデルやツールの再構築が必要になる。</p>
+                        <p class="lang-en text-sm text-gray-700 leading-relaxed mb-3">Need to rebuild Initiative A's operational model and tools after Initiative B rolls out.</p>
+                        
+                        <p class="lang-ja text-xs text-gray-500 mt-auto pt-4 border-t border-orange-200">Need to rebuild Initiative A's operational model and tools after Initiative B rolls out.</p>
+                    </div>
+
+                    <!-- リスク3 -->
+                    <div class="bg-kklightorange rounded-xl p-6 border-t-4 border-kkdarkorange shadow-md flex flex-col items-center text-center transition-transform hover:-translate-y-1">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-kkdarkorange text-2xl shadow-sm mb-4">
+                            <i class="fa-solid fa-chair text-gray-400"></i>
+                            <i class="fa-solid fa-question text-kkdarkorange absolute ml-6 mb-4 bg-white rounded-full"></i>
+                        </div>
+                        <span class="text-xs font-bold text-kkdarkorange tracking-widest uppercase mb-1">Governance Gap</span>
+                        
+                        <h4 class="lang-ja font-bold text-xl text-gray-800 mb-3">ガバナンスの空白<br><span class="text-base text-gray-600">（意思決定者の不在）</span></h4>
+                        <h4 class="lang-en font-bold text-xl text-gray-800 mb-3">Governance Gap<br><span class="text-base text-gray-600">(Absence of Decision Maker)</span></h4>
+                        
+                        <p class="lang-ja text-sm text-gray-700 leading-relaxed mb-3">2つの設計が衝突した際、誰が全体最適の観点で決定を下すのかが不明確。</p>
+                        <p class="lang-en text-sm text-gray-700 leading-relaxed mb-3">Unclear who has the authority to make decisions when designs conflict.</p>
+                        
+                        <p class="lang-ja text-xs text-gray-500 mt-auto pt-4 border-t border-orange-200">Unclear who has the authority to make decisions when designs conflict.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 矢印マーカー -->
+            <div class="flex justify-center text-gray-300 my-6">
+                <i class="fa-solid fa-chevron-down text-4xl"></i>
+            </div>
+
+            <!-- SECTION 4: 提案する解決策 -->
+            <section class="bg-white rounded-xl border-2 border-kkorange shadow-lg overflow-hidden">
+                <div class="bg-kkorange text-white p-4 text-center">
+                    <h3 class="text-2xl font-bold tracking-wide">
+                        <span class="lang-ja">提案：横断的な調整の場の設置 <span class="font-normal text-lg ml-2 opacity-90">| The Proposed Solution: Standing Sync</span></span>
+                        <span class="lang-en">The Proposed Solution: Standing Sync</span>
+                    </h3>
+                </div>
+                
+                <div class="p-8 flex flex-col md:flex-row items-center gap-8 bg-gradient-to-b from-orange-50 to-white">
+                    
+                    <!-- ビジュアル：統合ハブ -->
+                    <div class="md:w-1/3 flex flex-col items-center">
+                        <div class="relative w-40 h-40">
+                            <!-- 矢印A (上から) -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-4 text-kkorange">
+                                <i class="fa-solid fa-arrow-down text-3xl"></i>
+                            </div>
+                            <!-- 矢印B (下から) -->
+                            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-4 text-kkorange">
+                                <i class="fa-solid fa-arrow-up text-3xl"></i>
+                            </div>
+                            <!-- 中央ハブ -->
+                            <div class="absolute inset-0 bg-white rounded-full border-4 border-kkorange shadow-lg flex items-center justify-center z-10">
+                                <div class="text-kkorange animate-spin-slow" style="animation: spin 10s linear infinite;">
+                                    <i class="fa-solid fa-gear text-6xl"></i>
+                                </div>
+                                <div class="absolute text-white bg-kkorange rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl shadow-inner">
+                                    Sync
+                                </div>
+                            </div>
+                            <!-- 出力矢印 (右へ) -->
+                            <div class="absolute right-0 top-1/2 transform translate-x-6 -translate-y-1/2 text-kkorange z-0">
+                                <i class="fa-solid fa-arrow-right text-4xl drop-shadow-md"></i>
+                            </div>
+                        </div>
+                        <p class="lang-ja mt-8 font-bold text-gray-600 text-center">両施策のシームレスな統合<br><span class="text-xs text-gray-500">Seamless Integration</span></p>
+                        <p class="lang-en mt-8 font-bold text-gray-600 text-center">Seamless Integration</p>
+                    </div>
+
+                    <!-- アクションアイテム -->
+                    <div class="md:w-2/3">
+                        <ul class="space-y-4">
+                            <li class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-kkorange flex items-start">
+                                <i class="fa-solid fa-circle-check text-kkorange text-xl mt-1 mr-4"></i>
+                                <div>
+                                    <p class="lang-ja font-bold text-gray-800 text-lg">両施策リードによる定例同期ミーティングの開催</p>
+                                    <p class="lang-ja text-sm text-gray-500 mt-1">Establish regular sync meetings between leads of both initiatives.</p>
+                                    <p class="lang-en font-bold text-gray-800 text-lg">Establish regular sync meetings between leads of both initiatives.</p>
+                                </div>
+                            </li>
+                            <li class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-kkorange flex items-start">
+                                <i class="fa-solid fa-circle-check text-kkorange text-xl mt-1 mr-4"></i>
+                                <div>
+                                    <p class="lang-ja font-bold text-gray-800 text-lg">設計コンフリクトの早期発見と解決</p>
+                                    <p class="lang-ja text-sm text-gray-500 mt-1">Surface and resolve design conflicts early in the process.</p>
+                                    <p class="lang-en font-bold text-gray-800 text-lg">Surface and resolve design conflicts early in the process.</p>
+                                </div>
+                            </li>
+                            <li class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-kkorange flex items-start">
+                                <i class="fa-solid fa-circle-check text-kkorange text-xl mt-1 mr-4"></i>
+                                <div>
+                                    <p class="lang-ja font-bold text-gray-800 text-lg">本番稼働前のプロアクティブなリスク対応</p>
+                                    <p class="lang-ja text-sm text-gray-500 mt-1">Proactively address risks before they hit production.</p>
+                                    <p class="lang-en font-bold text-gray-800 text-lg">Proactively address risks before they hit production.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 結論メッセージ -->
+                <div class="bg-gray-800 text-white p-6 text-center">
+                    <p class="lang-ja text-xl md:text-2xl font-bold leading-tight">
+                        <i class="fa-solid fa-handshake-angle text-kkorange mr-2"></i>
+                        目標は両施策の成功。<br class="md:hidden">決定の撤回ではなく、調整の場を設けることへの合意を。
+                    </p>
+                    <p class="lang-ja text-sm md:text-base text-gray-300 mt-2">
+                        The goal is the success of both initiatives. Not asking to reverse decisions, but to agree on a coordination space.
+                    </p>
+
+                    <p class="lang-en text-xl md:text-2xl font-bold leading-tight">
+                        <i class="fa-solid fa-handshake-angle text-kkorange mr-2"></i>
+                        The goal is the success of both initiatives.<br>Not asking to reverse decisions, but to agree on a coordination space.
+                    </p>
+                </div>
+            </section>
+            
+        </div>
+        
+        <!-- FOOTER -->
+        <footer class="bg-gray-100 p-4 text-center border-t border-gray-200">
+            <p class="text-xs text-gray-400 font-medium">Internal Discussion Document based on Proposal Script</p>
+        </footer>
+
+    </div>
+
+    <!-- 言語切り替えスクリプト -->
+    <script>
+        function setLang(lang) {
+            const body = document.body;
+            const btnJa = document.getElementById('btn-ja');
+            const btnEn = document.getElementById('btn-en');
+            
+            if (lang === 'en') {
+                body.classList.add('en-mode');
+                
+                // ENボタンをアクティブに
+                btnEn.classList.add('bg-white', 'text-kkorange', 'shadow-sm');
+                btnEn.classList.remove('text-white', 'hover:bg-white/20');
+                
+                // JPボタンを非アクティブに
+                btnJa.classList.remove('bg-white', 'text-kkorange', 'shadow-sm');
+                btnJa.classList.add('text-white', 'hover:bg-white/20');
+            } else {
+                body.classList.remove('en-mode');
+                
+                // JPボタンをアクティブに
+                btnJa.classList.add('bg-white', 'text-kkorange', 'shadow-sm');
+                btnJa.classList.remove('text-white', 'hover:bg-white/20');
+                
+                // ENボタンを非アクティブに
+                btnEn.classList.remove('bg-white', 'text-kkorange', 'shadow-sm');
+                btnEn.classList.add('text-white', 'hover:bg-white/20');
+            }
+        }
+    </script>
+</body>
+</html>
