@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Development Activities - IT Organization</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Use Montserrat for a warm, modern feel, Inter for clean readability, Noto Sans JP for Japanese -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* 1. COLOR PALETTE & THE SETUP (Warm, Human-centric) */
+        :root {
+            --brand-orange: #f37021; /* Core Orange */
+            --orange-light: #fef0e8;
+            --orange-soft: #ffedd5;
+            --orange-accent: #fdba74;
+            --orange-gradient: linear-gradient(135deg, #f37021 0%, #f97316 100%);
+            
+            --bg-cream: #fffaf6;
+            --bg-white: #ffffff;
+            
+            --text-main: #432c1a; /* Warm dark brown instead of harsh black/blue */
+            --text-sub: #785a46;  /* Warm muted tone */
+            --text-light: #a89f91;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        p {
+            margin: 0;
+            margin-bottom: 15px;
+        }
+
+        body {
+            background-color: #f5f0eb; /* Soft ambient background */
+            display: grid;
+            gap: 40px;
+            grid-template-columns: 1fr;
+            margin: 0;
+            min-height: 100vh;
+            padding: 40px 0;
+            place-items: center;
+        }
+
+        .slide-container {
+            align-items: center;
+            background-color: var(--bg-cream);
+            border-radius: 24px; /* Softer, organic corners */
+            box-shadow: 0 20px 40px rgba(67, 44, 26, 0.06);
+            display: flex;
+            flex-direction: column;
+            font-family: 'Inter', sans-serif;
+            height: 720px;
+            justify-content: center;
+            overflow: hidden;
+            padding: 60px 80px;
+            position: relative;
+            width: 1280px;
+        }
+
+        /* 2. CONSISTENT TYPOGRAPHY */
+        .slide-container h1,
+        .slide-container h2,
+        .slide-container h3 {
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+        }
+
+        .slide-container p,
+        .slide-container li,
+        .slide-container .subtitle {
+            color: var(--text-sub);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+
+        .slide-container h1 {
+            font-size: 72px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--brand-orange);
+        }
+
+        .slide-container .slide-title {
+            color: var(--text-main);
+            font-size: 46px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 50px;
+            text-align: left;
+            width: 100%;
+            border-bottom: 2px solid var(--orange-light);
+            padding-bottom: 15px;
+        }
+
+        .slide-container h3 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .slide-container p {
+            font-size: 20px;
+        }
+
+        .slide-container .content-area {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+            z-index: 2;
+        }
+
+        /* 3. SLIDE SPECIFIC DESIGNS */
+        
+        /* Slide 1: Title Slide with Organic Curves */
+        .title-slide {
+            background: radial-gradient(circle at 100% 0%, var(--orange-soft) 0%, transparent 40%),
+                        radial-gradient(circle at 0% 100%, var(--orange-light) 0%, transparent 50%),
+                        var(--bg-white);
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .curve-decoration {
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            border: 40px solid var(--orange-light);
+            opacity: 0.6;
+            z-index: 0;
+        }
+
+        .curve-decoration-2 {
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background-color: var(--orange-soft);
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        .title-content {
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        /* Tiled Layouts */
+        .tiled-content {
+            align-items: stretch;
+            display: flex;
+            gap: 50px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .tile {
+            align-items: center;
+            background-color: var(--bg-white);
+            border-radius: 24px; /* Organic feel */
+            border: 1px solid var(--orange-light);
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            justify-content: center;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(243, 112, 33, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .tile .icon {
+            font-size: 64px;
+            margin-bottom: 25px;
+            color: var(--brand-orange);
+            background: var(--orange-light);
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%; /* Human-centric circular container */
+        }
+
+        /* Timeline Layout (Warm Theme) */
+        .timeline-layout {
+            align-items: stretch;
+            display: flex;
+            height: stretch;
+            justify-content: space-between;
+            position: relative;
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        .timeline-layout .timeline-line {
+            background-color: var(--orange-accent);
+            height: 6px; /* Slightly thicker */
+            border-radius: 3px;
+            left: 0;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-3px);
+            width: 100%;
+            z-index: 0;
+        }
+
+        .timeline-item {
+            position: relative;
+            text-align: center;
+            width: 25%;
+        }
+
+        .timeline-item::after {
+            background-color: var(--bg-white);
+            border-radius: 50%;
+            border: 6px solid var(--brand-orange);
+            content: '';
+            height: 28px;
+            left: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 28px;
+            z-index: 1;
+            box-shadow: 0 0 0 6px var(--bg-cream);
+        }
+
+        .timeline-item .content-wrapper {
+            left: 0;
+            position: absolute;
+            width: 100%;
+            padding: 0 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .timeline-item:nth-child(odd) .content-wrapper {
+            bottom: 50%;
+            margin-bottom: 45px;
+        }
+
+        .timeline-item:nth-child(even) .content-wrapper {
+            margin-top: 45px;
+            top: 50%;
+        }
+
+        .timeline-icon {
+            font-size: 40px;
+            color: var(--brand-orange);
+            margin-bottom: 15px;
+        }
+
+        /* Discussion Layouts */
+        .discussion-layout {
+            text-align: center;
+            max-width: 900px;
+            position: relative;
+        }
+
+        .discussion-bg-icon {
+            position: absolute;
+            font-size: 300px;
+            color: var(--orange-light);
+            opacity: 0.3;
+            z-index: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .discussion-content {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(67, 44, 26, 0.05);
+            border: 1px solid var(--orange-soft);
+        }
+
+        .discussion-bubble {
+            background: var(--orange-gradient);
+            color: white;
+            padding: 30px 40px;
+            border-radius: 20px 20px 20px 0;
+            display: inline-block;
+            margin: 30px 0;
+            box-shadow: 0 10px 20px rgba(243, 112, 33, 0.2);
+        }
+
+        .discussion-bubble p {
+            color: white;
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* Utilities */
+        .text-orange { color: var(--brand-orange); }
+        .text-brown { color: var(--text-main); }
+        .border-top-orange { border-top: 8px solid var(--brand-orange); }
+
+        /* --- Language Toggle & Fonts --- */
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-white);
+            border: 2px solid var(--orange-light);
+            border-radius: 30px;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(67, 44, 26, 0.1);
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: var(--brand-orange);
+            color: var(--bg-white);
+        }
+
+        /* Language Display Control */
+        body.lang-en .ja { display: none !important; }
+        body.lang-ja .en { display: none !important; }
+
+        /* Japanese Font Overrides */
+        body.lang-ja .slide-container h1,
+        body.lang-ja .slide-container h2,
+        body.lang-ja .slide-container h3,
+        body.lang-ja .slide-container .slide-title {
+            font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+        }
+
+        body.lang-ja .slide-container p,
+        body.lang-ja .slide-container li,
+        body.lang-ja .slide-container .subtitle,
+        body.lang-ja .lang-btn {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+    </style>
+</head>
+<body class="lang-en">
+
+    <!-- Language Toggle Buttons -->
+    <div class="lang-toggle">
+        <button id="btn-en" class="lang-btn active" onclick="setLanguage('en')">EN</button>
+        <button id="btn-ja" class="lang-btn" onclick="setLanguage('ja')">JA</button>
+    </div>
+
+    <!-- Slide 1: Title Slide (Redesigned with Warm, Organic Elements) -->
+    <div class="slide-container title-slide" id="slide1">
+        <div class="curve-decoration"></div>
+        <div class="curve-decoration-2"></div>
+        
+        <div class="title-content">
+            <!-- Organic sunrise/growth icon hint -->
+            <i class="fa-solid fa-sun text-orange" style="font-size: 48px; margin-bottom: 30px; opacity: 0.8;"></i>
+            
+            <h1 style="line-height: 1.1; margin-bottom: 25px;">
+                <span class="en">Skill Development Activities</span>
+                <span class="ja">スキル開発活動</span>
+            </h1>
+            <p style="color: var(--text-main); font-size: 32px; font-weight: 500; font-family: 'Montserrat', sans-serif; margin-bottom: 60px;">
+                <span class="en">Review and Future Direction of the IT Organization</span>
+                <span class="ja">IT組織のレビューと今後の方向性</span>
+            </p>
+            
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="width: 40px; height: 3px; background-color: var(--brand-orange);"></div>
+                <p style="color: var(--text-sub); font-size: 22px; font-weight: 500; letter-spacing: 1px; margin: 0;">
+                    <span class="en">IT Department Meeting</span>
+                    <span class="ja">IT部門ミーティング</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Agenda (Opening) -->
+    <div class="slide-container" id="slide2">
+        <h2 class="slide-title">
+            <span class="en">Today's Agenda</span>
+            <span class="ja">本日のアジェンダ</span>
+        </h2>
+        <div class="content-area">
+            <div class="tiled-content" style="max-width: 1000px; gap: 60px;">
+                <!-- Tile 1: Past -->
+                <div class="tile border-top-orange">
+                    <div class="icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <h3 class="text-brown">
+                        <span class="en">1. A 5-Year Recap</span>
+                        <span class="ja">1. 過去5年間の振り返り</span>
+                    </h3>
+                    <p style="font-size: 22px; font-weight: 500;">
+                        <span class="en">(Looking Back)</span>
+                        <span class="ja">(実績の確認)</span>
+                    </p>
+                </div>
+                
+                <!-- Tile 2: Future -->
+                <div class="tile border-top-orange" style="border-top-color: #fb923c;">
+                    <div class="icon" style="background: #ffedd5; color: #fb923c;"><i class="fa-solid fa-seedling"></i></div>
+                    <h3 class="text-brown">
+                        <span class="en">2. Future Direction</span>
+                        <span class="ja">2. 今後の方向性</span>
+                    </h3>
+                    <p style="font-size: 22px; font-weight: 500;">
+                        <span class="en">(What's Next)</span>
+                        <span class="ja">(これからの取り組み)</span>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Note -->
+            <div style="margin-top: 70px; text-align: center; width: 100%; background: var(--bg-white); padding: 20px 40px; border-radius: 50px; border: 1px dashed var(--orange-accent); max-width: 700px;">
+                <p style="font-size: 22px; margin: 0; font-weight: 500;">
+                    <i class="fa-regular fa-comments text-orange" style="margin-right: 12px; font-size: 26px;"></i>
+                    <span class="en">We will pause for feedback after each section.</span>
+                    <span class="ja">各セクションの後にフィードバックの時間を設けます。</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: 5-Year Recap (Looking Back) -->
+    <div class="slide-container" id="slide3">
+        <h2 class="slide-title">
+            <span class="en">Looking Back: 5-Year Journey</span>
+            <span class="ja">振り返り：5年間の歩み</span>
+        </h2>
+        <div class="content-area" style="justify-content: center;">
+            
+            <!-- Timeline Layout (Removed bottom question box) -->
+            <div class="timeline-layout" style="min-height: 400px; margin-top: 0;">
+                <div class="timeline-line"></div>
+                
+                <!-- Item 1 -->
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <i class="fa-solid fa-clipboard-list timeline-icon"></i>
+                        <h3 class="text-orange" style="font-size: 24px;">
+                            <span class="en">Year 1</span>
+                            <span class="ja">1年目</span>
+                        </h3>
+                        <p style="font-size: 19px; font-weight: 500;">
+                            <span class="en">Skill Assessment<br>& Baseline</span>
+                            <span class="ja">スキルアセスメント<br>& ベースライン策定</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Item 2 -->
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <i class="fa-solid fa-people-group timeline-icon"></i>
+                        <h3 class="text-orange" style="font-size: 24px;">
+                            <span class="en">Step 2</span>
+                            <span class="ja">ステップ 2</span>
+                        </h3>
+                        <p style="font-size: 19px; font-weight: 500;">
+                            <span class="en">Global Skill Development<br>Program Launched</span>
+                            <span class="ja">グローバルスキル開発<br>プログラムの開始</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Item 3 -->
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <i class="fa-solid fa-book-open-reader timeline-icon"></i>
+                        <h3 class="text-orange" style="font-size: 24px;">
+                            <span class="en">Step 3</span>
+                            <span class="ja">ステップ 3</span>
+                        </h3>
+                        <p style="font-size: 19px; font-weight: 500;">
+                            <span class="en">Self-Directed Learning<br>& Engagement Tracking</span>
+                            <span class="ja">自律的学習<br>& エンゲージメント追跡</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Item 4 -->
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <i class="fa-solid fa-handshake-angle timeline-icon"></i>
+                        <h3 class="text-orange" style="font-size: 24px;">
+                            <span class="en">This Spring</span>
+                            <span class="ja">今春</span>
+                        </h3>
+                        <p style="font-size: 19px; font-weight: 500;">
+                            <span class="en">Handover to HR for<br>Company-wide Expansion</span>
+                            <span class="ja">全社展開に向けた<br>人事部への引き継ぎ</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Discussion 1 (NEW) -->
+    <div class="slide-container" id="slide4" style="background-color: var(--bg-white);">
+        <h2 class="slide-title" style="border-bottom: none; text-align: center; margin-bottom: 30px;">
+            <span class="en">Discussion: Looking Back</span>
+            <span class="ja">ディスカッション：振り返り</span>
+        </h2>
+        
+        <div class="content-area">
+            <div class="discussion-layout">
+                <!-- Background Silhouette -->
+                <i class="fa-solid fa-users discussion-bg-icon"></i>
+                
+                <div class="discussion-content">
+                    <p style="font-size: 28px; font-weight: 600; color: var(--text-main); margin-bottom: 20px;">
+                        <span class="en">That's the five-year story.</span>
+                        <span class="ja">以上が過去5年間の歩みです。</span>
+                    </p>
+                    
+                    <div class="discussion-bubble">
+                        <p>
+                            <i class="fa-solid fa-clipboard-question" style="margin-right: 15px; opacity: 0.9;"></i>
+                            <span class="en">Does anything stand out to you, or do you have any feedback on how things went?</span>
+                            <span class="ja">特に印象に残った点や、これまでの取り組みに対するフィードバックはありますか？</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Future Direction (What's Next) -->
+    <div class="slide-container" id="slide5">
+        <h2 class="slide-title">
+            <span class="en">What's Next: Towards a Global IT Organization</span>
+            <span class="ja">今後の方向性：グローバルIT組織に向けて</span>
+        </h2>
+        <div class="content-area">
+            <div class="tiled-content" style="gap: 50px;">
+                
+                <!-- Pillar 1: Standardization -->
+                <div class="tile" style="justify-content: flex-start; padding: 60px 40px; background: var(--bg-white);">
+                    <div class="icon" style="margin-bottom: 35px;"><i class="fa-regular fa-compass"></i></div>
+                    <h3 style="font-size: 28px; margin-bottom: 25px; line-height: 1.4;">
+                        <span class="en">1. Global Skill<br>Standardization</span>
+                        <span class="ja">1. グローバルスキル<br>標準化</span>
+                    </h3>
+                    <div style="background-color: var(--bg-cream); border-radius: 12px; padding: 25px; width: 100%; border: 1px solid var(--orange-light);">
+                        <p style="font-size: 18px; font-weight: 600; color: var(--text-main); margin-bottom: 5px;">
+                            <span class="en">Candidate:</span>
+                            <span class="ja">候補：</span>
+                        </p>
+                        <p style="font-size: 24px; font-weight: 700; color: var(--brand-orange); margin: 0;">SFIA9</p>
+                    </div>
+                </div>
+                
+                <!-- Pillar 2: Career Ladder -->
+                <div class="tile" style="justify-content: flex-start; padding: 60px 40px; background: var(--bg-white);">
+                    <div class="icon" style="margin-bottom: 35px;"><i class="fa-solid fa-arrow-up-right-dots"></i></div>
+                    <h3 style="font-size: 28px; margin-bottom: 25px; line-height: 1.4;">
+                        <span class="en">2. Global IT<br>Career Ladder</span>
+                        <span class="ja">2. グローバルIT<br>キャリアラダー</span>
+                    </h3>
+                    <div style="background-color: var(--bg-cream); border-radius: 12px; padding: 25px; width: 100%; border: 1px solid var(--orange-light);">
+                        <p style="font-size: 18px; font-weight: 600; color: var(--text-main); margin-bottom: 5px;">
+                            <span class="en">Connecting Skill to:</span>
+                            <span class="ja">スキルとの連動：</span>
+                        </p>
+                        <p style="font-size: 24px; font-weight: 700; color: var(--brand-orange); margin: 0;">
+                            <span class="en">Compensation</span>
+                            <span class="ja">報酬・評価</span>
+                            <i class="fa-solid fa-leaf" style="font-size: 20px; margin-left: 8px;"></i>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Discussion 2 & Wrap-up (Updated) -->
+    <div class="slide-container" id="slide6" style="background-color: var(--bg-white);">
+        <h2 class="slide-title" style="border-bottom: none; text-align: center; margin-bottom: 30px;">
+            <span class="en">Your Input Needed: Shaping the Future</span>
+            <span class="ja">皆様のご意見：未来を形作るために</span>
+        </h2>
+        
+        <div class="content-area">
+            <div class="discussion-layout">
+                <!-- Background Silhouette -->
+                <i class="fa-regular fa-lightbulb discussion-bg-icon" style="font-size: 250px;"></i>
+                
+                <div class="discussion-content">
+                    <p style="font-size: 24px; font-weight: 500; color: var(--text-main); margin-bottom: 20px;">
+                        <span class="en">As we move forward on Standardization and Career Ladders:</span>
+                        <span class="ja">標準化とキャリアラダーを推進するにあたり：</span>
+                    </p>
+                    
+                    <div class="discussion-bubble" style="border-radius: 20px;">
+                        <p style="font-size: 28px;">
+                            <span class="en">To make these initiatives effective, what kind of roles or goal settings do you think would be necessary?</span>
+                            <span class="ja">これらの取り組みを効果的にするためには、どのような役割や目標設定が必要だと思いますか？</span>
+                        </p>
+                    </div>
+                    
+                    <div style="margin-top: 40px; padding-top: 30px; border-top: 2px solid var(--orange-light);">
+                        <p style="font-size: 22px; color: var(--text-sub); font-weight: 500; margin: 0;">
+                            <i class="fa-regular fa-face-smile" style="margin-right: 10px;"></i>
+                            <span class="en">Looking forward to your input. Thank you.</span>
+                            <span class="ja">皆様からのご意見をお待ちしております。ありがとうございました。</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for Language Toggle -->
+    <script>
+        function setLanguage(lang) {
+            // Update body class to toggle visibility
+            document.body.classList.remove('lang-en', 'lang-ja');
+            document.body.classList.add('lang-' + lang);
+            
+            // Update button styles
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            document.getElementById('btn-ja').classList.toggle('active', lang === 'ja');
+        }
+    </script>
+</body>
+</html>
