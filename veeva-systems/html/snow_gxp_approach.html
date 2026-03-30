@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiceNow GxP Compliance Approach</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary: #F39800; /* Kyowa Kirin Orange */
+            --primary-light: #FFF4E5;
+            --primary-dark: #D98800;
+            --bg-color: #F8F9FA;
+            --white: #FFFFFF;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --border-color: #E2E8F0;
+            --success: #28A745;
+            --slide-width: 1280px;
+            --slide-height: 720px;
+        }
+
+        /* Reset & Base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #E2E8F0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Noto Sans JP', 'Poppins', sans-serif;
+            color: var(--text-main);
+            overflow: hidden; /* Prevent scrolling outside presentation */
+        }
+
+        /* Presentation Container */
+        #presentation {
+            position: relative;
+            width: var(--slide-width);
+            height: var(--slide-height);
+            background-color: var(--bg-color);
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            position: absolute;
+            top: 24px;
+            right: 32px;
+            display: flex;
+            background: var(--white);
+            border: 2px solid var(--primary);
+            border-radius: 30px;
+            overflow: hidden;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(243, 152, 0, 0.2);
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* Slides */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 60px 80px 80px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease-in-out, visibility 0.4s;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-color);
+            z-index: 1;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 54px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 30px;
+            border-left: 8px solid var(--primary);
+            padding-left: 20px;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 16px;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        /* Global Layout Utilities */
+        .content-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            height: 100%;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--primary);
+            position: relative;
+        }
+
+        /* Slide 1: Title */
+        .slide-1-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            position: relative;
+        }
+        
+        .title-box {
+            background: var(--white);
+            padding: 60px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            z-index: 2;
+            text-align: center;
+            border: 2px solid var(--primary-light);
+            max-width: 900px;
+        }
+
+        .title-box h1 { margin-bottom: 10px; font-size: 56px; }
+        .title-box h2 { border: none; padding: 0; color: var(--text-muted); font-size: 32px; font-weight: 500; margin-bottom: 40px; }
+        
+        .key-point {
+            background: var(--primary-light);
+            display: inline-block;
+            padding: 16px 32px;
+            border-radius: 50px;
+            color: var(--primary-dark);
+            font-weight: 700;
+            font-size: 22px;
+            border: 2px solid var(--primary);
+        }
+
+        .v-model-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            z-index: 1;
+        }
+
+        /* Slide 2: Overall Structure */
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 40px;
+            position: relative;
+        }
+
+        .process-flow::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            width: 90%;
+            height: 4px;
+            background: var(--border-color);
+            z-index: 0;
+            transform: translateY(-50%);
+        }
+
+        .process-step {
+            background: var(--white);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 30px 20px;
+            width: 260px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .process-step .icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .process-step h3 { font-size: 20px; margin: 0; }
+
+        .process-arrow {
+            color: var(--primary);
+            font-size: 30px;
+            z-index: 1;
+        }
+
+        /* Slide 3: Scope Definition */
+        .gxp-list { list-style: none; }
+        .gxp-list li {
+            font-size: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--white);
+            padding: 14px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+            border-left: 4px solid var(--primary);
+        }
+        .gxp-list li i { color: var(--success); font-size: 24px; }
+        
+        .risk-criteria { display: flex; flex-direction: column; gap: 16px; }
+        .risk-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .risk-item .icon { font-size: 36px; color: var(--primary); width: 60px; text-align: center; }
+        .risk-item p { font-size: 20px; font-weight: 600; margin: 0; }
+
+        /* Slide 4: Target Flow Definition */
+        .flow-cards {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .flow-card {
+            flex: 1;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 24px 16px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+            border-top: 6px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 220px;
+        }
+        .flow-card i { font-size: 40px; color: var(--primary); margin-bottom: 16px; }
+        .flow-card h3 { font-size: 18px; margin-bottom: 10px; line-height: 1.4; }
+        .flow-card p {
+            font-size: 12px;
+            color: var(--text-muted);
+            background: var(--primary-light);
+            padding: 4px 8px;
+            border-radius: 20px;
+        }
+        .note {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-main);
+            background: var(--primary-light);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px dashed var(--primary);
+        }
+
+        /* Slide 5: Design Doc Hierarchy */
+        .doc-hierarchy {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        .doc-box {
+            background: var(--white);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 20px 30px;
+            width: 850px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        .doc-box:hover { transform: translateX(10px); }
+        .doc-box .doc-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            width: 140px;
+            flex-shrink: 0;
+            border-right: 2px solid var(--border-color);
+            margin-right: 24px;
+        }
+        .doc-box .doc-desc { font-size: 20px; font-weight: 500; }
+        .down-arrow { color: var(--primary); font-size: 32px; }
+
+        /* Slide 6: V-Model */
+        .v-model-diagram {
+            position: relative;
+            width: 900px;
+            height: 400px;
+            margin: 20px auto 0;
+        }
+        .v-node {
+            position: absolute;
+            background: var(--white);
+            border: 3px solid var(--primary);
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-size: 22px;
+            font-weight: 700;
+            text-align: center;
+            width: 160px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+            z-index: 2;
+        }
+        .v-node.left { border-color: #0056b3; color: #0056b3; }
+        .v-node.right { border-color: var(--success); color: var(--success); }
+        
+        /* Node Positions */
+        .node-urs { top: 0; left: 0; }
+        .node-pq { top: 0; right: 0; }
+        .node-fs { top: 140px; left: 160px; }
+        .node-oq { top: 140px; right: 160px; }
+        .node-ds { top: 280px; left: 320px; }
+        .node-iq { top: 280px; right: 320px; }
+
+        /* SVG Lines */
+        .h-line {
+            position: absolute;
+            border-bottom: 2px dashed var(--text-muted);
+            z-index: 1;
+        }
+        .h-line-1 { top: 35px; left: 160px; width: 580px; }
+        .h-line-2 { top: 175px; left: 320px; width: 260px; }
+        
+        .v-caption {
+            position: absolute;
+            background: var(--primary-light);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            white-space: nowrap;
+            z-index: 3;
+        }
+        .caption-pq { top: -15px; left: 50%; transform: translateX(-50%); }
+        .caption-oq { top: 125px; left: 50%; transform: translateX(-50%); }
+
+        /* Slide 7: Swimlane Flow */
+        .swimlane-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .step-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .step-box {
+            display: flex;
+            align-items: center;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 12px 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            flex-grow: 1;
+            border-left: 6px solid var(--primary);
+        }
+        .step-num {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        .step-desc { font-size: 18px; font-weight: 500; flex-grow: 1; }
+        .step-actor {
+            background: var(--bg-color);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .step-icon { font-size: 24px; color: var(--primary); margin-left: 16px; }
+
+        /* Slide 8: Operation & Maintenance */
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .pillar-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 40px 24px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+        .pillar-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .pillar-card i { font-size: 56px; color: var(--primary); margin-bottom: 20px; }
+        .pillar-card h3 { font-size: 22px; margin-bottom: 16px; color: var(--text-main); }
+        .pillar-card p { font-size: 16px; color: var(--text-muted); line-height: 1.5; text-align: left;}
+
+        /* Slide 9: Summary & Comparison */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 16px;
+        }
+        .comparison-table th { background: #EDF2F7; font-weight: 700; font-size: 18px; width: 20%; }
+        .comparison-table th.sn-col { background: var(--primary); color: var(--white); width: 40%; }
+        .comparison-table th.v-col { background: #4A5568; color: var(--white); width: 40%; }
+        
+        .comparison-table td.sn-cell {
+            background: var(--primary-light);
+            font-weight: 600;
+            color: var(--primary-dark);
+            border-left: 2px solid var(--primary);
+            border-right: 2px solid var(--primary);
+        }
+        .comparison-table tr:last-child td.sn-cell { border-bottom: 2px solid var(--primary); }
+        
+        .conclusion-box {
+            background: var(--primary);
+            color: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(243, 152, 0, 0.3);
+        }
+
+        /* Controls */
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: var(--white);
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 20px;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            color: var(--border-color);
+        }
+
+        .indicators { display: flex; gap: 12px; }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #CBD5E1;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .dot.active { background: var(--primary); transform: scale(1.3); }
+
+    </style>
+</head>
+<body>
+
+<div id="presentation">
+    
+    <!-- Language Toggle -->
+    <div class="lang-toggle">
+        <button id="btn-jp" class="lang-btn active" onclick="setLang('jp')">JP</button>
+        <button id="btn-en" class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+
+    <!-- ================= Slide 1 ================= -->
+    <div class="slide active" id="slide-0">
+        <div class="slide-1-content">
+            <svg class="v-model-bg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <polyline points="10,10 50,90 90,10" fill="none" stroke="#F39800" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            
+            <div class="title-box">
+                <h1 data-jp="ServiceNow GxP対応アプローチ" data-en="ServiceNow GxP Compliance Approach">ServiceNow GxP対応アプローチ</h1>
+                <h2 data-jp="V字モデルに基づく実践的導入ガイド" data-en="Practical Guide based on V-Model">V字モデルに基づく実践的導入ガイド</h2>
+                <div class="key-point">
+                    <i class="fa-solid fa-lightbulb" style="margin-right: 10px;"></i>
+                    <span data-jp="「フロー作成」と「バリデーション」の2段階が必要" data-en="Requires two stages: 'Flow Creation' and 'Validation'">「フロー作成」と「バリデーション」の2段階が必要</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Slide 2 ================= -->
+    <div class="slide" id="slide-1">
+        <h2 data-jp="全体構造" data-en="Overall Structure">全体構造</h2>
+        <div class="content-area">
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                    <h3 data-jp="Phase 1:<br>スコープ定義・リスク評価" data-en="Phase 1:<br>Scope Definition & Risk Assessment">Phase 1:<br>スコープ定義・リスク評価</h3>
+                </div>
+                <div class="process-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="process-step">
+                    <div class="icon"><i class="fa-solid fa-pen-ruler"></i></div>
+                    <h3 data-jp="Phase 2:<br>フロー設計・構築<br><span style='font-size:14px; color:#666;'>(V字モデル 左側)</span>" data-en="Phase 2:<br>Flow Design & Build<br><span style='font-size:14px; color:#666;'>(V-Model Left)</span>">Phase 2:<br>フロー設計・構築<br><span style='font-size:14px; color:#666;'>(V字モデル 左側)</span></h3>
+                </div>
+                <div class="process-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="process-step">
+                    <div class="icon"><i class="fa-solid fa-check-double"></i></div>
+                    <h3 data-jp="Phase 3:<br>バリデーション実施<br><span style='font-size:14px; color:#666;'>(V字モデル 右側)</span>" data-en="Phase 3:<br>Validation Execution<br><span style='font-size:14px; color:#666;'>(V-Model Right)</span>">Phase 3:<br>バリデーション実施<br><span style='font-size:14px; color:#666;'>(V字モデル 右側)</span></h3>
+                </div>
+                <div class="process-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="process-step" style="background: var(--bg-color); border-color: var(--text-muted);">
+                    <div class="icon" style="color: var(--text-muted); background: #E2E8F0;"><i class="fa-solid fa-rotate"></i></div>
+                    <h3 data-jp="運用・維持管理" data-en="Operation & Maintenance">運用・維持管理</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Slide 3 ================= -->
+    <div class="slide" id="slide-2">
+        <h2 data-jp="Phase 1: スコープ定義とリスク評価" data-en="Phase 1: Scope Definition & Risk Assessment">Phase 1: スコープ定義とリスク評価</h2>
+        <div class="content-area grid-2">
+            <div class="card">
+                <h3 data-jp="GxP対象プロセスの特定" data-en="Identify GxP Target Processes">GxP対象プロセスの特定</h3>
+                <ul class="gxp-list" style="margin-top: 20px;">
+                    <li><i class="fa-solid fa-check-circle"></i> <span data-jp="逸脱管理 (Deviation)" data-en="Deviation">逸脱管理 (Deviation)</span></li>
+                    <li><i class="fa-solid fa-check-circle"></i> <span data-jp="CAPA管理 (CAPA)" data-en="CAPA">CAPA管理 (CAPA)</span></li>
+                    <li><i class="fa-solid fa-check-circle"></i> <span data-jp="変更管理 (Change Control)" data-en="Change Control">変更管理 (Change Control)</span></li>
+                    <li><i class="fa-solid fa-check-circle"></i> <span data-jp="監査指摘管理 (Audit Finding)" data-en="Audit Finding">監査指摘管理 (Audit Finding)</span></li>
+                    <li><i class="fa-solid fa-check-circle"></i> <span data-jp="苦情管理 (Complaint)" data-en="Complaint">苦情管理 (Complaint)</span></li>
+                </ul>
+                <p style="margin-top: 20px; font-size: 16px; color: var(--text-muted); padding: 10px; background: #F1F5F9; border-radius: 6px;">
+                    <i class="fa-solid fa-circle-info"></i> <span data-jp="※ 通常のITインシデント等は対象外" data-en="* Normal IT incidents are out of scope">※ 通常のITインシデント等は対象外</span>
+                </p>
+            </div>
+            <div class="card">
+                <h3 data-jp="リスク評価基準" data-en="Risk Evaluation Criteria">リスク評価基準</h3>
+                <div class="risk-criteria" style="margin-top: 20px;">
+                    <div class="risk-item">
+                        <i class="icon fa-solid fa-hand-holding-medical"></i>
+                        <p data-jp="製品品質・患者安全への影響度" data-en="Impact on Product Quality & Patient Safety">製品品質・患者安全への影響度</p>
+                    </div>
+                    <div class="risk-item">
+                        <i class="icon fa-solid fa-shield-halved"></i>
+                        <p data-jp="データ完全性リスク (ALCOA+観点)" data-en="Data Integrity Risk (ALCOA+ perspective)">データ完全性リスク (ALCOA+観点)</p>
+                    </div>
+                    <div class="risk-item">
+                        <i class="icon fa-solid fa-file-contract"></i>
+                        <p data-jp="規制要件との紐づけ (Part 11, Annex 11等)" data-en="Regulatory Requirement Mapping (Part 11, Annex 11, etc.)">規制要件との紐づけ (Part 11, Annex 11等)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Slide 4 ================= -->
+    <div class="slide" id="slide-3">
+        <h2 data-jp="Phase 2: 構築すべき5つのGxP品質フロー" data-en="Phase 2: 5 GxP Quality Flows to Build">Phase 2: 構築すべき5つのGxP品質フロー</h2>
+        <div class="content-area">
+            <div class="flow-cards">
+                <div class="flow-card">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <h3 data-jp="逸脱管理<br>(Deviation)" data-en="Deviation">逸脱管理<br>(Deviation)</h3>
+                    <p data-jp="規制: GMP 等" data-en="Reg: GMP, etc.">規制: GMP 等</p>
+                </div>
+                <div class="flow-card">
+                    <i class="fa-solid fa-wrench"></i>
+                    <h3 data-jp="CAPA管理<br>(CAPA)" data-en="CAPA">CAPA管理<br>(CAPA)</h3>
+                    <p data-jp="規制: 21 CFR Part 820 等" data-en="Reg: 21 CFR Part 820, etc.">規制: 21 CFR Part 820 等</p>
+                </div>
+                <div class="flow-card">
+                    <i class="fa-solid fa-code-branch"></i>
+                    <h3 data-jp="変更管理<br>(Change Control)" data-en="Change Control">変更管理<br>(Change Control)</h3>
+                    <p data-jp="規制: Annex 15 等" data-en="Reg: Annex 15, etc.">規制: Annex 15 等</p>
+                </div>
+                <div class="flow-card">
+                    <i class="fa-solid fa-file-signature"></i>
+                    <h3 data-jp="監査指摘管理<br>(Audit Finding)" data-en="Audit Finding">監査指摘管理<br>(Audit Finding)</h3>
+                    <p data-jp="内部/外部監査の対応" data-en="Internal/External Audit">内部/外部監査の対応</p>
+                </div>
+                <div class="flow-card">
+                    <i class="fa-solid fa-comment-medical"></i>
+                    <h3 data-jp="苦情管理<br>(Complaint)" data-en="Complaint">苦情管理<br>(Complaint)</h3>
+                    <p data-jp="市場からのフィードバック" data-en="Market Feedback">市場からのフィードバック</p>
+                </div>
+            </div>
+            <div class="note">
+                <i class="fa-solid fa-circle-exclamation" style="color: var(--primary);"></i> 
+                <span data-jp="Veeva標準機能をServiceNow上でゼロから設計・構築する必要があります。" data-en="Veeva standard features must be designed and built from scratch on ServiceNow.">Veeva標準機能をServiceNow上でゼロから設計・構築する必要があります。</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Slide 5 ================= -->
+    <div class="slide" id="slide-4">
+        <h2 data-jp="Phase 2: 設計フェーズの文書体系" data-en="Phase 2: Design Documentation Hierarchy">Phase 2: 設計フェーズの文書体系</h2>
+        <div class="content-area">
+            <p style="text-align: center; font-size: 20px; margin-bottom: 20px;" data-jp="V字モデル左側: 上流から下流へ具体化していくプロセス" data-en="V-Model Left: Process of detailing from upstream to downstream">V字モデル左側: 上流から下流へ具体化していくプロセス</p>
+            <div class="doc-hierarchy">
+                <div class="doc-box">
+                    <div class="doc-title">URS</div>
+                    <div class="doc-desc">
+                        <strong data-jp="ユーザー要求仕様" data-en="User Requirement Specification">ユーザー要求仕様</strong><br>
+                        <span style="color: var(--text-muted); font-size: 16px;" data-jp="「何をしたいか」を定義 (GxP要件)" data-en="Define 'what to do' (GxP requirements)">「何をしたいか」を定義 (GxP要件)</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-arrow-down down-arrow"></i>
+                <div class="doc-box" style="width: 750px;">
+                    <div class="doc-title">FS</div>
+                    <div class="doc-desc">
+                        <strong data-jp="機能仕様" data-en="Functional Specification">機能仕様</strong><br>
+                        <span style="color: var(--text-muted); font-size: 16px;" data-jp="「どんな機能が必要か」をServiceNow機能にマッピング" data-en="Map 'what functions are needed' to ServiceNow features">「どんな機能が必要か」をServiceNow機能にマッピング</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-arrow-down down-arrow" style="font-size: 24px;"></i>
+                <div class="doc-box" style="width: 650px;">
+                    <div class="doc-title">DS</div>
+                    <div class="doc-desc">
+                        <strong data-jp="設計仕様" data-en="Design Specification">設計仕様</strong><br>
+                        <span style="color: var(--text-muted); font-size: 16px;" data-jp="「どう設定・構築するか」を具体的に記述<br>(テーブル設計, ワークフロー設計など)" data-en="Describe 'how to configure/build' concretely (Tables, Workflows)">「どう設定・構築するか」を具体的に記述<br>(テーブル設計, ワークフロー設計など)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Slide 6 ================= -->
+    <div class="slide" id="slide-5">
+        <h2 data-jp="Phase 3: 検証フェーズ（V字モデル）" data-en="Phase 3: Validation Phase (V-Model)">Phase 3: 検証フェーズ（V字モデル）</h2>
+        <div class="content-area">
+            <div class="v-model-diagram">
+                <!-- SVG V-Shape -->
+                <svg width="100%" height="100%" style="position: absolute; top:0; left:0; z-index: 0;">
+                    <polyline points="80,40 400,340 820,40" fill="none" stroke="#E2E8F0" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+
+                <!-- Horizontal Link Lines -->
+                <div class="h-line h-line-1"></div>
+                <div class="h-line h-line-2"></div>
+
+                <!-- Captions on Lines -->
+                <div class="v-caption caption-pq" data-jp="業務シナリオで意図通り動くか確認" data-en="Confirm if it works as intended in business scenarios">業務シナリオで意図通り動くか確認</div>
+                <div class="v-caption caption-oq" data-jp="要件・機能が正しく動作するか確認" data-en="Confirm if requirements/functions work correctly">要件・機能が正しく動作するか確認</div>
+
+                <!-- Nodes Left (Design) -->
+                <div class="v-node left node-urs">URS<br><span style="font-size: 14px; font-weight: normal;">(User Requirement)</span></div>
+                <div class="v-node left node-fs">FS<br><span style="font-size: 14px; font-weight: normal;">(Functional Spec)</span></div>
+                <div class="v-node left node-ds">DS<br><span style="font-size: 14px; font-weight: normal;">(Design Spec)</span></div>
+
+                <!-- Nodes Right (Test) -->
+                <div class="v-node right node-pq">PQ<br><span style="font-size: 14px; font-weight: normal;" data-jp="(製造適格性確認)" data-en="(Performance Qualification)">(製造適格性確認)</span></div>
+                <div class="v-node right node-oq">OQ<br><span style="font-size: 14px; font-weight: normal;" data-jp="(運用適格性確認)" data-en="(Operational Qualification)">(運用適格性確認)</span></div>
+                <div class="v-node right node-iq">IQ<br><span style="font-size: 14px; font-weight: normal;" data-jp="(据付適格性確認)" data-en="(Installation Qualification)">(据付適格性確認)</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Slide 7 ================= -->
+    <div class="slide" id="slide-6">
+        <h2 data-jp="PQシナリオ例：逸脱管理フロー" data-en="PQ Scenario Example: Deviation Flow">PQシナリオ例：逸脱管理フロー</h2>
+        <div class="content-area">
+            <div class="swimlane-container">
+                <div class="step-row">
+                    <div class="step-box">
+                        <div class="step-num">1</div>
+                        <div class="step-actor" data-jp="現場担当者" data-en="Site Staff">現場担当者</div>
+                        <div class="step-desc" style="margin-left: 16px;" data-jp="逸脱事象の起票と初期報告" data-en="Initiate Deviation & Initial Report">逸脱事象の起票と初期報告</div>
+                    </div>
+                </div>
+                
+                <div class="step-row">
+                    <i class="fa-solid fa-arrow-down" style="color: var(--primary); font-size: 20px; margin-left: 40px;"></i>
+                </div>
+
+                <div class="step-row">
+                    <div class="step-box">
+                        <div class="step-num">2</div>
+                        <div class="step-actor" data-jp="QA部門" data-en="QA Dept">QA部門</div>
+                        <div class="step-desc" style="margin-left: 16px;" data-jp="重大度の評価 (例: Majorと判定)" data-en="Evaluate Severity (e.g., Major)">重大度の評価 (例: Majorと判定)</div>
+                    </div>
+                </div>
+
+                <div class="step-row">
+                    <i class="fa-solid fa-arrow-down" style="color: var(--primary); font-size: 20px; margin-left: 40px;"></i>
+                </div>
+
+                <div class="step-row">
+                    <div class="step-box" style="border-left-color: #6c757d;">
+                        <div class="step-num" style="background: #6c757d;">3</div>
+                        <div class="step-actor" data-jp="システム" data-en="System">システム</div>
+                        <div class="step-desc" style="margin-left: 16px;" data-jp="調査タスクの自動割当と通知" data-en="Auto-assign Investigation Task & Notify">調査タスクの自動割当と通知</div>
+                        <i class="fa-solid fa-robot step-icon" style="color: #6c757d;"></i>
+                    </div>
+                </div>
+
+                <div class="step-row">
+                    <i class="fa-solid fa-arrow-down" style="color: var(--primary); font-size: 20px; margin-left: 40px;"></i>
+                </div>
+
+                <div class="step-row">
+                    <div class="step-box">
+                        <div class="step-num">4</div>
+                        <div class="step-actor" data-jp="調査担当者" data-en="Investigator">調査担当者</div>
+                        <div class="step-desc" style="margin-left: 16px;" data-jp="根本原因調査とCAPA提案" data-en="Root Cause Analysis & CAPA Proposal">根本原因調査とCAPA提案</div>
+                    </div>
+                </div>
+
+                <div class="step-row">
+                    <i class="fa-solid fa-arrow-down" style="color: var(--primary); font-size: 20px; margin-left: 40px;"></i>
+                </div>
+
+                <div class="step-row">
+                    <div class="step-box">
+                        <div class="step-num">5</div>
+                        <div class="step-actor" data-jp="QA部門" data-en="QA Dept">QA部門</div>
+                        <div class="step-desc" style="margin-left: 16px;" data-jp="調査結果のレビュー・承認 (21 CFR Part 11 電子署名)" data-en="Review & Approve (21 CFR Part 11 Electronic Signature)">調査結果のレビュー・承認 (21 CFR Part 11 電子署名)</div>
+                        <i class="fa-solid fa-file-signature step-icon"></i>
+                    </div>
+                </div>
+
+                <div class="step-row">
+                    <i class="fa-solid fa-arrow-down" style="color: var(--primary); font-size: 20px; margin-left: 40px;"></i>
+                </div>
+
+                <div class="step-row">
+                    <div class="step-box" style="border-left-color: var(--success);">
+                        <div class="step-num" style="background: var(--success);">6</div>
+                        <div class="step-actor" data-jp="システム" data-en="System">システム</div>
+                        <div class="step-desc" style="margin-left: 16px;" data-jp="監査証跡(Audit Trail)の自動記録確認" data-en="Verify Automatic Audit Trail Record">監査証跡(Audit Trail)の自動記録確認</div>
+                        <i class="fa-solid fa-shield-check step-icon" style="color: var(--success);"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Slide 8 ================= -->
+    <div class="slide" id="slide-7">
+        <h2 data-jp="バリデーション状態の維持" data-en="Maintenance of Validated State">バリデーション状態の維持</h2>
+        <div class="content-area" style="position: relative;">
+            <div class="pillars">
+                <div class="pillar-card">
+                    <i class="fa-solid fa-code-pull-request"></i>
+                    <h3 data-jp="変更管理" data-en="Change Control">変更管理</h3>
+                    <p>
+                        <ul style="list-style-type: disc; margin-left: 20px;">
+                            <li data-jp="ServiceNowのVer.UP時の影響評価" data-en="Impact Assessment during ServiceNow Upgrades">ServiceNowのVer.UP時の影響評価</li>
+                            <li data-jp="必要に応じた再バリデーション" data-en="Re-validation as necessary">必要に応じた再バリデーション</li>
+                        </ul>
+                    </p>
+                </div>
+                <div class="pillar-card">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <h3 data-jp="定期レビュー" data-en="Periodic Review">定期レビュー</h3>
+                    <p>
+                        <ul style="list-style-type: disc; margin-left: 20px;">
+                            <li data-jp="監査証跡(Audit Trail)の確認" data-en="Audit Trail Verification">監査証跡(Audit Trail)の確認</li>
+                            <li data-jp="退職者等のアカウント棚卸し" data-en="Account Inventory (e.g., separated employees)">退職者等のアカウント棚卸し</li>
+                        </ul>
+                    </p>
+                </div>
+                <div class="pillar-card">
+                    <i class="fa-solid fa-sliders"></i>
+                    <h3 data-jp="設定ドリフト管理" data-en="Configuration Drift Management">設定ドリフト管理</h3>
+                    <p>
+                        <ul style="list-style-type: disc; margin-left: 20px;">
+                            <li data-jp="本番環境と検証環境の差異管理" data-en="Manage differences between Prod and Test environments">本番環境と検証環境の差異管理</li>
+                            <li data-jp="厳格なデプロイ統制" data-en="Strict deployment control">厳格なデプロイ統制</li>
+                        </ul>
+                    </p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 30px; font-weight: 600; color: var(--primary);" data-jp="継続的なサイクルによるコンプライアンス維持" data-en="Maintaining compliance through a continuous cycle">継続的なサイクルによるコンプライアンス維持</p>
+        </div>
+    </div>
+
+    <!-- ================= Slide 9 ================= -->
+    <div class="slide" id="slide-8">
+        <h2 data-jp="まとめ：Veevaとの工数比較" data-en="Summary: Effort Comparison with Veeva">まとめ：Veevaとの工数比較</h2>
+        <div class="content-area">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th data-jp="フェーズ / 項目" data-en="Phase / Item">フェーズ / 項目</th>
+                        <th class="sn-col">ServiceNow (カスタム構築)</th>
+                        <th class="v-col">Veeva (SaaS標準)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight: 600;" data-jp="URS作成" data-en="URS Creation">URS作成</td>
+                        <td class="sn-cell" data-jp="高 (要件定義から必要)" data-en="High (Required from requirements definition)">高 (要件定義から必要)</td>
+                        <td data-jp="低 (標準プロセスに合わせる)" data-en="Low (Align to standard process)">低 (標準プロセスに合わせる)</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;" data-jp="FS・DS作成" data-en="FS/DS Creation">FS・DS作成</td>
+                        <td class="sn-cell" data-jp="高 (ゼロからテーブル・フロー設計)" data-en="High (Design tables/flows from scratch)">高 (ゼロからテーブル・フロー設計)</td>
+                        <td data-jp="低 (設定パラメータの定義のみ)" data-en="低 (設定パラメータの定義のみ)">低 (設定パラメータの定義のみ)</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;" data-jp="テスト (IQ/OQ/PQ)" data-en="Testing (IQ/OQ/PQ)">テスト (IQ/OQ/PQ)</td>
+                        <td class="sn-cell" data-jp="高 (全テストを自社で実施・文書化)" data-en="High (All tests executed/documented in-house)">高 (全テストを自社で実施・文書化)</td>
+                        <td data-jp="中 (IQ/OQはベンダー提供資料を引用可)" data-en="Medium (IQ/OQ can reference vendor docs)">中 (IQ/OQはベンダー提供資料を引用可)</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;" data-jp="維持管理 (Ver.UP)" data-en="Maintenance (Ver.UP)">維持管理 (Ver.UP)</td>
+                        <td class="sn-cell" data-jp="高 (都度、影響評価と再テスト)" data-en="High (Impact assessment & re-test each time)">高 (都度、影響評価と再テスト)</td>
+                        <td data-jp="低 (ベンダーがバリデーション状態を維持)" data-en="Low (Vendor maintains validated state)">低 (ベンダーがバリデーション状態を維持)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box">
+                <i class="fa-solid fa-circle-check" style="margin-right: 10px;"></i>
+                <span data-jp="結論：「GxPドメイン知識を持つチーム」と「V字モデル実行体制」の確保が最重要" data-en="Conclusion: Securing a 'team with GxP domain knowledge' and a 'V-Model execution framework' is critical.">結論：「GxPドメイン知識を持つチーム」と「V字モデル実行体制」の確保が最重要</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button class="nav-btn" id="prev-btn" onclick="prevSlide()" disabled><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="indicators" id="indicators">
+            <!-- Dots generated by JS -->
+        </div>
+        <button class="nav-btn" id="next-btn" onclick="nextSlide()"><i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+
+</div>
+
+<!-- Logic -->
+<script>
+    // --- Slide Navigation ---
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const indicatorsContainer = document.getElementById('indicators');
+
+    // Initialize Indicators
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        indicatorsContainer.appendChild(dot);
+    }
+    const dots = document.querySelectorAll('.dot');
+
+    function updateControls() {
+        prevBtn.disabled = currentSlide === 0;
+        nextBtn.disabled = currentSlide === totalSlides - 1;
+
+        slides.forEach((slide, index) => {
+            if (index === currentSlide) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+
+        dots.forEach((dot, index) => {
+            if (index === currentSlide) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function nextSlide() {
+        if (currentSlide < totalSlides - 1) {
+            currentSlide++;
+            updateControls();
+        }
+    }
+
+    function prevSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            updateControls();
+        }
+    }
+
+    function goToSlide(index) {
+        currentSlide = index;
+        updateControls();
+    }
+
+    // Keyboard Navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+            prevSlide();
+        }
+    });
+
+
+    // --- Language Toggle ---
+    let currentLang = 'jp';
+
+    function setLang(lang) {
+        currentLang = lang;
+        
+        // Update Buttons
+        document.getElementById('btn-jp').classList.toggle('active', lang === 'jp');
+        document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+
+        // Update Text Content
+        const elements = document.querySelectorAll('[data-jp][data-en]');
+        elements.forEach(el => {
+            if (lang === 'jp') {
+                el.innerHTML = el.getAttribute('data-jp');
+            } else {
+                el.innerHTML = el.getAttribute('data-en');
+            }
+        });
+    }
+
+</script>
+
+</body>
+</html>

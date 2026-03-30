@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veeva Data System — スライドデック一覧</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+      :root {
+        --primary-orange: #F39200;
+        --primary-blue: #005697;
+        --light-bg: #F8F9FA;
+        --white-bg: #FFFFFF;
+        --text-dark: #333333;
+        --text-muted: #666666;
+        --border-color: #E2E8F0;
+        --accent-orange-light: #FFF0DB;
+        --accent-blue-light: #E6F0F9;
+        --accent-green-light: #ECFDF5;
+        --page-bg: #e2e8f0;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        background: var(--page-bg);
+        min-height: 100vh;
+        font-family: 'Noto Sans JP', sans-serif;
+        color: var(--text-dark);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* ===== Hero ===== */
+      .hero {
+        width: 100%;
+        background: linear-gradient(135deg, #004a82 0%, #005697 50%, #0072b8 100%);
+        padding: 72px 40px 60px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: '';
+        position: absolute; inset: 0;
+        background:
+          radial-gradient(circle at 15% 50%, rgba(243,146,0,0.18) 0%, transparent 45%),
+          radial-gradient(circle at 85% 20%, rgba(255,255,255,0.06) 0%, transparent 40%);
+        pointer-events: none;
+      }
+      .hero-eyebrow {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 30px;
+        padding: 5px 18px;
+        font-size: 13px; font-weight: 700; letter-spacing: 1px;
+        color: rgba(255,255,255,0.85);
+        text-transform: uppercase;
+        margin-bottom: 24px;
+      }
+      .hero h1 {
+        font-size: 48px; font-weight: 700;
+        color: #ffffff;
+        line-height: 1.2;
+        margin-bottom: 16px;
+        position: relative;
+      }
+      .hero h1 span { color: var(--primary-orange); }
+      .hero p {
+        font-size: 18px;
+        color: rgba(255,255,255,0.75);
+        max-width: 640px;
+        margin: 0 auto;
+        line-height: 1.7;
+        position: relative;
+      }
+
+      /* ===== Cards container ===== */
+      .cards-section {
+        width: 100%;
+        max-width: 1100px;
+        padding: 56px 24px 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .section-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-muted);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+
+      /* ===== Card ===== */
+      .card {
+        background: var(--white-bg);
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+        display: flex;
+        align-items: stretch;
+        overflow: hidden;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: 1px solid transparent;
+      }
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(0,0,0,0.13);
+        border-color: var(--border-color);
+      }
+
+      /* Accent stripe */
+      .card-stripe {
+        width: 8px;
+        flex-shrink: 0;
+      }
+      .stripe-blue   { background: var(--primary-blue); }
+      .stripe-orange { background: var(--primary-orange); }
+      .stripe-teal   { background: #0891b2; }
+
+      /* Icon panel */
+      .card-icon-panel {
+        width: 120px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 44px;
+        padding: 32px 20px;
+      }
+      .icon-blue   { background: var(--accent-blue-light);  color: var(--primary-blue); }
+      .icon-orange { background: var(--accent-orange-light); color: var(--primary-orange); }
+      .icon-teal   { background: #e0f7fc; color: #0891b2; }
+
+      /* Body */
+      .card-body {
+        flex: 1;
+        padding: 28px 32px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+      }
+      .card-part-tag {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 3px 10px;
+        border-radius: 20px;
+        width: fit-content;
+      }
+      .tag-blue   { background: var(--accent-blue-light);   color: var(--primary-blue); }
+      .tag-orange { background: var(--accent-orange-light);  color: #A05F00; }
+      .tag-teal   { background: #e0f7fc; color: #0e7490; }
+
+      .card-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-dark);
+        line-height: 1.3;
+      }
+      .card-subtitle {
+        font-size: 14px;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+
+      /* Chapter chips */
+      .chapter-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 4px;
+      }
+      .chip {
+        background: var(--light-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 3px 10px;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      /* CTA arrow */
+      .card-cta {
+        width: 64px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--border-color);
+        font-size: 20px;
+        transition: color 0.2s, transform 0.2s;
+        padding-right: 24px;
+      }
+      .card:hover .card-cta { color: var(--primary-orange); transform: translateX(4px); }
+
+      /* ===== Footer ===== */
+      .footer {
+        width: 100%;
+        border-top: 1px solid var(--border-color);
+        background: var(--white-bg);
+        padding: 20px 40px;
+        text-align: center;
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-eyebrow">
+        <i class="fa-solid fa-book-open"></i>
+        Slide Deck Collection
+      </div>
+      <h1>Veeva Data System</h1>
+      <!-- <h1>Veeva <span>Data System</span><br>スライドデック一覧</h1>
+      <p>創薬からCMC、上市後のSFA・CRM活動、VeevaプラットフォームのデータアーキテクチャをPartごとに整理したスライドデックです。</p> -->
+    </div>
+
+    <!-- Cards -->
+    <div class="cards-section">
+
+      <p class="section-label">Slide Decks</p>
+
+      <!-- Part 1 -->
+      <a class="card" href="part1-drug-discovery-to-cmc.html">
+        <div class="card-stripe stripe-blue"></div>
+        <div class="card-icon-panel icon-blue">
+          <i class="fa-solid fa-flask"></i>
+        </div>
+        <div class="card-body">
+          <span class="card-part-tag tag-blue">Part 1</span>
+          <p class="card-title">創薬からCMCまで</p>
+          <p class="card-subtitle">基礎研究から非臨床・臨床試験・規制申請まで、創薬プロセスの全体像とCMC（Chemistry, Manufacturing and Controls）の業務フローを体系的に解説します。</p>
+          <div class="chapter-chips">
+            <span class="chip">1-1 創薬フェーズ概観</span>
+            <span class="chip">1-2 CMC業務の全体像</span>
+            <span class="chip">1-3 バイオロジクスのCMC</span>
+            <span class="chip">1-4 CMCビジネスプロセス</span>
+            <span class="chip">1-5 CRO</span>
+            <span class="chip">1-6 PMDA / FDA</span>
+            <span class="chip">1-7 CTD・eCTD</span>
+          </div>
+        </div>
+        <div class="card-cta"><i class="fa-solid fa-arrow-right"></i></div>
+      </a>
+
+      <!-- Part 2 -->
+      <a class="card" href="part2-post-launch-sfa-crm.html">
+        <div class="card-stripe stripe-orange"></div>
+        <div class="card-icon-panel icon-orange">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="card-body">
+          <span class="card-part-tag tag-orange">Part 2</span>
+          <p class="card-title">上市後のSFA・CRM活動</p>
+          <p class="card-subtitle">PMDA承認後の業務引き継ぎから、Medical Affairs・ファーマコビジランス・MR/MSL/KAMの現場活動、MLRコンテンツガバナンス、KPI管理まで網羅します。</p>
+          <div class="chapter-chips">
+            <span class="chip">2-1 MSL / Medical Affairs</span>
+            <span class="chip">2-2 承認後引き継ぎ</span>
+            <span class="chip">2-3 ファーマコビジランス</span>
+            <span class="chip">2-4 HCP/HCO・Ultmarc</span>
+            <span class="chip">2-5 MR/MSL/KAM役割分担</span>
+            <span class="chip">2-6 MLRレビュー</span>
+            <span class="chip">2-7 CLM・Engage・Approved Email</span>
+            <span class="chip">2-8 KAM</span>
+            <span class="chip">2-9 KPI指標</span>
+          </div>
+        </div>
+        <div class="card-cta"><i class="fa-solid fa-arrow-right"></i></div>
+      </a>
+
+      <!-- Part 3 -->
+      <a class="card" href="part3-veeva-platform-data-architecture.html">
+        <div class="card-stripe stripe-teal"></div>
+        <div class="card-icon-panel icon-teal">
+          <i class="fa-solid fa-diagram-project"></i>
+        </div>
+        <div class="card-body">
+          <span class="card-part-tag tag-teal">Part 3</span>
+          <p class="card-title">Veevaプラットフォームのデータ連携</p>
+          <p class="card-subtitle">Vault・CRM・Networkの製品群において、どのデータがどこで生まれどこへ流れるかをエンジニア視点で整理。System of Record・API/VQL・CRUD/RACIマトリクスも収録。</p>
+          <div class="chapter-chips">
+            <span class="chip">3-1 Platform全体像</span>
+            <span class="chip">3-2 System of Record</span>
+            <span class="chip">3-3 開発フェーズデータフロー</span>
+            <span class="chip">3-4 市販後安全性データフロー</span>
+            <span class="chip">3-5 Vault製品間接続</span>
+            <span class="chip">3-6 CRM構成</span>
+            <span class="chip">3-7 Vault-CRM接続点</span>
+            <span class="chip">3-8 Network/Ultmarc MDM</span>
+            <span class="chip">3-9 Vaultデータ構造</span>
+            <span class="chip">3-10 API・VQL</span>
+            <span class="chip">3-11 CRUDマトリクス</span>
+            <span class="chip">3-12 RACIマトリクス</span>
+          </div>
+        </div>
+        <div class="card-cta"><i class="fa-solid fa-arrow-right"></i></div>
+      </a>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      Veeva Data System — Internal Reference Slide Decks
+    </div>
+
+  </body>
+</html>

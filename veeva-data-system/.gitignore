@@ -1,0 +1,16 @@
+# Python
+src/.venv/
+src/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# macOS
+.DS_Store
+
+# 財務データ（機密）
+src/data/history/
+src/data/out/
+src/data/latest/
+in/

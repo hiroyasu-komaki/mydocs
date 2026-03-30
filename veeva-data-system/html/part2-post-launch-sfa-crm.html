@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第二部：上市後のSFA・CRM活動</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+      :root {
+        --primary-orange: #F39200;
+        --primary-blue: #005697;
+        --light-bg: #F8F9FA;
+        --white-bg: #FFFFFF;
+        --text-dark: #333333;
+        --text-muted: #666666;
+        --border-color: #E2E8F0;
+        --accent-orange-light: #FFF0DB;
+        --accent-blue-light: #E6F0F9;
+        --accent-green-light: #ECFDF5;
+        --accent-yellow-light: #FFF8E1;
+        --accent-yellow-border: #F9A825;
+        --accent-red-light: #FEF2F2;
+      }
+      * { box-sizing: border-box; }
+      p, h1, h2, h3, h4, ul, li { margin: 0; padding: 0; }
+      body {
+        background-color: #e2e8f0;
+        display: flex; flex-direction: column; align-items: center;
+        gap: 20px; margin: 0; min-height: 100vh; padding: 20px 0;
+        font-family: 'Noto Sans JP', sans-serif; color: var(--text-dark);
+      }
+
+      /* --- Multi-language --- */
+      .lang-toggle-container { position:fixed; top:20px; right:20px; z-index:1000; background:var(--white-bg); padding:5px; border-radius:30px; box-shadow:0 4px 10px rgba(0,0,0,0.1); display:flex; gap:5px; }
+      .lang-btn { border:none; background:transparent; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:500; font-family:'Lato',sans-serif; color:var(--text-muted); transition:all 0.2s; }
+      .lang-btn.active { background:var(--primary-orange); color:white; }
+      body.lang-ja .en { display:none !important; }
+      body.lang-en .ja { display:none !important; }
+      .ja, .en { display:inline; }
+      div.ja, div.en, h1.ja, h1.en, h2.ja, h2.en, h3.ja, h3.en, p.ja, p.en, li.ja, li.en, th.ja, th.en, td.ja, td.en { display:block; }
+      tr.ja, tr.en { display:table-row; }
+      span.ja, span.en { display:inline; }
+
+      /* --- Slide Container --- */
+      .slide-container {
+        background-color: var(--white-bg); border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        display: flex; flex-direction: column;
+        min-height: 720px; width: 1280px;
+        overflow: visible; padding: 50px 60px; position: relative;
+      }
+      .slide-container.fixed-height { height: 720px; min-height: 720px; overflow: hidden; }
+      .slide-container::before {
+        content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
+        background: radial-gradient(circle at 20% 80%, rgba(243,146,0,0.05) 0%, transparent 40%),
+                    radial-gradient(circle at 80% 20%, rgba(0,86,151,0.04) 0%, transparent 40%);
+        z-index:0; pointer-events:none;
+      }
+      .slide-container > * { position:relative; z-index:1; }
+
+      /* --- Typography --- */
+      h1 { font-size:52px; font-weight:700; color:var(--primary-blue); line-height:1.2; }
+      h2.slide-title { font-size:32px; font-weight:700; color:var(--text-dark); margin-bottom:20px; border-left:6px solid var(--primary-orange); padding-left:15px; width:100%; }
+      h3 { font-size:20px; font-weight:700; color:var(--primary-blue); margin-bottom:10px; }
+      p, li, td, th { font-size:16px; line-height:1.6; color:var(--text-dark); }
+      .subtitle { font-size:19px; color:var(--text-muted); margin-top:15px; }
+      .slide-tag { display:inline-block; background:var(--accent-orange-light); color:var(--primary-orange); font-size:13px; font-weight:700; padding:3px 12px; border-radius:20px; margin-bottom:10px; }
+
+      /* --- Layouts --- */
+      .content-area { flex-grow:1; display:flex; flex-direction:column; width:100%; }
+      .two-column { display:flex; gap:28px; width:100%; align-items:stretch; }
+      .two-column > div { flex:1; display:flex; flex-direction:column; }
+      .three-column { display:flex; gap:20px; width:100%; }
+      .three-column > div { flex:1; }
+      .tiled-content { display:flex; gap:14px; width:100%; flex-wrap:wrap; justify-content:center; }
+      .tile { background:var(--light-bg); border:1px solid var(--border-color); border-radius:12px; padding:18px; flex:1; display:flex; flex-direction:column; align-items:flex-start; min-width:180px; }
+      .tile .icon { color:var(--primary-orange); font-size:26px; margin-bottom:8px; }
+
+      /* --- Table --- */
+      .table-layout { width:100%; border-collapse:collapse; }
+      .table-layout th, .table-layout td { border:1px solid var(--border-color); padding:9px 13px; text-align:left; font-size:14px; }
+      .table-layout th { background-color:var(--accent-blue-light); color:var(--primary-blue); font-weight:700; }
+      .table-layout tr:nth-child(even) { background-color:var(--light-bg); }
+      .table-sm th, .table-sm td { font-size:13px; padding:7px 10px; }
+
+      /* --- System Flow --- */
+      .system-flow { display:flex; align-items:stretch; justify-content:space-between; gap:14px; }
+      .s-box { background:var(--white-bg); border:2px solid var(--primary-blue); border-radius:12px; padding:14px; flex:1; text-align:center; display:flex; flex-direction:column; justify-content:center; gap:4px; }
+      .s-box.vault { background:var(--accent-blue-light); }
+      .s-box.orange { background:var(--accent-orange-light); border-color:var(--primary-orange); }
+      .s-box.green { background:var(--accent-green-light); border-color:#059669; }
+      .s-arrow-container { display:flex; flex-direction:column; justify-content:center; align-items:center; color:var(--primary-orange); font-weight:bold; flex-shrink:0; gap:3px; }
+      .s-arrow-label { font-size:10px; color:var(--text-muted); text-align:center; max-width:60px; line-height:1.3; }
+
+      /* --- Callout --- */
+      .callout { background:var(--accent-blue-light); border-left:4px solid var(--primary-blue); border-radius:0 8px 8px 0; padding:12px 16px; }
+      .callout.orange { background:var(--accent-orange-light); border-left-color:var(--primary-orange); }
+      .callout.green { background:var(--accent-green-light); border-left-color:#059669; }
+
+      /* --- Styled List --- */
+      ul.styled-list { list-style:none; }
+      ul.styled-list li { margin-bottom:7px; padding-left:20px; position:relative; }
+      ul.styled-list li::before { content:'\f0da'; font-family:'Font Awesome 6 Free'; font-weight:900; color:var(--primary-orange); position:absolute; left:0; top:2px; }
+
+      /* --- Badges --- */
+      .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:700; }
+      .badge-blue { background:var(--accent-blue-light); color:var(--primary-blue); }
+      .badge-orange { background:var(--accent-orange-light); color:#A05F00; }
+      .badge-gray { background:#F3F4F6; color:#6B7280; }
+      .badge-green { background:var(--accent-green-light); color:#065F46; }
+      .badge-red { background:var(--accent-red-light); color:#991B1B; }
+
+      /* --- VS Panel --- */
+      .vs-panel { display:flex; gap:18px; background:var(--light-bg); padding:18px; border-radius:12px; }
+      .vs-col { flex:1; background:white; padding:18px; border-radius:8px; border-top:4px solid var(--primary-blue); }
+      .vs-col.orange-top { border-top-color:var(--primary-orange); }
+      .vs-col.green-top { border-top-color:#059669; }
+
+      /* --- Numbered Steps --- */
+      .numbered-steps { display:flex; flex-direction:column; gap:10px; }
+      .num-step { display:flex; align-items:flex-start; gap:12px; background:var(--light-bg); border-radius:8px; padding:10px 14px; }
+      .num-circle { background:var(--primary-blue); color:white; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; flex-shrink:0; }
+      .num-circle.orange { background:var(--primary-orange); }
+
+      /* --- PV Steps Grid --- */
+      .pv-steps-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+      .pv-step-card { background:var(--light-bg); border-radius:10px; border:1px solid var(--border-color); padding:14px; display:flex; flex-direction:column; gap:6px; }
+      .pv-step-num { font-size:22px; font-weight:700; color:var(--primary-orange); }
+      .pv-step-title { font-size:14px; font-weight:700; color:var(--primary-blue); }
+      .pv-step-body { font-size:13px; color:var(--text-dark); line-height:1.5; }
+
+      /* --- Role Cards --- */
+      .role-cards { display:flex; gap:14px; }
+      .role-card { flex:1; border-radius:10px; padding:16px; display:flex; flex-direction:column; gap:8px; }
+      .role-card.mr { background:#E6F0F9; border:2px solid var(--primary-blue); }
+      .role-card.msl { background:#FFF0DB; border:2px solid var(--primary-orange); }
+      .role-card.kam { background:#ECFDF5; border:2px solid #059669; }
+      .role-card .role-title { font-size:18px; font-weight:700; }
+      .role-card.mr .role-title { color:var(--primary-blue); }
+      .role-card.msl .role-title { color:#A05F00; }
+      .role-card.kam .role-title { color:#065F46; }
+
+      /* --- Process Steps --- */
+      .process-steps { display:flex; align-items:center; justify-content:space-between; background:var(--light-bg); padding:16px; border-radius:12px; }
+      .p-step { text-align:center; flex:1; }
+      .p-arrow { color:var(--primary-orange); font-size:22px; }
+
+      /* --- Swimlane --- */
+      .swimlane-table { width:100%; border-collapse:collapse; font-size:13px; }
+      .swimlane-table td, .swimlane-table th { border:1px solid var(--border-color); padding:7px 10px; vertical-align:middle; }
+      .swimlane-table th { background:var(--accent-blue-light); color:var(--primary-blue); font-weight:700; }
+      .lane-header { background:var(--primary-blue); color:white; font-weight:700; writing-mode:horizontal-tb; text-align:center; }
+
+      /* --- KPI --- */
+      .kpi-leading { border-left:4px solid var(--primary-orange); }
+      .kpi-lagging { border-left:4px solid var(--primary-blue); }
+      .kpi-mid { border-left:4px solid #059669; }
+    </style>
+  </head>
+  <body class="lang-ja">
+
+    <div class="lang-toggle-container">
+      <button class="lang-btn active" onclick="setLang('ja')">JA</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+
+    <!-- ===== Slide 1: Title ===== -->
+    <div class="slide-container fixed-height">
+      <div style="display:flex; flex-direction:column; justify-content:center; height:100%; gap:30px;">
+        <div>
+          <span class="slide-tag"><span class="ja">第二部</span><span class="en">Part 2</span></span>
+          <h1>
+            <span class="ja">上市後の<br>SFA・CRM活動</span>
+            <span class="en">Post-Launch<br>SFA &amp; CRM Activities</span>
+          </h1>
+          <p class="subtitle" style="margin-top:14px;">
+            <span class="ja">Medical Affairsからファーマコビジランス、MR/MSL/KAM活動、コンテンツガバナンスまで体系的に整理します</span>
+            <span class="en">A systematic overview of Medical Affairs, Pharmacovigilance, MR/MSL/KAM field activities, and content governance</span>
+          </p>
+        </div>
+        <div class="tiled-content">
+          <div class="tile">
+            <i class="fa-solid fa-user-doctor icon"></i>
+            <p style="font-weight:700; color:var(--primary-blue);"><span class="ja">2-1〜2-2</span><span class="en">2-1 to 2-2</span></p>
+            <p style="font-size:14px;"><span class="ja">MSL/MA と承認後引き継ぎ</span><span class="en">MSL/MA &amp; Post-Approval Handoff</span></p>
+          </div>
+          <div class="tile">
+            <i class="fa-solid fa-shield-halved icon"></i>
+            <p style="font-weight:700; color:var(--primary-blue);"><span class="ja">2-3</span><span class="en">2-3</span></p>
+            <p style="font-size:14px;"><span class="ja">ファーマコビジランス（PV）</span><span class="en">Pharmacovigilance (PV)</span></p>
+          </div>
+          <div class="tile">
+            <i class="fa-solid fa-hospital icon"></i>
+            <p style="font-weight:700; color:var(--primary-blue);"><span class="ja">2-4〜2-5</span><span class="en">2-4 to 2-5</span></p>
+            <p style="font-size:14px;"><span class="ja">HCP/HCO・Ultmarc・役割分担</span><span class="en">HCP/HCO, Ultmarc &amp; Role Allocation</span></p>
+          </div>
+          <div class="tile">
+            <i class="fa-solid fa-file-circle-check icon"></i>
+            <p style="font-weight:700; color:var(--primary-blue);"><span class="ja">2-6〜2-9</span><span class="en">2-6 to 2-9</span></p>
+            <p style="font-size:14px;"><span class="ja">MLR・CLM・KAM・KPI</span><span class="en">MLR, CLM, KAM &amp; KPIs</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Slide 2: 2-1 Medical Affairs Role ===== -->
+    <div class="slide-container">
+      <h2 class="slide-title">
+        <span class="ja">2-1 MSL / Medical Affairsの役割</span>
+        <span class="en">2-1 MSL / Medical Affairs Role</span>
+      </h2>
+      <div class="content-area" style="gap:20px;">
+        <div class="callout orange">
+          <p style="font-size:14px;">
+            <span class="ja">Medical Affairs（MA）は、<strong>「科学・医療の立場から製品価値を創り、外部と対話し、社内にインサイトを戻す専門職チーム」</strong>です。営業部門とは独立し、非プロモーションの立場で活動します。</span>
+            <span class="en">Medical Affairs (MA) is a specialist team that <strong>creates product value from a scientific/medical standpoint, engages externally, and feeds insights back internally</strong> — independent of commercial/promotional activities.</span>
+          </p>
+        </div>
+        <table class="table-layout">
+          <thead>
+            <tr><th style="width:22%;"><span class="ja">活動軸</span><span class="en">Axis</span></th><th><span class="ja">Medical Affairsがすること</span><span class="en">What Medical Affairs Does</span></th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-orange"><span class="ja">外向き</span><span class="en">Outside-in</span></span></td>
+              <td><span class="ja">MSLがKOL/HCPと科学的ディスカッション。未充足ニーズ・実臨床課題・安全性インサイトを収集</span><span class="en">MSLs conduct scientific discussions with KOLs/HCPs to collect unmet needs, real-world challenges, and safety insights</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-blue"><span class="ja">内向き</span><span class="en">Inside-out</span></span></td>
+              <td><span class="ja">インサイトを開発戦略・エビデンス計画・ラベリング検討に反映し、社内に科学的助言を提供</span><span class="en">Translates insights into development strategy, evidence planning, and labeling reviews; provides scientific counsel internally</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-green"><span class="ja">エビデンス</span><span class="en">Evidence</span></span></td>
+              <td><span class="ja">観察研究・RWE・IIT（医師主導研究）支援など、Phase III以降の追加データ創出を企画・サポート</span><span class="en">Plans and supports additional data generation post-Phase III: observational studies, RWE, IITs (investigator-initiated trials)</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-gray"><span class="ja">教育</span><span class="en">Education</span></span></td>
+              <td><span class="ja">学会発表・メディカルミーティング・社内トレーニング等を通じて疾患・治療・データに関する教育を実施</span><span class="en">Delivers education on disease, treatment, and data via conferences, medical meetings, and internal training</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-red"><span class="ja">コンプライアンス</span><span class="en">Compliance</span></span></td>
+              <td><span class="ja">営業部門とは独立し、科学的・中立的立場で活動することで、倫理・規制要件を担保</span><span class="en">Operates independently from commercial, ensuring ethical and regulatory compliance through a scientifically neutral stance</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout" style="margin-top:4px;">
+          <p style="font-size:14px;">
+            <span class="ja">MSL（Medical Science Liaison）はMA部門の<strong>フィールド担当</strong>。KOL（キーオピニオンリーダー）と対等な立場で科学的議論を行い、アンメットニーズを収集・社内共有します。<strong>非プロモーションの純粋科学活動</strong>に限定される点がMRとの最大の違いです。</span>
+            <span class="en">MSLs (Medical Science Liaisons) are the <strong>field arm</strong> of Medical Affairs. They engage KOLs as scientific peers, collecting unmet needs. Their activities are <strong>strictly non-promotional</strong> — the key distinction from MRs.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Slide 3: MR vs MSL + Post-Approval Handoff ===== -->
+    <div class="slide-container fixed-height">
+      <h2 class="slide-title">
+        <span class="ja">2-1 MRとMSLの違い ／ 2-2 承認後の業務引き継ぎ</span>
+        <span class="en">2-1 MR vs. MSL ／ 2-2 Post-Approval Handoff</span>
+      </h2>
+      <div class="content-area" style="gap:20px;">
+        <div class="vs-panel" style="padding:14px;">
+          <div class="vs-col orange-top">
+            <h3 style="font-size:16px; color:#A05F00;"><i class="fa-solid fa-briefcase-medical" style="margin-right:6px;"></i><span class="ja">MR（Medical Representative）</span><span class="en">MR (Medical Representative)</span></h3>
+            <ul class="styled-list" style="margin-top:8px; font-size:14px;">
+              <li><span class="ja"><strong>目的</strong>：処方促進・製品理解促進（プロモーション）</span><span class="en"><strong>Goal</strong>: Drive prescriptions / product understanding (promotional)</span></li>
+              <li><span class="ja"><strong>対象</strong>：HCP/HCO（医師・病院）</span><span class="en"><strong>Target</strong>: HCPs / HCOs (physicians, hospitals)</span></li>
+              <li><span class="ja"><strong>コンテンツ</strong>：MLR承認済み販促資料（CLM）</span><span class="en"><strong>Content</strong>: MLR-approved promotional materials (CLM)</span></li>
+              <li><span class="ja"><strong>ツール</strong>：Veeva CRM / CLM / Approved Email</span><span class="en"><strong>Tools</strong>: Veeva CRM / CLM / Approved Email</span></li>
+            </ul>
+          </div>
+          <div class="vs-col">
+            <h3 style="font-size:16px;"><i class="fa-solid fa-flask" style="margin-right:6px;"></i><span class="ja">MSL（Medical Science Liaison）</span><span class="en">MSL (Medical Science Liaison)</span></h3>
+            <ul class="styled-list" style="margin-top:8px; font-size:14px;">
+              <li><span class="ja"><strong>目的</strong>：科学的対話・インサイト収集（非プロモーション）</span><span class="en"><strong>Goal</strong>: Scientific dialogue / insight collection (non-promotional)</span></li>
+              <li><span class="ja"><strong>対象</strong>：KOL（キーオピニオンリーダー）</span><span class="en"><strong>Target</strong>: KOLs (Key Opinion Leaders)</span></li>
+              <li><span class="ja"><strong>コンテンツ</strong>：学術資料・エビデンスデータ・IIT支援</span><span class="en"><strong>Content</strong>: Scientific literature, evidence data, IIT support</span></li>
+              <li><span class="ja"><strong>ツール</strong>：Veeva CRM / MedInquiry / Vault SafetyDocs</span><span class="en"><strong>Tools</strong>: Veeva CRM / MedInquiry / Vault SafetyDocs</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 style="font-size:17px; margin-top:4px;"><span class="ja">PMDA承認後の引き継ぎフロー</span><span class="en">Post-PMDA Approval Handoff Flow</span></h3>
+        <div class="system-flow" style="gap:10px;">
+          <div class="s-box" style="background:#334155; border-color:#334155; color:white; flex:0.9;">
+            <i class="fa-solid fa-landmark" style="font-size:20px; color:#94a3b8;"></i>
+            <p style="font-size:13px; font-weight:700; color:white;"><span class="ja">PMDA/FDA</span><span class="en">PMDA/FDA</span></p>
+            <p style="font-size:11px; color:#94a3b8;"><span class="ja">承認通知・RMP条件</span><span class="en">Approval + RMP</span></p>
+          </div>
+          <div class="s-arrow-container"><i class="fa-solid fa-arrow-right" style="font-size:18px;"></i></div>
+          <div class="s-box vault" style="flex:1.1;">
+            <i class="fa-solid fa-user-tie" style="font-size:18px; color:var(--primary-blue);"></i>
+            <p style="font-size:13px; font-weight:700;"><span class="ja">規制担当（RA）</span><span class="en">Regulatory Affairs (RA)</span></p>
+            <p style="font-size:11px; color:var(--text-muted);"><span class="ja">承認情報をMSL・PV・PMSに共有</span><span class="en">Shares approval info to MSL/PV/PMS</span></p>
+          </div>
+          <div class="s-arrow-container">
+            <i class="fa-solid fa-arrow-right" style="font-size:18px;"></i>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px; flex:2.2;">
+            <div class="s-box orange" style="min-height:0; padding:10px;">
+              <p style="font-size:13px; font-weight:700;"><span class="ja">MSL / Medical Affairs</span><span class="en">MSL / Medical Affairs</span></p>
+              <p style="font-size:11px; color:var(--text-muted);"><span class="ja">メディカル戦略・KOLマッピング・科学交流</span><span class="en">Medical strategy, KOL mapping, scientific engagement</span></p>
+            </div>
+            <div class="s-box vault" style="min-height:0; padding:10px;">
+              <p style="font-size:13px; font-weight:700;"><span class="ja">PVチーム（ファーマコビジランス）</span><span class="en">PV Team (Pharmacovigilance)</span></p>
+              <p style="font-size:11px; color:var(--text-muted);"><span class="ja">RMP・安全性要件・ICSR報告スケジュール管理</span><span class="en">RMP, safety requirements, ICSR reporting schedule</span></p>
+            </div>
+            <div class="s-box" style="border-color:#059669; background:var(--accent-green-light); min-height:0; padding:10px;">
+              <p style="font-size:13px; font-weight:700;"><span class="ja">PMS担当（製造販売後調査）</span><span class="en">PMS (Post-Marketing Surveillance)</span></p>
+              <p style="font-size:11px; color:var(--text-muted);"><span class="ja">GPSP準拠の調査計画・再審査申請データ収集</span><span class="en">GPSP-compliant survey planning, re-examination data collection</span></p>
+            </div>
+          </div>
+          <div class="s-arrow-container"><i class="fa-solid fa-arrow-right" style="font-size:18px;"></i></div>
+          <div class="s-box" style="flex:0.9;">
+            <i class="fa-solid fa-stethoscope" style="font-size:20px; color:var(--primary-orange);"></i>
+            <p style="font-size:13px; font-weight:700;"><span class="ja">医師・KOL/HCP</span><span class="en">Physicians / KOLs / HCPs</span></p>
+            <p style="font-size:11px; color:var(--text-muted);"><span class="ja">実臨床での安全性・有効性フィードバック</span><span class="en">Real-world safety &amp; efficacy feedback</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Slide 4: 2-3 PV 6-step Process ===== -->
+    <div class="slide-container">
+      <h2 class="slide-title">
+        <span class="ja">2-3 ファーマコビジランス（PV）— 自発報告 6ステップ</span>
+        <span class="en">2-3 Pharmacovigilance (PV) — Spontaneous Report: 6 Steps</span>
+      </h2>
+      <div class="content-area" style="gap:14px;">
+        <div class="callout" style="margin-bottom:4px;">
+          <p style="font-size:14px;">
+            <span class="ja">PVチームは上市後に副作用・有害事象を継続収集・評価し、PMDA等への報告と添付文書改訂を実施します。「1症例」の処理から<strong>安全性シグナル検出→ラベリング更新</strong>までをつなぐ役割を担います。</span>
+            <span class="en">The PV team continuously collects and evaluates adverse events post-launch, reporting to PMDA and updating labeling. Their scope spans from processing a single case to <strong>signal detection → labeling update</strong>.</span>
+          </p>
+        </div>
+        <div class="pv-steps-grid">
+          <div class="pv-step-card">
+            <div class="pv-step-num">01</div>
+            <div class="pv-step-title"><span class="ja">症例受付・トリアージ</span><span class="en">Case Receipt &amp; Triage</span></div>
+            <div class="pv-step-body"><span class="ja">HCP・患者・MR経由で副作用報告を受付。必須4要素（患者・報告者・疑義薬・事象）と重篤性・期限（7/15日）を判定。</span><span class="en">Receive AE reports from HCPs, patients, or MRs. Validate 4 required elements and assess seriousness and reporting deadline (7/15 days).</span></div>
+          </div>
+          <div class="pv-step-card">
+            <div class="pv-step-num">02</div>
+            <div class="pv-step-title"><span class="ja">ケース登録・データ入力</span><span class="en">Case Registration &amp; Data Entry</span></div>
+            <div class="pv-step-body"><span class="ja">安全性データベースに新規ケースを登録。重複チェック後、MedDRAコーディング・薬剤情報・既往歴などを詳細記録。</span><span class="en">Register new case in safety database. After duplicate check, code events in MedDRA and record drug, dosage, route, concomitant meds, and medical history.</span></div>
+          </div>
+          <div class="pv-step-card">
+            <div class="pv-step-num">03</div>
+            <div class="pv-step-title"><span class="ja">医学評価（重篤性・因果関係・期待性）</span><span class="en">Medical Evaluation</span></div>
+            <div class="pv-step-body"><span class="ja">PV医師・薬剤師が重篤性（死亡・入院等）・因果関係（関連あり/なし）・既知/未知（添付文書比較）を評価。不足情報はフォローアップ問い合わせで補完。</span><span class="en">PV physicians/pharmacists assess seriousness, causality, and expectedness (vs. current label). Missing info is requested via follow-up.</span></div>
+          </div>
+          <div class="pv-step-card">
+            <div class="pv-step-num">04</div>
+            <div class="pv-step-title"><span class="ja">ICSR作成・当局報告</span><span class="en">ICSR Generation &amp; Authority Reporting</span></div>
+            <div class="pv-step-body"><span class="ja">個別症例安全性報告（ICSR）をE2B(R3)形式で生成し、QC後にPMDA/FDA等へ電子送信。重篤・予期せぬ症例は迅速報告（7〜15日以内）。</span><span class="en">Generate ICSR in E2B(R3) format. After QC, submit electronically to PMDA/FDA. Serious unexpected cases require expedited reporting (7–15 days).</span></div>
+          </div>
+          <div class="pv-step-card">
+            <div class="pv-step-num">05</div>
+            <div class="pv-step-title"><span class="ja">シグナル検出・リスク評価</span><span class="en">Signal Detection &amp; Risk Assessment</span></div>
+            <div class="pv-step-body"><span class="ja">累積データから同種症例を集計し、頻度・重篤性から安全性シグナルを評価。新リスクが疑われる場合、RMPの重要な潜在的リスクとして再評価。</span><span class="en">Aggregate similar cases from cumulative data and evaluate safety signals by frequency and seriousness. New risks are reassessed against RMP risk categories.</span></div>
+          </div>
+          <div class="pv-step-card">
+            <div class="pv-step-num">06</div>
+            <div class="pv-step-title"><span class="ja">ラベリング・リスク最小化への反映</span><span class="en">Labeling &amp; Risk Minimization Update</span></div>
+            <div class="pv-step-body"><span class="ja">PVが添付文書副作用欄・警告の改訂案を作成しRAに提案。RAがPMDA等と協議し改訂。MSLがKOL/HCPへメディカルコミュニケーションとして展開。</span><span class="en">PV proposes labeling revisions (ADR section, warnings) to RA. RA negotiates with PMDA. MSLs communicate updated information to KOLs/HCPs.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Slide 5: 2-3 PV Vault Safety Flow ===== -->
+    <div class="slide-container fixed-height">
+      <h2 class="slide-title">
+        <span class="ja">2-3 PVとVaultのデータフロー（Vault Safety / SafetyDocs）</span>
+        <span class="en">2-3 PV &amp; Vault Data Flow (Vault Safety / SafetyDocs)</span>
+      </h2>
+      <div class="content-area" style="gap:18px;">
+        <div style="display:flex; gap:14px; align-items:stretch; flex:1;">
+          <!-- Left: HCP -->
+          <div class="s-box orange" style="flex:0.9; padding:16px;">
+            <i class="fa-solid fa-user-injured" style="font-size:24px; color:var(--primary-orange);"></i>
+            <p style="font-size:13px; font-weight:700;"><span class="ja">医師・患者・MR</span><span class="en">Physicians / Patients / MRs</span></p>
+            <p style="font-size:11px; color:var(--text-muted); margin-top:4px;"><span class="ja">副作用報告<br>フォローアップ情報提供</span><span class="en">AE Reports<br>Follow-up info</span></p>
+          </div>
+          <div class="s-arrow-container" style="gap:5px;">
+            <span style="font-size:10px; color:var(--text-muted); text-align:center; max-width:50px;"><span class="ja">副作用報告</span><span class="en">AE Report</span></span>
+            <i class="fa-solid fa-arrow-right" style="font-size:18px;"></i>
+          </div>
+          <!-- Center: Vault Safety -->
+          <div class="s-box vault" style="flex:2; padding:16px; align-items:flex-start; text-align:left;">
+            <p style="font-size:14px; font-weight:700; color:var(--primary-blue); margin-bottom:8px;"><i class="fa-solid fa-database" style="margin-right:6px;"></i>Vault Safety <span class="badge badge-blue" style="font-size:11px;"><span class="ja">症例DB / ICSR</span><span class="en">Case DB / ICSR</span></span></p>
+            <div style="display:flex; flex-direction:column; gap:5px; width:100%;">
+              <div style="background:white; border-radius:6px; padding:6px 10px; border:1px solid var(--border-color); font-size:12px;">
+                <span class="ja">① 受付・トリアージ（必須4要素チェック・重複確認）</span><span class="en">① Triage (4-element validation, deduplication)</span>
+              </div>
+              <div style="background:white; border-radius:6px; padding:6px 10px; border:1px solid var(--border-color); font-size:12px;">
+                <span class="ja">② 症例登録・MedDRAコーディング・評価</span><span class="en">② Case registration, MedDRA coding &amp; medical evaluation</span>
+              </div>
+              <div style="background:white; border-radius:6px; padding:6px 10px; border:1px solid var(--border-color); font-size:12px;">
+                <span class="ja">③ ICSR生成（E2B R3形式）・QC</span><span class="en">③ ICSR generation (E2B R3), QC review</span>
+              </div>
+              <div style="background:white; border-radius:6px; padding:6px 10px; border:1px solid var(--border-color); font-size:12px;">
+                <span class="ja">④ シグナル検出・累積集計</span><span class="en">④ Signal detection &amp; aggregate analysis</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; justify-content:space-around; gap:8px;">
+            <div class="s-arrow-container" style="gap:3px;">
+              <span style="font-size:10px; color:var(--text-muted); text-align:center; max-width:55px;"><span class="ja">E2B電子送信</span><span class="en">E2B Submit</span></span>
+              <i class="fa-solid fa-arrow-right" style="font-size:16px;"></i>
+            </div>
+            <div class="s-arrow-container" style="gap:3px;">
+              <span style="font-size:10px; color:var(--text-muted); text-align:center; max-width:55px;"><span class="ja">シグナル情報</span><span class="en">Signal data</span></span>
+              <i class="fa-solid fa-arrow-right" style="font-size:16px;"></i>
+            </div>
+          </div>
+          <!-- Right: Outputs -->
+          <div style="display:flex; flex-direction:column; gap:10px; flex:1.2;">
+            <div class="s-box" style="background:#334155; border-color:#334155; color:white; flex:1; padding:12px;">
+              <i class="fa-solid fa-landmark" style="font-size:18px; color:#94a3b8;"></i>
+              <p style="font-size:13px; font-weight:700; color:white;"><span class="ja">PMDA / FDA</span><span class="en">PMDA / FDA</span></p>
+              <p style="font-size:11px; color:#94a3b8;"><span class="ja">個別ICSR（迅速報告）・定期報告</span><span class="en">Individual ICSR (expedited) &amp; periodic reports</span></p>
+            </div>
+            <div class="s-box vault" style="flex:1.3; padding:12px; align-items:flex-start; text-align:left;">
+              <p style="font-size:13px; font-weight:700; color:var(--primary-blue);"><i class="fa-solid fa-folder-open" style="margin-right:5px;"></i>Vault SafetyDocs</p>
+              <p style="font-size:11px; color:var(--text-muted); margin-top:4px;"><span class="ja">PSUR・RMP・PSMF などの安全性文書を管理。レビュー/承認ワークフロー付き。</span><span class="en">Manages PSUR, RMP, PSMF and other safety documents with review/approval workflows.</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="two-column" style="gap:14px; flex:0;">
+          <div class="callout orange">
+            <p style="font-size:13px;"><strong>Vault Safety</strong>：<span class="ja">症例受付・ICSR作成・E2B送信・シグナル検出の中核システム（「ケース処理のエンジン」）</span><span class="en">Core system for case intake, ICSR creation, E2B submission, and signal detection ("case processing engine")</span></p>
+          </div>
+          <div class="callout">
+            <p style="font-size:13px;"><strong>Vault SafetyDocs</strong>：<span class="ja">PSMF/RMP/PVA/PSUR等の安全性関連文書を一元管理する「コンテンツ側」。ワークフローで承認しRAがPMDA提出</span><span class="en">The "content side" — manages safety documents (PSMF/RMP/PVA/PSUR) with approval workflows before RA submission to PMDA</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Slide 6: 2-4 HCP/HCO + Ultmarc ===== -->
+    <div class="slide-container">
+      <h2 class="slide-title">
+        <span class="ja">2-4 HCP/HCOセグメンテーションと日本のデータ事情</span>
+        <span class="en">2-4 HCP/HCO Segmentation &amp; Japan Data Landscape</span>
+      </h2>
+      <div class="content-area" style="gap:18px;">
+        <div class="two-column" style="gap:18px;">
+          <div>
+            <h3 style="font-size:17px;"><span class="ja">HCP / HCOの定義</span><span class="en">HCP / HCO Definitions</span></h3>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
+              <div class="callout orange">
+                <p style="font-size:14px;"><strong>HCP</strong>（Healthcare Professional）：<span class="ja">医師・薬剤師・看護師などの医療関連専門家</span><span class="en">physicians, pharmacists, nurses, and other healthcare professionals</span></p>
+              </div>
+              <div class="callout">
+                <p style="font-size:14px;"><strong>HCO</strong>（Healthcare Organization）：<span class="ja">病院・クリニック・医療協会・大学などの医療組織</span><span class="en">hospitals, clinics, medical associations, universities, and other healthcare organizations</span></p>
+              </div>
+            </div>
+            <h3 style="font-size:17px; margin-top:14px;"><span class="ja">Veeva OpenData（グローバル）</span><span class="en">Veeva OpenData (Global)</span></h3>
+            <ul class="styled-list" style="font-size:14px; margin-top:8px;">
+              <li><span class="ja">CDA（Common Data Architecture）準拠の標準フィールド名</span><span class="en">CDA-compliant standard field names</span></li>
+              <li><span class="ja">HCP識別子：Veeva ID・名前・住所・NPI/License ID・専門分野</span><span class="en">HCP identifiers: Veeva ID, name, address, NPI/License ID, specialty</span></li>
+              <li><span class="ja">レコード数・対象国数に基づくサブスクリプション制（有料）</span><span class="en">Paid subscription based on HCP/HCO record count and countries</span></li>
+              <li style="color:var(--primary-orange);"><strong><span class="ja">日本では提供なし</span><span class="en">Not available in Japan</span></strong></li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="font-size:17px;"><span class="ja">日本特有の状況：Ultmarc（日本アルトマーク）</span><span class="en">Japan: Ultmarc (formerly Japan Altmark)</span></h3>
+            <table class="table-layout table-sm" style="margin-top:10px;">
+              <thead>
+                <tr><th>File</th><th><span class="ja">正式名称</span><span class="en">Full Name</span></th><th><span class="ja">カバー範囲</span><span class="en">Coverage</span></th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>DCF</strong></td>
+                  <td>Doctor Computer File</td>
+                  <td><span class="ja">全国医療施設（病院・診療所）＋所属医師の基本情報</span><span class="en">Hospitals &amp; clinics nationwide + affiliated physician profiles</span></td>
+                </tr>
+                <tr>
+                  <td><strong>DSF</strong></td>
+                  <td>Drug Store File</td>
+                  <td><span class="ja">全国の薬局・薬店の基本情報</span><span class="en">Pharmacies and drugstores nationwide</span></td>
+                </tr>
+                <tr>
+                  <td><strong>PCF</strong></td>
+                  <td>Pharmacist Computer File</td>
+                  <td><span class="ja">全国の病院内薬剤師の基本情報</span><span class="en">Hospital pharmacists nationwide</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="callout orange" style="margin-top:12px;">
+              <p style="font-size:13px;"><span class="ja">MDBカバー範囲：<strong>病院約8,000件・診療所約106,000件・福祉施設約65,000件</strong>。195社以上が参加する業界共同メンテナンスモデル。Veeva Nitro / Jitsushoka経由でCRMに連携。</span><span class="en">MDB coverage: <strong>~8,000 hospitals, ~106,000 clinics, ~65,000 welfare facilities</strong>. Industry-shared maintenance model with 195+ member companies. Integrated into CRM via Veeva Nitro / Jitsushoka.</span></p>
+            </div>
+            <h3 style="font-size:15px; margin-top:12px;"><span class="ja">日本のHCPデータ入手経路</span><span class="en">Japan HCP Data Sources</span></h3>
+            <ul class="styled-list" style="font-size:13px; margin-top:6px;">
+              <li><span class="ja"><strong>Ultmarc提携データ</strong>：Veeva Jitsushoka・Nitro経由でCRM連携</span><span class="en"><strong>Ultmarc partnership data</strong>: CRM integration via Veeva Jitsushoka / Nitro</span></li>
+              <li><span class="ja"><strong>Veeva HCP Access</strong>：CRM活動データから生成。四半期・ブリックレベル（5人グループ集計）</span><span class="en"><strong>Veeva HCP Access</strong>: Generated from CRM activity data. Quarterly, brick-level (5-person aggregation)</span></li>
+              <li><span class="ja"><strong>自社データ＋外部連携</strong>：営業ログ・電子カルテ共有サービス等との組み合わせ</span><span class="en"><strong>In-house + external data</strong>: Combined with sales logs and EHR-sharing services</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Slide 7: 2-5 MR/MSL/KAM Roles ===== -->
+    <div class="slide-container">
+      <h2 class="slide-title">
+        <span class="ja">2-5 MR / MSL / KAMの役割分担</span>
+        <span class="en">2-5 MR / MSL / KAM Role Allocation</span>
+      </h2>
+      <div class="content-area" style="gap:16px;">
+        <div class="role-cards">
+          <div class="role-card mr">
+            <div class="role-title">MR</div>
+            <p style="font-size:12px; color:var(--text-muted);"><span class="ja">Medical Representative</span><span class="en">Medical Representative</span></p>
+            <ul class="styled-list" style="font-size:13px; margin-top:4px;">
+              <li><span class="ja"><strong>対象</strong>：HCP/HCO</span><span class="en"><strong>Target</strong>: HCPs/HCOs</span></li>
+              <li><span class="ja">製品ディテール・サンプリング</span><span class="en">Product detailing &amp; sampling</span></li>
+              <li><span class="ja">CLM提示・Approved Email</span><span class="en">CLM presentation, Approved Email</span></li>
+              <li><span class="ja">面談記録（コールサマリー）</span><span class="en">Call summary recording</span></li>
+            </ul>
+          </div>
+          <div class="role-card msl">
+            <div class="role-title">MSL</div>
+            <p style="font-size:12px; color:var(--text-muted);"><span class="ja">Medical Science Liaison</span><span class="en">Medical Science Liaison</span></p>
+            <ul class="styled-list" style="font-size:13px; margin-top:4px;">
+              <li><span class="ja"><strong>対象</strong>：KOL（キーオピニオンリーダー）</span><span class="en"><strong>Target</strong>: KOLs</span></li>
+              <li><span class="ja">科学交流・インサイト収集</span><span class="en">Scientific dialogue &amp; insight collection</span></li>
+              <li><span class="ja">IIT・Phase IV研究支援</span><span class="en">IIT &amp; Phase IV study support</span></li>
+              <li><span class="ja">MedInquiryエスカレーション</span><span class="en">MedInquiry escalation</span></li>
+            </ul>
+          </div>
+          <div class="role-card kam">
+            <div class="role-title">KAM</div>
+            <p style="font-size:12px; color:var(--text-muted);"><span class="ja">Key Account Manager</span><span class="en">Key Account Manager</span></p>
+            <ul class="styled-list" style="font-size:13px; margin-top:4px;">
+              <li><span class="ja"><strong>対象</strong>：大規模病院・学会</span><span class="en"><strong>Target</strong>: Key hospitals &amp; societies</span></li>
+              <li><span class="ja">アカウント計画・意思決定者マップ</span><span class="en">Account planning &amp; stakeholder mapping</span></li>
+              <li><span class="ja">MR/MSL活動統括・360度ビュー</span><span class="en">Coordinating MR/MSL activities, 360° view</span></li>
+              <li><span class="ja">病院KPI・次四半期計画立案</span><span class="en">Hospital KPI tracking &amp; quarterly planning</span></li>
+            </ul>
+          </div>
+        </div>
+        <h3 style="font-size:16px;"><span class="ja">活動フェーズ別マッピング</span><span class="en">Activity Phase Mapping</span></h3>
+        <table class="table-layout table-sm">
+          <thead>
+            <tr>
+              <th><span class="ja">活動フェーズ</span><span class="en">Phase</span></th>
+              <th><span class="ja">MR（HCP/HCO）</span><span class="en">MR (HCPs/HCOs)</span></th>
+              <th><span class="ja">MSL（KOL）</span><span class="en">MSL (KOLs)</span></th>
+              <th><span class="ja">KAM</span><span class="en">KAM</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong><span class="ja">計画・準備</span><span class="en">Planning</span></strong></td>
+              <td><span class="ja">HCPリスト取得・テリトリー計画</span><span class="en">HCP list &amp; territory planning</span></td>
+              <td><span class="ja">KOL特定・科学交流計画</span><span class="en">KOL mapping &amp; scientific engagement plan</span></td>
+              <td><span class="ja">アカウント計画・複数HCP統括</span><span class="en">Account plan &amp; multi-HCP oversight</span></td>
+            </tr>
+            <tr>
+              <td><strong><span class="ja">コンテンツ取得</span><span class="en">Content</span></strong></td>
+              <td><span class="ja">VaultからCLM同期</span><span class="en">Sync CLM from Vault</span></td>
+              <td><span class="ja">学術資料・エビデンス取得</span><span class="en">Scientific literature &amp; evidence</span></td>
+              <td><span class="ja">アカウント向け資料同期</span><span class="en">Sync account-specific materials</span></td>
+            </tr>
+            <tr>
+              <td><strong><span class="ja">活動実行</span><span class="en">Execution</span></strong></td>
+              <td><span class="ja">訪問/ビデオ面談・CLM提示・サンプリング</span><span class="en">F2F/video calls, CLM, sampling</span></td>
+              <td><span class="ja">科学議論・インサイト収集</span><span class="en">Scientific dialogue &amp; insight collection</span></td>
+              <td><span class="ja">病院/学会交渉・CLM統括</span><span class="en">Hospital/society negotiations, CLM oversight</span></td>
+            </tr>
+            <tr>
+              <td><strong><span class="ja">記録・フォロー</span><span class="en">Recording</span></strong></td>
+              <td><span class="ja">コールサマリー・反応ログ</span><span class="en">Call summary &amp; reaction log</span></td>
+              <td><span class="ja">諮問記録・フォローアップ</span><span class="en">Advisory notes &amp; follow-up</span></td>
+              <td><span class="ja">アカウント活動ログ</span><span class="en">Account activity log</span></td>
+            </tr>
+            <tr>
+              <td><strong><span class="ja">分析・次回</span><span class="en">Analysis</span></strong></td>
+              <td><span class="ja">KPI確認・次回提案</span><span class="en">KPI review &amp; next-call plan</span></td>
+              <td><span class="ja">KOLエンゲージメント分析</span><span class="en">KOL engagement analysis</span></td>
+              <td><span class="ja">アカウントKPI・次期計画</span><span class="en">Account KPIs &amp; next quarter plan</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout" style="font-size:13px;">
+          <span class="ja"><strong>クロス機能連携</strong>：NetworkでMR/MSL/KAMが同一HCP/HCOを参照。KAMがMR/MSL活動を集約して360度ビューで管理。Medical InquiryでMR→MSL自動エスカレーション。</span>
+          <span class="en"><strong>Cross-functional integration</strong>: MR/MSL/KAM share the same HCP/HCO via Network. KAM aggregates activities for a 360° view. Medical Inquiry enables automatic MR→MSL escalation.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Slide 8: 2-6 MLR Review Content Governance ===== -->
+    <div class="slide-container">
+      <h2 class="slide-title">
+        <span class="ja">2-6 コンテンツガバナンスとMLRレビュー</span>
+        <span class="en">2-6 Content Governance &amp; MLR Review</span>
+      </h2>
+      <div class="content-area" style="gap:16px;">
+        <div class="two-column" style="gap:18px;">
+          <div>
+            <h3 style="font-size:16px;"><span class="ja">MLRレビューとは</span><span class="en">What is MLR Review?</span></h3>
+            <p style="font-size:14px; margin:8px 0;">
+              <span class="ja"><strong>MLR（Medical・Legal・Regulatory）レビュー</strong>は、医療・法務・規制の3部署による販促資料承認プロセスです。MR/CLMで使う全資料が事前承認必須（薬機法・ガイドライン）。</span>
+              <span class="en"><strong>MLR (Medical, Legal, Regulatory) review</strong> is a three-department approval process for promotional materials. All content used in MR/CLM activities must be pre-approved under pharmaceutical laws and guidelines.</span>
+            </p>
+            <table class="table-layout table-sm">
+              <thead><tr><th><span class="ja">ステップ</span><span class="en">Step</span></th><th><span class="ja">内容</span><span class="en">Description</span></th></tr></thead>
+              <tbody>
+                <tr><td>1. <span class="ja">作成</span><span class="en">Create</span></td><td><span class="ja">マーケティングがドラフト作成・メタデータ（製品/主張/市場）入力</span><span class="en">Marketing creates draft and enters metadata (product / claim / market)</span></td></tr>
+                <tr><td>2. <span class="ja">初回レビュー</span><span class="en">Initial Review</span></td><td><span class="ja">AIプリチェック（主張準拠）→ Medical→Legal→Regulatoryの順でコメント/レッドライン</span><span class="en">AI pre-check (claim compliance) → Medical → Legal → Regulatory sequential comments/redlines</span></td></tr>
+                <tr><td>3. <span class="ja">反復レビュー</span><span class="en">Iterative Review</span></td><td><span class="ja">修正→再レビュー。電子署名で合意</span><span class="en">Revisions → re-review cycle. Agreement via electronic signature</span></td></tr>
+                <tr><td>4. <span class="ja">最終承認</span><span class="en">Final Approval</span></td><td><span class="ja">MLR全員署名・FDA 2253フォーム自動生成</span><span class="en">All MLR sign off; FDA 2253 form auto-generated</span></td></tr>
+                <tr><td>5. <span class="ja">状態遷移</span><span class="en">State Transition</span></td><td><span class="ja">Draft → In Review → Approved。CRM/CLMへ自動同期</span><span class="en">Draft → In Review → Approved. Auto-synced to CRM/CLM</span></td></tr>
+                <tr><td>6. <span class="ja">配布・追跡</span><span class="en">Distribution</span></td><td><span class="ja">承認コンテンツのみ配信。閲覧/クリックログ収集</span><span class="en">Only approved content distributed. View/click logs collected</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <h3 style="font-size:16px;"><span class="ja">Vaultライフサイクル → CRM連動</span><span class="en">Vault Lifecycle → CRM Sync</span></h3>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
+              <div style="background:#F3F4F6; border:1px solid var(--border-color); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+                <span class="badge badge-gray" style="flex-shrink:0;">Draft</span>
+                <span style="font-size:13px;"><span class="ja">CRMに配信されない</span><span class="en">Not distributed to CRM</span></span>
+              </div>
+              <div style="background:#FFF8E1; border:1px solid var(--accent-yellow-border); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+                <span class="badge" style="background:#FFF8E1; color:#A05F00; border:1px solid var(--accent-yellow-border); flex-shrink:0;">In Review</span>
+                <span style="font-size:13px;"><span class="ja">CRMに配信されない（審査中）</span><span class="en">Not distributed to CRM (under review)</span></span>
+              </div>
+              <div style="background:var(--accent-green-light); border:1px solid #059669; border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+                <span class="badge badge-green" style="flex-shrink:0;">Approved</span>
+                <span style="font-size:13px;"><span class="ja"><strong>CRMに自動同期・CLMで利用可能</strong></span><span class="en"><strong>Auto-synced to CRM, available in CLM</strong></span></span>
+              </div>
+              <div style="background:var(--accent-red-light); border:1px solid #991B1B; border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+                <span class="badge badge-red" style="flex-shrink:0;">Expired</span>
+                <span style="font-size:13px;"><span class="ja"><strong>CRMから自動撤回・現場で表示不可</strong></span><span class="en"><strong>Auto-withdrawn from CRM, invisible in the field</strong></span></span>
+              </div>
+            </div>
+            <div class="callout orange" style="margin-top:14px;">
+              <p style="font-size:13px;">
+                <span class="ja">消費財CRMは「自由な販促」前提ですが、Veeva CRMは<strong>GxP承認済みコンテンツのみ保証</strong>。承認外コンテンツの使用を物理的に防止し、失効資料を自動回収します。</span>
+                <span class="en">Unlike consumer-goods CRMs that allow free promotions, Veeva CRM <strong>guarantees only GxP-approved content</strong>. Unauthorized content is physically blocked; expired materials are automatically recalled.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Slide 9: 2-7 Omnichannel CLM/Engage/Email ===== -->
+    <div class="slide-container fixed-height">
+      <h2 class="slide-title">
+        <span class="ja">2-7 オムニチャネル実行（CLM・Engage・Approved Email）</span>
+        <span class="en">2-7 Omnichannel Execution (CLM, Engage &amp; Approved Email)</span>
+      </h2>
+      <div class="content-area" style="gap:16px;">
+        <!-- PromoMats → MLR → CLM flow -->
+        <div style="background:var(--light-bg); border-radius:12px; padding:16px;">
+          <p style="font-size:13px; font-weight:700; color:var(--primary-blue); margin-bottom:10px;"><span class="ja">コンテンツ配信フロー：MLR承認(PromoMats) → 現場実行(CRM) → ログ還流</span><span class="en">Content Flow: MLR Approval (PromoMats) → Field Execution (CRM) → Log Feedback</span></p>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div class="s-box vault" style="flex:1.2; padding:12px;">
+              <p style="font-size:12px; font-weight:700; color:var(--primary-blue);">Vault PromoMats</p>
+              <p style="font-size:11px; color:var(--text-muted);"><span class="ja">ドラフト作成<br>Medical→Legal→Regulatory<br>最終承認・電子署名</span><span class="en">Draft creation<br>Medical→Legal→Regulatory<br>Final approval &amp; e-signature</span></p>
+            </div>
+            <div class="s-arrow-container"><span style="font-size:10px; color:var(--text-muted); max-width:50px; text-align:center;"><span class="ja">ライフサイクル連動</span><span class="en">Lifecycle sync</span></span><i class="fa-solid fa-arrow-right" style="font-size:18px;"></i></div>
+            <div style="display:flex; flex-direction:column; gap:6px; flex:2;">
+              <div class="s-box orange" style="padding:10px; flex-direction:row; gap:10px; text-align:left;">
+                <div><i class="fa-solid fa-display" style="color:var(--primary-orange); font-size:18px;"></i></div>
+                <div>
+                  <p style="font-size:12px; font-weight:700;"><span class="ja">CLM（Closed Loop Marketing）</span><span class="en">CLM (Closed Loop Marketing)</span></p>
+                  <p style="font-size:11px; color:var(--text-muted);"><span class="ja">iPad等でオフライン閲覧・HCPへスライド提示・ホットスポット操作</span><span class="en">Offline-cached slides presented to HCPs with interactive hotspots</span></p>
+                </div>
+              </div>
+              <div class="s-box" style="border-color:#059669; background:var(--accent-green-light); padding:10px; flex-direction:row; gap:10px; text-align:left;">
+                <div><i class="fa-solid fa-envelope" style="color:#059669; font-size:18px;"></i></div>
+                <div>
+                  <p style="font-size:12px; font-weight:700;"><span class="ja">Approved Email</span><span class="en">Approved Email</span></p>
+                  <p style="font-size:11px; color:var(--text-muted);"><span class="ja">承認済みテンプレートのみ配信・開封/クリック追跡</span><span class="en">Only approved templates sent; open/click tracking</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="s-arrow-container"><span style="font-size:10px; color:var(--text-muted); max-width:50px; text-align:center;"><span class="ja">ログ還流</span><span class="en">Log feedback</span></span><i class="fa-solid fa-rotate-left" style="font-size:18px;"></i></div>
+            <div class="s-box" style="flex:1; padding:12px;">
+              <i class="fa-solid fa-chart-bar" style="font-size:18px; color:var(--primary-orange);"></i>
+              <p style="font-size:12px; font-weight:700;"><span class="ja">利用ログ記録</span><span class="en">Usage Logs</span></p>
+              <p style="font-size:11px; color:var(--text-muted);"><span class="ja">閲覧時間・クリック数・HCP反応をCRMに記録</span><span class="en">View time, click counts, HCP reactions recorded in CRM</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CLM 6 steps -->
+        <div class="two-column" style="gap:18px;">
+          <div>
+            <h3 style="font-size:16px;"><span class="ja">CLM操作ステップ（MRの現場）</span><span class="en">CLM Workflow (MR in the field)</span></h3>
+            <div class="numbered-steps" style="margin-top:10px; gap:6px;">
+              <div class="num-step" style="padding:7px 12px;">
+                <div class="num-circle" style="width:22px; height:22px; font-size:12px;">1</div>
+                <p style="font-size:13px;"><span class="ja"><strong>コンテンツ作成（Vault側）</strong>：Marketingがスライド作成・VaultでMLRレビュー・承認</span><span class="en"><strong>Content creation (Vault)</strong>: Marketing creates slides; MLR review &amp; approval in Vault</span></p>
+              </div>
+              <div class="num-step" style="padding:7px 12px;">
+                <div class="num-circle" style="width:22px; height:22px; font-size:12px;">2</div>
+                <p style="font-size:13px;"><span class="ja"><strong>CRM同期</strong>：承認後にCLM IDが割り当てられ自動プッシュ。端末にオフラインキャッシュ</span><span class="en"><strong>CRM sync</strong>: CLM ID assigned after approval; auto-pushed and offline-cached on device</span></p>
+              </div>
+              <div class="num-step" style="padding:7px 12px;">
+                <div class="num-circle" style="width:22px; height:22px; font-size:12px;">3</div>
+                <p style="font-size:13px;"><span class="ja"><strong>コール開始</strong>：HCP選択後、プレゼンを選択（全体orカスタム）</span><span class="en"><strong>Start call</strong>: Select HCP, choose full or custom presentation</span></p>
+              </div>
+              <div class="num-step" style="padding:7px 12px;">
+                <div class="num-circle orange" style="width:22px; height:22px; font-size:12px;">4</div>
+                <p style="font-size:13px;"><span class="ja"><strong>インタラクティブ操作</strong>：ホットスポットクリック・動画・反応ボタンでHCP反応記録</span><span class="en"><strong>Interactive engagement</strong>: Hotspot clicks, video playback, reaction buttons capture HCP responses</span></p>
+              </div>
+              <div class="num-step" style="padding:7px 12px;">
+                <div class="num-circle orange" style="width:22px; height:22px; font-size:12px;">5</div>
+                <p style="font-size:13px;"><span class="ja"><strong>自動ログ</strong>：表示時間・クリック数・反応内容がCRMに記録。コールサマリーに反映</span><span class="en"><strong>Auto-logging</strong>: View time, clicks, and reactions automatically recorded in CRM call summary</span></p>
+              </div>
+              <div class="num-step" style="padding:7px 12px;">
+                <div class="num-circle orange" style="width:22px; height:22px; font-size:12px;">6</div>
+                <p style="font-size:13px;"><span class="ja"><strong>分析・改善</strong>：スライドごとの利用率・反応をもとにコンテンツ最適化（Vaultへ還流）</span><span class="en"><strong>Analysis &amp; improvement</strong>: Slide-level engagement used to optimize content (fed back to Vault)</span></p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 style="font-size:16px;"><span class="ja">標準営業活動フロー（MRの1日）</span><span class="en">Standard Sales Activity Flow (MR Daily)</span></h3>
+            <div style="display:flex; flex-direction:column; gap:6px; margin-top:10px;">
+              <div style="background:var(--accent-blue-light); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+                <i class="fa-solid fa-list-check" style="color:var(--primary-blue); font-size:16px; flex-shrink:0;"></i>
+                <div>
+                  <p style="font-size:13px; font-weight:700;"><span class="ja">①計画・準備</span><span class="en">① Planning</span></p>
+                  <p style="font-size:12px; color:var(--text-muted);"><span class="ja">Network/MDBでHCPリスト取得・AIで優先順位付け・VaultからCLMコンテンツ同期</span><span class="en">Retrieve HCP list from Network/MDB; AI prioritization; sync CLM from Vault</span></p>
+                </div>
+              </div>
+              <div style="background:var(--accent-orange-light); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+                <i class="fa-solid fa-person-walking" style="color:var(--primary-orange); font-size:16px; flex-shrink:0;"></i>
+                <div>
+                  <p style="font-size:13px; font-weight:700;"><span class="ja">②接点実行</span><span class="en">② Engagement</span></p>
+                  <p style="font-size:12px; color:var(--text-muted);"><span class="ja">訪問/ビデオ（Engage）。CLMで承認資料提示。サンプリング（資格・在庫・規制チェック）</span><span class="en">F2F or video (Engage). CLM presentation of approved materials. Sampling with eligibility/inventory checks</span></p>
+                </div>
+              </div>
+              <div style="background:var(--light-bg); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+                <i class="fa-solid fa-pen" style="color:var(--text-muted); font-size:16px; flex-shrink:0;"></i>
+                <div>
+                  <p style="font-size:13px; font-weight:700;"><span class="ja">③即時記録</span><span class="en">③ Recording</span></p>
+                  <p style="font-size:12px; color:var(--text-muted);"><span class="ja">製品ディテール・医療相談・出席者・所要時間を入力</span><span class="en">Log product detail, medical inquiry, attendees, and duration</span></p>
+                </div>
+              </div>
+              <div style="background:var(--accent-green-light); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+                <i class="fa-solid fa-chart-line" style="color:#059669; font-size:16px; flex-shrink:0;"></i>
+                <div>
+                  <p style="font-size:13px; font-weight:700;"><span class="ja">④分析・次回</span><span class="en">④ Analysis &amp; Next Call</span></p>
+                  <p style="font-size:12px; color:var(--text-muted);"><span class="ja">活動データ自動集計・Pre-call Agent（AI）で次回提案・KPI確認</span><span class="en">Auto-aggregated data; Pre-call Agent (AI) generates next-call plan; KPI review</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Slide 10: 2-8 KAM + 2-9 KPI ===== -->
+    <div class="slide-container fixed-height">
+      <h2 class="slide-title">
+        <span class="ja">2-8 Key Account Management ／ 2-9 KPI・エンゲージメント指標</span>
+        <span class="en">2-8 Key Account Management ／ 2-9 KPI &amp; Engagement Metrics</span>
+      </h2>
+      <div class="content-area" style="gap:16px;">
+        <div class="two-column" style="gap:18px; flex:1;">
+          <div>
+            <h3 style="font-size:16px;"><span class="ja">KAM — Key Accountビジネスフロー（東京大学病院の例）</span><span class="en">KAM — Key Account Flow (e.g., Univ. of Tokyo Hospital)</span></h3>
+            <div style="margin-top:10px; background:var(--light-bg); border-radius:12px; padding:14px;">
+              <div class="s-box vault" style="padding:10px; margin-bottom:8px;">
+                <p style="font-size:12px; font-weight:700;"><span class="ja">Network/MDB — HCP/HCO共有データ</span><span class="en">Network/MDB — Shared HCP/HCO Data</span></p>
+              </div>
+              <div class="s-arrow-container" style="margin:4px 0;"><i class="fa-solid fa-arrow-down" style="font-size:16px;"></i></div>
+              <div class="s-box" style="border-color:#059669; background:var(--accent-green-light); padding:10px; margin-bottom:8px;">
+                <p style="font-size:12px; font-weight:700; color:#065F46;"><span class="ja">KAM — アカウント計画・意思決定者マップ</span><span class="en">KAM — Account plan &amp; stakeholder map</span></p>
+              </div>
+              <div style="display:flex; gap:8px; margin-bottom:8px;">
+                <div class="s-box" style="border-color:var(--primary-blue); background:var(--accent-blue-light); padding:8px; flex:1;">
+                  <p style="font-size:11px; font-weight:700;"><span class="ja">MR<br>一般HCPへのディテール</span><span class="en">MR<br>General HCP detailing</span></p>
+                </div>
+                <div class="s-box orange" style="padding:8px; flex:1;">
+                  <p style="font-size:11px; font-weight:700;"><span class="ja">MSL<br>KOLとの科学交流</span><span class="en">MSL<br>KOL scientific dialogue</span></p>
+                </div>
+                <div class="s-box" style="border-color:#059669; background:var(--accent-green-light); padding:8px; flex:1;">
+                  <p style="font-size:11px; font-weight:700;"><span class="ja">Marketing<br>イベント/メール</span><span class="en">Marketing<br>Events / emails</span></p>
+                </div>
+              </div>
+              <div class="s-arrow-container" style="margin:4px 0;"><i class="fa-solid fa-arrow-down" style="font-size:16px;"></i></div>
+              <div class="s-box" style="padding:8px;">
+                <p style="font-size:12px; font-weight:700;"><span class="ja">360度ビュー — 全活動統合 → 次四半期計画</span><span class="en">360° View — All activities unified → Next quarter plan</span></p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 style="font-size:16px;"><span class="ja">KPI体系（Leading → Lagging因果連鎖）</span><span class="en">KPI Framework (Leading → Lagging Causal Chain)</span></h3>
+            <table class="table-layout table-sm" style="margin-top:10px;">
+              <thead>
+                <tr><th><span class="ja">KPIカテゴリ</span><span class="en">Category</span></th><th><span class="ja">代表指標</span><span class="en">Key Metrics</span></th><th><span class="ja">性質</span><span class="en">Type</span></th><th><span class="ja">目標例</span><span class="en">Example Target</span></th></tr>
+              </thead>
+              <tbody>
+                <tr class="kpi-leading"><td><span class="ja">活動</span><span class="en">Activity</span></td><td><span class="ja">MR/MSL訪問頻度・CLM利用率・イベント参加率</span><span class="en">Visit frequency, CLM usage, event attendance</span></td><td><span class="badge badge-orange">Leading</span></td><td><span class="ja">月間20回・参加率70%</span><span class="en">20/month, 70% participation</span></td></tr>
+                <tr class="kpi-mid"><td><span class="ja">関係性</span><span class="en">Relationship</span></td><td><span class="ja">ステークホルダー接点率・NPS・意思決定者カバー率</span><span class="en">Stakeholder reach, NPS, decision-maker coverage</span></td><td><span class="badge badge-green">Mid</span></td><td><span class="ja">主要80%カバー・NPS+20</span><span class="en">80% coverage, NPS +20</span></td></tr>
+                <tr class="kpi-mid"><td><span class="ja">プロジェクト</span><span class="en">Projects</span></td><td><span class="ja">共同プロジェクト数・処方プロトコル導入数</span><span class="en">Joint projects, formulary protocol adoptions</span></td><td><span class="badge badge-green">Mid</span></td><td><span class="ja">3件/年</span><span class="en">3/year</span></td></tr>
+                <tr class="kpi-lagging"><td><span class="ja">財務</span><span class="en">Financial</span></td><td><span class="ja">病院売上シェア・処方数・YoY成長率</span><span class="en">Hospital revenue share, Rx volume, YoY growth</span></td><td><span class="badge badge-blue">Lagging</span></td><td><span class="ja">シェア+10%・YoY+15%</span><span class="en">Share +10%, YoY +15%</span></td></tr>
+                <tr class="kpi-lagging"><td><span class="ja">コンプライアンス</span><span class="en">Compliance</span></td><td><span class="ja">活動記録完全率・Vault準拠率</span><span class="en">Activity record completeness, Vault compliance rate</span></td><td><span class="badge badge-gray"><span class="ja">通年</span><span class="en">Always-on</span></span></td><td>100%</td></tr>
+              </tbody>
+            </table>
+            <div class="callout" style="margin-top:10px; font-size:13px;">
+              <span class="ja"><strong>Leadingで介入・Laggingで検証</strong>。CRMではAccount Plan X-Page（進捗・チーム活動・KPIダッシュ）、Standard Metrics（業界標準自動集計）、Pre-call Agent（AI次回提案）でリアルタイム管理。</span>
+              <span class="en"><strong>Intervene on Leading signals; validate with Lagging results.</strong> CRM tools: Account Plan X-Page (progress/KPI dashboard), Standard Metrics (industry benchmarks), Pre-call Agent (AI next-call suggestions).</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Slide 11: Summary ===== -->
+    <div class="slide-container fixed-height">
+      <h2 class="slide-title">
+        <span class="ja">第二部まとめ：全体ビジネスプロセス</span>
+        <span class="en">Part 2 Summary: End-to-End Business Process</span>
+      </h2>
+      <div class="content-area" style="justify-content:center; gap:18px;">
+        <!-- Top flow -->
+        <div style="display:flex; align-items:center; gap:10px; background:var(--light-bg); border-radius:12px; padding:16px;">
+          <div style="text-align:center; flex:1;">
+            <i class="fa-solid fa-pen-ruler" style="font-size:24px; color:var(--primary-orange);"></i>
+            <p style="font-size:13px; font-weight:700; margin-top:4px;"><span class="ja">Marketing<br>ドラフト作成</span><span class="en">Marketing<br>Draft creation</span></p>
+          </div>
+          <i class="fa-solid fa-arrow-right p-arrow"></i>
+          <div style="text-align:center; flex:1.2;">
+            <i class="fa-solid fa-file-circle-check" style="font-size:24px; color:var(--primary-blue);"></i>
+            <p style="font-size:13px; font-weight:700; margin-top:4px;"><span class="ja">MLRレビュー<br>（PromoMats）</span><span class="en">MLR Review<br>(PromoMats)</span></p>
+            <p style="font-size:11px; color:var(--text-muted);"><span class="ja">Medical→Legal→Regulatory承認</span><span class="en">Medical → Legal → Regulatory</span></p>
+          </div>
+          <i class="fa-solid fa-arrow-right p-arrow"></i>
+          <div style="text-align:center; flex:1;">
+            <i class="fa-solid fa-circle-check" style="font-size:24px; color:#059669;"></i>
+            <p style="font-size:13px; font-weight:700; margin-top:4px;"><span class="ja">Vault状態: Approved</span><span class="en">Vault: Approved</span></p>
+            <p style="font-size:11px; color:var(--text-muted);"><span class="ja">CRM/CLM自動同期</span><span class="en">Auto-synced to CRM/CLM</span></p>
+          </div>
+          <i class="fa-solid fa-arrow-right p-arrow"></i>
+          <div style="text-align:center; flex:1.4;">
+            <i class="fa-solid fa-users" style="font-size:24px; color:var(--primary-blue);"></i>
+            <p style="font-size:13px; font-weight:700; margin-top:4px;"><span class="ja">MR/MSL/KAM<br>現場活動</span><span class="en">MR/MSL/KAM<br>Field Activities</span></p>
+            <p style="font-size:11px; color:var(--text-muted);"><span class="ja">Network/MDB共有</span><span class="en">Shared via Network/MDB</span></p>
+          </div>
+          <i class="fa-solid fa-arrow-right p-arrow"></i>
+          <div style="text-align:center; flex:1.2;">
+            <i class="fa-solid fa-chart-pie" style="font-size:24px; color:var(--primary-orange);"></i>
+            <p style="font-size:13px; font-weight:700; margin-top:4px;"><span class="ja">活動ログ・KAM統括</span><span class="en">Activity Logs &amp; KAM Oversight</span></p>
+            <p style="font-size:11px; color:var(--text-muted);"><span class="ja">Vault還流 + 分析/KPI</span><span class="en">Vault feedback + KPI/analytics</span></p>
+          </div>
+        </div>
+
+        <table class="table-layout">
+          <thead><tr><th><span class="ja">フェーズ</span><span class="en">Phase</span></th><th><span class="ja">登場人物</span><span class="en">Actors</span></th><th><span class="ja">ツール/システム</span><span class="en">Tools/Systems</span></th><th><span class="ja">成果物</span><span class="en">Deliverables</span></th></tr></thead>
+          <tbody>
+            <tr><td><span class="ja"><strong>コンテンツ準備</strong></span><span class="en"><strong>Content Prep</strong></span></td><td>Marketing + MLR</td><td>PromoMats</td><td><span class="ja">承認済みCLMプレゼン</span><span class="en">Approved CLM presentations</span></td></tr>
+            <tr><td><span class="ja"><strong>対象特定</strong></span><span class="en"><strong>Target ID</strong></span></td><td><span class="ja">全役割</span><span class="en">All roles</span></td><td>Network/MDB</td><td><span class="ja">HCP/HCOリスト</span><span class="en">HCP/HCO lists</span></td></tr>
+            <tr><td><span class="ja"><strong>活動実行</strong></span><span class="en"><strong>Execution</strong></span></td><td>MR・MSL・KAM</td><td>CRM / Engage / CLM</td><td><span class="ja">面談ログ・インサイト・サンプリング記録</span><span class="en">Call logs, insights, sampling records</span></td></tr>
+            <tr><td><span class="ja"><strong>安全性監視</strong></span><span class="en"><strong>Safety Monitoring</strong></span></td><td>PV / RA</td><td>Vault Safety / SafetyDocs</td><td><span class="ja">ICSR・PSUR・RMP</span><span class="en">ICSRs, PSURs, RMPs</span></td></tr>
+            <tr><td><span class="ja"><strong>統括・分析</strong></span><span class="en"><strong>Oversight</strong></span></td><td>KAM + Marketing</td><td>Account Plan / Reporting</td><td><span class="ja">KPIダッシュ・次期計画</span><span class="en">KPI dashboard, next-period plan</span></td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout orange">
+          <p style="font-size:14px; text-align:center; font-weight:700;">
+            <span class="ja">MLRが前提、現場が実行、KAMが統括 — GxP保証エンドツーエンドで成立するVeevaのライフサイエンス特化CRM</span>
+            <span class="en">MLR as prerequisite, field teams as executors, KAM as orchestrator — Veeva's life-science-specific CRM delivering GxP-guaranteed end-to-end compliance</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function setLang(lang) {
+        document.body.className = 'lang-' + lang;
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector('.lang-btn[onclick="setLang(\'' + lang + '\')"]').classList.add('active');
+      }
+    </script>
+  </body>
+</html>
